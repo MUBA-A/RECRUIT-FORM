@@ -1,4 +1,5 @@
-(function() {
+<script>
+    (function() {
     const oldDiv = document.getElementById("for_form");
           if (!oldDiv) {
             console.error("Target div not found!");
@@ -28,22 +29,22 @@
             --success-color: #388e3c;
         }
 
-        * {
+        *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
         #entry_entryForm {
-          font-family: var(--font-family) !important;
-          font-weight: bold !important;
+            font-family: var(--font-family, sans-serif);
+            font-weight: 700;
         }
 
         .form-row {
             display: flex;
             flex-wrap: wrap;
             margin-bottom: 20px;
-            gap: 20px;
+            gap: 45px;
         }
 
         .form-group {
@@ -60,28 +61,30 @@
 
         .required-label::after {
             content: "*";
-            color: var(--error-color);
+            color: var(--error-color, #ff9090);
             margin-left: 4px;
         }
 
-        input, select {
+        input {
             width: 100%;
             padding: 10px 12px;
-            border: var(--input-border);
+            border: var(--input-border, 2px solid #FFFFFF);
             border-radius: 4px;
-            background-color: var(--input-bg);
+            background-color: var(--input-bg, rgb(161, 239, 255));
             transition: background-color 0.3s ease;
             font-size: 16px;
-            font-family: var(--font-family);
-            font-weight: bold;
+            font-family: var(--font-family, sans-serif);
+            font-weight: 700;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
 
-        select {
-          color: #333;
-        }
-        
         input:focus {
             background: #dddddd !important;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
+            border-color: var(--primary-color, #0078d7);
         }
 
         input:hover, input:focus:hover {
@@ -89,16 +92,18 @@
         }
 
         input::placeholder {
-          opacity: 0.5;
-          color: var(--placeholder-color);
-          font-weight: bold;
-          font-family: var(--font-family) ;
+            opacity: 0.5;
+            color: var(--placeholder-color, #283593);
+            font-weight: 700;
+            font-family: var(--font-family, sans-serif);
         }
 
-        select:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
-            border-color: var(--primary-color);
+        /* For Edge */
+        input::-ms-input-placeholder {
+            opacity: 0.5;
+            color: var(--placeholder-color, #283593);
+            font-weight: 700;
+            font-family: var(--font-family, sans-serif);
         }
 
         .file-input-container {
@@ -111,11 +116,10 @@
         .file-input-label {
             display: block; 
             padding: 10px 20px;
-            border: var(--input-border);
+            border: var(--input-border, 2px solid #FFFFFF);
             border-radius: 4px;
-            background-color: var(--input-bg);
-            color: var(--placeholder-color);
-            border-radius: 4px;
+            background-color: var(--input-bg, rgb(161, 239, 255));
+            color: var(--placeholder-color, #283593);
             cursor: pointer;
             transition: background-color 0.2s;
             text-align: center;
@@ -154,7 +158,11 @@
         .checkbox-input {
             width: auto;
             margin-right: 10px;
+            -webkit-transform: scale(1.5);
+            -ms-transform: scale(1.5);
             transform: scale(1.5); 
+            -webkit-transform-origin: 50% 60%;
+            -ms-transform-origin: 50% 60%;
             transform-origin: 50% 60%;
             cursor: pointer;
         }
@@ -164,20 +172,22 @@
         }
 
         /* Privacy Policy Link */
-        #entry_privacy_policy_link, #entry_privacy_policy_link:visited {
-          color: #44D8F1; 
-          text-decoration: underline;
+        #entry_privacy_policy_link, 
+        #entry_privacy_policy_link:visited {
+            color: #44D8F1; 
+            text-decoration: underline;
         }
 
         #entry_privacyPolicyError {
-          text-align: center;
+            text-align: center;
         }
 
         .submit-btn {
             background: linear-gradient(106deg, #49fff1 0%, #0062e9 100%);
+            -webkit-transition: .4s cubic-bezier(.4,.4,0,1);
             transition: .4s cubic-bezier(.4,.4,0,1);
             color: white;
-            font-weight: bold;
+            font-weight: 700;
             border: none;
             padding: 12px 24px;
             font-size: 16px;
@@ -190,21 +200,27 @@
         }
 
         .submit-btn:hover {
-          transform: scale(1.05, 1.05);
+            -webkit-transform: scale(1.05, 1.05);
+            -ms-transform: scale(1.05, 1.05);
+            transform: scale(1.05, 1.05);
         }
 
         .submit-btn:disabled {
-            background-color: #cccccc;
+            background: #cccccc;
             cursor: not-allowed;
+            -webkit-transform: none;
+            -ms-transform: none;
+            transform: none;
         }
 
         .error-message {
-            color: var(--error-color);
+            color: var(--error-color, #ff9090);
             font-size: 14px;
             margin-top: 5px;
             display: none;
         }
-
+        
+    
       `;
       shadow.appendChild(styleElement);
 
@@ -225,6 +241,19 @@
             @media (max-width: 540px) {
                 #entry_form-container {
                     width: 100%;
+                }
+            }
+            
+            @media (hover: none) {
+                .submit-btn:hover {
+                    transform: none;
+                }
+            }
+
+            @media (-ms-high-contrast: active), (-ms-high-contrast: none) {
+                /* IE10+ specific styles */
+                .submit-btn {
+                    background: #0062e9;
                 }
             }
         `;
@@ -282,19 +311,19 @@
                     <input type="text" id="entry_school" name="school" required aria-required="true" placeholder="○○大学">
                     <div class="error-message" id="entry_schoolError">学校名を入力してください</div>
                 </div>
+                <div class="form-group">
+                    <label for="entry_department">学部名</label>
+                    <input type="text" id="entry_department" name="department" placeholder="○○学部">
+                    <div class="error-message" id="entry_departmentError">学部名を入力してください</div>
+                </div>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label for="entry_academicType" class="required-label">文理</label>
-                <select id="entry_academicType" name="academicType" required aria-required="true">
-                    <option value="">選択してください</option>
-                    <option value="理系">理系</option>
-                    <option value="文系">文系</option>
-                    <option value="不明">該当なし</option>
-                </select>
-                  <div class="error-message" id="entry_academicTypeError">文理を選択してください</div>
-              </div>
+                    <label for="entry_faculty">学科名</label>
+                    <input type="text" id="entry_faculty" name="faculty" placeholder="○○学科">
+                    <div class="error-message" id="entry_facultyError">学科名を入力してください</div>
+                </div>
               <div class="form-group">
                 <label for="entry_graduationYear" class="required-label">卒業年度</label>
                 <input type="number" id="entry_graduationYear" name="graduationYear" required aria-required="true" placeholder="2023">
@@ -304,8 +333,8 @@
 
             <div class="form-row">
               <div class="form-group">
-                <label for="entry_eventDate">説明会参加日</label>
-                <input type="date" id="entry_eventDate" name="eventDate" aria-required="false">
+                <label for="entry_eventDate" class="required-label">説明会参加日</label>
+                <input type="date" id="entry_eventDate" name="eventDate" required aria-required="true">
                 <div class="error-message" id="entry_eventDateError"></div>
               </div>
               <div class="form-group">
@@ -328,6 +357,9 @@
             </div>
             <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
 
+            <!-- timestamp for privacy policy checkbox -->
+            <input type="hidden" id="entry_privacyPolicyTimestamp" name="privacyPolicyTimestamp" value="">
+
             <button type="submit" id="entry_submitBtn" class="submit-btn">エントリー</button>
         </form>
       `;
@@ -339,7 +371,7 @@
     sbmtBtn.disabled = true;
     sbmtBtn.textContent = '読込中...';
     let mktoFormEl;
-    
+
     // Watch for Marketo form to be ready and enable submit button.
     MktoForms2.whenReady(function(mktoForm) {
         mktoFormEl = mktoForm;
@@ -354,6 +386,9 @@
     const commentInput = shadow.getElementById('entry_comment');
     const commentFileNameDisplay = shadow.getElementById('entry_commentfileName');
     const graduationYearPlaceholder = shadow.getElementById('entry_graduationYear');
+    const privacyPolicyCheckbox = shadow.getElementById('entry_privacyPolicy');
+    const privacyPolicyTimestampField = shadow.getElementById('entry_privacyPolicyTimestamp');
+
 
     // Set default graduation year to current year
     const nextYear = new Date().getFullYear() - 3;
@@ -364,7 +399,7 @@
         if (this.files.length > 0) {
             fileNameDisplay.textContent = this.files[0].name;
             fileNameDisplay.style.fontWeight = "bold";
-            validateFile(this);
+            validateFile(this); // This validates on change but the error was disappearing
         } else {
             fileNameDisplay.textContent = '選択されていません';
             hideError('entry_resumeError');
@@ -380,6 +415,17 @@
         } else {
             commentFileNameDisplay.textContent = '選択されていません';
             hideError('entry_commentError');
+        }
+    });
+
+    privacyPolicyCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            // ISO format (e.g., "2023-12-01T08:30:45.123Z")
+            const now = new Date();
+            privacyPolicyTimestampField.value = now.toISOString();
+        } else {
+            // Clear the timestamp if unchecked
+            privacyPolicyTimestampField.value = '';
         }
     });
 
@@ -399,19 +445,30 @@
         isValid = validateEmailConfirmation() && isValid;
         isValid = validatePhone() && isValid;
         isValid = validateRequiredField('entry_school', 'entry_schoolError') && isValid;
-        isValid = validateDropdown('entry_academicType', 'entry_academicTypeError') && isValid;
+        // Department and faculty are optional but need length validation
+        isValid = validateOptionalField('entry_department', 'entry_departmentError') && isValid;
+        isValid = validateOptionalField('entry_faculty', 'entry_facultyError') && isValid;
+
         isValid = validateGraduationYear() && isValid;
         isValid = validateFile(resumeInput) && isValid;
+        isValid = validateEventDate() && isValid; // might delete
         isValid = validateCommentFile(commentInput) && isValid;
         isValid = validateCheckbox('entry_privacyPolicy', 'entry_privacyPolicyError') && isValid;
+
+        function setFormSubmitting(isSubmitting) {
+            const inputs = form.querySelectorAll('input, button');
+            inputs.forEach(input => {
+                input.disabled = isSubmitting;
+            });
+            sbmtBtn.disabled = isSubmitting;
+            sbmtBtn.textContent = isSubmitting ? '送信中...' : 'エントリー';
+        }
         
         if (isValid) {
             // Get form data
             const formData = new FormData(form);
             
-            // Show loading state
-            sbmtBtn.disabled = true;
-            sbmtBtn.textContent = '送信中...';
+            setFormSubmitting(true);
             
             // Create a Promise that will resolve on Marketo success or reject after timeout
             const marketoSubmissionWithTimeout = new Promise((resolve, reject) => {
@@ -445,10 +502,6 @@
                     'Email': formData.get('email'),
                     'Phone': formData.get('phone'),
                     'graduation': formData.get('graduationYear'),
-                    'SchoolName': formData.get('school'),
-                    'ApplicantHumanitiesSciences': formData.get('academicType'),
-                    'Referral_Surname': formData.get('referrerLastName'),
-                    'Referral_Firstname': formData.get('referrerFirstName'),
                     'OrientationAttendanceDay': formData.get('eventDate'),
                     'praivacyPolicy': formData.get('privacyPolicy') !== null ? "yes" : "no",
                     'recordtype': '応募者_新卒'
@@ -462,6 +515,7 @@
                 // Handle successful submission
                 form.reset();
                 shadow.getElementById('entry_fileName').textContent = '選択されていません';
+                shadow.getElementById('entry_commentfileName').textContent = '選択されていません';
                 sbmtBtn.disabled = false;
                 sbmtBtn.textContent = 'エントリー';
                 
@@ -469,11 +523,10 @@
                 window.location.href = "https://recruit.gl-navi.co.jp/entry-successful";
             })
             .catch(error => {
-                console.error('Error submitting form:', error.message);
+                console.error('Error submitting form:', error.message, error.stack);
                 
                 // Re-enable submit button
-                sbmtBtn.disabled = false;
-                sbmtBtn.textContent = 'エントリー';
+                setFormSubmitting(false);
                 
                 // Show error message to user
                 alert('フォームの送信中にエラーが発生しました。後ほど再試行してください。');
@@ -482,7 +535,7 @@
     });
 
     // Real-time validation for better UX
-    const inputs = form.querySelectorAll('input, select');
+    const inputs = form.querySelectorAll('input');
     inputs.forEach(input => {
         input.addEventListener('blur', function() {
             if (this.id === 'entry_email') {
@@ -491,14 +544,19 @@
                 validateEmailConfirmation();
             } else if (this.id === 'entry_phone') {
                 validatePhone();
-            } else if (this.id === 'entry_academicType') {
-                validateDropdown(this.id, 'entry_academicTypeError');
             } else if (this.id === 'entry_graduationYear') {
                 validateGraduationYear();
             } else if (this.id === 'entry_privacyPolicy') {
                 validateCheckbox(this.id, 'entry_privacyPolicyError');
+            } else if (this.id === 'entry_department' || this.id === 'entry_faculty') {
+                validateOptionalField(this.id, this.id + 'Error');
+            } else if (this.id === 'entry_resume') {
+                // Fixed: Ensure resume validation persists after blur
+                validateFile(this);
             } else if (this.required) {
                 validateRequiredField(this.id, this.id + 'Error');
+            } else if (this.id === 'entry_eventDate') {
+                validateEventDate();
             }
         });
     });
@@ -520,18 +578,32 @@
         }
     }
 
+    // Added function for optional fields that still need length validation
+    function validateOptionalField(fieldId, errorId) {
+        const field = shadow.getElementById(fieldId);
+        
+        if (field.value.trim() && field.value.length > 255) {
+            showError(errorId, `${field.previousElementSibling.textContent.replace('*', '')}を255文字以内で入力してください`);
+            return false;
+        } else {
+            hideError(errorId);
+            return true;
+        }
+    }
+
     function validateEmail() {
         const email = shadow.getElementById('entry_email');
-        const emailError = shadow.getElementById('entry_emailError');
         // Marketo email regex. RFC 5322 standard.
         const emailRegex_Marketo = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/; 
         const emailRegex_Salesforce = /^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
 
-
         if (!email.value.trim()) {
             showError('entry_emailError', 'Eメールを入力してください');
             return false;
-        } else if (!emailRegex_Marketo.test(email.value) || !emailRegex_Salesforce.test(email.value) || email.value.length > 255) {
+        } else if (email.value.length > 255) {
+            showError('entry_emailError', 'Eメールを255文字以内で入力してください');
+            return false;
+        } else if (!emailRegex_Marketo.test(email.value) || !emailRegex_Salesforce.test(email.value)) {
             showError('entry_emailError', '有効なメールアドレスを入力してください');
             return false;
         } else {
@@ -543,10 +615,12 @@
     function validateEmailConfirmation() {
         const email = shadow.getElementById('entry_email');
         const emailConfirmation = shadow.getElementById('entry_email_confirmation');
-        const emailConfirmationError = shadow.getElementById('entry_emailConfirmationError');
         
         if (!emailConfirmation.value.trim()) {
             showError('entry_emailConfirmationError', 'Eメールを再入力してください');
+            return false;
+        } else if (emailConfirmation.value.length > 255) {
+            showError('entry_emailConfirmationError', 'Eメールを255文字以内で入力してください');
             return false;
         } else if (!validateEmail()) {
             showError('entry_emailConfirmationError', '有効なメールアドレスを入力してください');
@@ -562,13 +636,19 @@
 
     function validatePhone() {
         const phone = shadow.getElementById('entry_phone');
-        const phoneError = shadow.getElementById('entry_phoneError');
-        const phoneRegex = /^([0-9()+. \t-])+(\s?(x|ext|extension)\s?([0-9()])+)?$/;
+        const phoneRegex_Marketo = /^([0-9()+. \t-])+(\s?(x|ext|extension)\s?([0-9()])+)?$/;
+        const phoneRegex_Salesforce = /^(0\d{1,4}[-\s]?\d{1,4}[-\s]?\d{3,4})$/; 
         
         if (!phone.value.trim()) {
             showError('entry_phoneError', '電話番号を入力してください');
             return false;
-        } else if (!phoneRegex.test(phone.value) || phone.value.replace(/[^0-9]/g, '').length < 10) {
+        } else if (phone.value.length > 255) {
+            showError('entry_phoneError', '電話番号を255文字以内で入力してください');
+            return false;
+        } else if (!phoneRegex_Marketo.test(phone.value)) {
+            showError('entry_phoneError', '有効な電話番号を入力してください');
+            return false;
+        } else if (!phoneRegex_Salesforce.test(phone.value)) {
             showError('entry_phoneError', '有効な電話番号を入力してください');
             return false;
         } else {
@@ -577,21 +657,8 @@
         }
     }
 
-    function validateDropdown(fieldId, errorId) {
-        const field = shadow.getElementById(fieldId);
-        
-        if (!field.value) {
-            showError(errorId, `${field.previousElementSibling.textContent.replace('*', '')}を選択してください`);
-            return false;
-        } else {
-            hideError(errorId);
-            return true;
-        }
-    }
-
     function validateGraduationYear() {
         const graduationYear = shadow.getElementById('entry_graduationYear');
-        const graduationYearError = shadow.getElementById('entry_graduationYearError');
         const currentYear = new Date().getFullYear();
         
         if (!graduationYear.value.trim()) {
@@ -607,36 +674,59 @@
     }
 
     function validateFile(fileInput) {
-        if (!fileInput.files || fileInput.files.length === 0) {
+        // Check if file is required and present
+        if (fileInput.required && (!fileInput.files || fileInput.files.length === 0)) {
             showError('entry_resumeError', '履歴書をアップロードしてください');
             return false;
         }
         
-        const file = fileInput.files[0];
-        const fileName = file.name.toLowerCase();
-        const fileSize = file.size;
-        const maxSize = 10 * 1024 * 1024; // 10MB
-        const allowedExtensions = ['.pdf', '.xlsx', '.xls', '.docx', '.doc'];
-        
-        let isValidExtension = false;
-        for (let ext of allowedExtensions) {
-            if (fileName.endsWith(ext)) {
-                isValidExtension = true;
-                break;
+        if (fileInput.files && fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const fileName = file.name.toLowerCase();
+            const fileSize = file.size;
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            const allowedExtensions = ['.pdf', '.xlsx', '.xls', '.docx', '.doc'];
+            const allowedMimeTypes = [
+                'application/pdf',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/msword'
+            ];
+            
+            // Check for empty files
+            if (fileSize === 0) {
+                showError('entry_resumeError', 'ファイルが空です。有効なファイルをアップロードしてください');
+                return false;
+            }
+            
+            // Check file extension
+            let isValidExtension = false;
+            for (let ext of allowedExtensions) {
+                if (fileName.endsWith(ext)) {
+                    isValidExtension = true;
+                    break;
+                }
+            }
+            
+            // Check MIME type (additional security)
+            const isValidMimeType = allowedMimeTypes.includes(file.type);
+            
+            if (!isValidExtension || !isValidMimeType) {
+                showError('entry_resumeError', '許可されているファイル形式：PDF、Excel、Word形式のみ');
+                return false;
+            } else if (fileSize > maxSize) {
+                showError('entry_resumeError', 'ファイルサイズは10MB以下にしてください');
+                return false;
+            } else {
+                hideError('entry_resumeError');
+                return true;
             }
         }
         
-        if (!isValidExtension) {
-            showError('entry_resumeError', '許可されているファイル形式：PDF、Excel、Word形式のみ');
-            return false;
-        } else if (fileSize > maxSize) {
-            showError('entry_resumeError', 'ファイルサイズは10MB以下にしてください');
-            return false;
-        } else {
-            hideError('entry_resumeError');
-            return true;
-        }
+        return true;
     }
+
 
     function validateCommentFile(fileInput) {
         if (!fileInput.files || fileInput.files.length === 0) {
@@ -648,6 +738,13 @@
         const fileSize = file.size;
         const maxSize = 10 * 1024 * 1024; // 10MB
         const allowedExtensions = ['.pdf', '.docx', '.doc', '.txt', '.text'];
+        const allowedMimeTypes = [
+                'application/pdf',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/msword',
+                'text/plain',
+                'text/plain; charset=utf-8'
+        ];
         
         let isValidExtension = false;
         for (let ext of allowedExtensions) {
@@ -656,8 +753,25 @@
                 break;
             }
         }
+
+        // Check for empty files
+        if (fileSize === 0) {
+            showError('entry_commentError', 'ファイルが空です。有効なファイルをアップロードしてください');
+            return false;
+        }
+            
+
+        // Check MIME type (additional security)
+        const isValidMimeType = allowedMimeTypes.includes(file.type);
         
-        if (!isValidExtension) {
+        if (!isValidExtension || !isValidMimeType) {
+            console.debug('File validation failed:', {
+                filename: fileName,
+                size: fileSize,
+                type: file.type,
+                validExt: isValidExtension,
+                validMime: isValidMimeType
+            });
             showError('entry_commentError', '許可されているファイル形式：PDF、Text、Word形式のみ');
             return false;
         } else if (fileSize > maxSize) {
@@ -665,6 +779,18 @@
             return false;
         } else {
             hideError('entry_commentError');
+            return true;
+        }
+    }
+
+    function validateEventDate() {
+        const eventDate = shadow.getElementById('entry_eventDate');
+        
+        if (!eventDate.value) {
+            showError('entry_eventDateError', '説明会参加日を入力してください');
+            return false;
+        } else {
+            hideError('entry_eventDateError');
             return true;
         }
     }
@@ -699,4 +825,5 @@
         });
     }
     
-})();
+    })();
+</script>
