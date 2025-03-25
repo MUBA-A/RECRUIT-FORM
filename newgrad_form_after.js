@@ -1,4 +1,4 @@
-<script>
+
     (function() {
     const oldDiv = document.getElementById("for_form");
           if (!oldDiv) {
@@ -826,4 +826,3 @@
     }
     
     })();
-</script>
