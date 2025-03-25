@@ -28,15 +28,15 @@
             --success-color: #388e3c;
         }
 
-        *, *::before, *::after {
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
         #entry_entryForm {
-            font-family: var(--font-family, sans-serif);
-            font-weight: 700;
+            font-family: var(--font-family) !important;
+            font-weight: bold !important;
         }
 
         .form-row {
@@ -44,11 +44,16 @@
             flex-wrap: wrap;
             margin-bottom: 20px;
             gap: 45px;
+            /* Improves alignment on different browsers */
+            align-items: flex-start;
         }
 
         .form-group {
             flex: 1 1 300px;
             margin-bottom: 15px;
+            /* For better vertical alignment of form elements */
+            display: flex;
+            flex-direction: column;
         }
 
         label {
@@ -60,30 +65,32 @@
 
         .required-label::after {
             content: "*";
-            color: var(--error-color, #ff9090);
+            color: var(--error-color);
             margin-left: 4px;
         }
 
-        input {
+        input, select {
             width: 100%;
             padding: 10px 12px;
-            border: var(--input-border, 2px solid #FFFFFF);
+            border: var(--input-border);
             border-radius: 4px;
-            background-color: var(--input-bg, rgb(161, 239, 255));
-            transition: background-color 0.3s ease;
+            background-color: var(--input-bg);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
             font-size: 16px;
-            font-family: var(--font-family, sans-serif);
-            font-weight: 700;
+            font-family: var(--font-family);
+            font-weight: bold;
+            /* Explicit line height improves cross-browser consistency */
+            line-height: 1.5;
+            /* Ensures consistent appearance across browsers */
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
         }
 
-        input:focus {
+        input:focus, select:focus {
             background: #dddddd !important;
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
-            border-color: var(--primary-color, #0078d7);
         }
 
         input:hover, input:focus:hover {
@@ -92,41 +99,55 @@
 
         input::placeholder {
             opacity: 0.5;
-            color: var(--placeholder-color, #283593);
-            font-weight: 700;
-            font-family: var(--font-family, sans-serif);
+            color: var(--placeholder-color);
+            font-weight: bold;
+            font-family: var(--font-family);
         }
 
-        /* For Edge */
-        input::-ms-input-placeholder {
+        /* Ensures consistent placeholder styling across browsers */
+        input::-webkit-input-placeholder {
             opacity: 0.5;
-            color: var(--placeholder-color, #283593);
-            font-weight: 700;
-            font-family: var(--font-family, sans-serif);
+            color: var(--placeholder-color);
+            font-weight: bold;
+            font-family: var(--font-family);
+        }
+
+        input::-moz-placeholder {
+            opacity: 0.5;
+            color: var(--placeholder-color);
+            font-weight: bold;
+            font-family: var(--font-family);
         }
 
         .file-input-container {
             position: relative;
             overflow: hidden;
             display: inline-block;
-            width: 100%; 
+            width: 100%;
         }
 
         .file-input-label {
-            display: block; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 10px 20px;
-            border: var(--input-border, 2px solid #FFFFFF);
+            border: var(--input-border);
             border-radius: 4px;
-            background-color: var(--input-bg, rgb(161, 239, 255));
-            color: var(--placeholder-color, #283593);
+            background-color: var(--input-bg);
+            color: var(--placeholder-color);
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.1s;
             text-align: center;
-            width: 100%; 
+            width: 100%;
+            user-select: none;
         }
 
         .file-input-label:hover {
             background-color: #005a9e;
+        }
+
+        .file-input-label:active {
+            transform: translateY(1px);
         }
 
         .file-input {
@@ -145,6 +166,7 @@
             font-size: 14px;
             color: #ffffff;
             font-weight: normal;
+            word-break: break-all;
         }
 
         .checkbox-group {
@@ -152,12 +174,13 @@
             align-items: center;
             justify-content: center;
             margin: 20px 0;
+            flex-wrap: wrap;
         }
-    
+
         .checkbox-input {
             width: auto;
             margin-right: 10px;
-            transform: scale(1.5); 
+            transform: scale(1.5);
             transform-origin: 50% 60%;
             cursor: pointer;
         }
@@ -167,10 +190,19 @@
         }
 
         /* Privacy Policy Link */
-        #entry_privacy_policy_link, 
-        #entry_privacy_policy_link:visited {
-            color: #44D8F1; 
+        #entry_privacy_policy_link, #entry_privacy_policy_link:visited {
+            color: #44D8F1;
             text-decoration: underline;
+            transition: color 0.2s;
+        }
+
+        #entry_privacy_policy_link:hover {
+            color: #7ae5ff;
+        }
+
+        #entry_privacy_policy_link:focus {
+            outline: 2px solid #44D8F1;
+            outline-offset: 2px;
         }
 
         #entry_privacyPolicyError {
@@ -179,10 +211,9 @@
 
         .submit-btn {
             background: linear-gradient(106deg, #49fff1 0%, #0062e9 100%);
-            -webkit-transition: .4s cubic-bezier(.4,.4,0,1);
-            transition: .4s cubic-bezier(.4,.4,0,1);
+            transition: transform 0.4s cubic-bezier(.4,.4,0,1), background 0.3s;
             color: white;
-            font-weight: 700;
+            font-weight: bold;
             border: none;
             padding: 12px 24px;
             font-size: 16px;
@@ -192,29 +223,43 @@
             margin: 30px auto 0;
             width: 100%;
             max-width: 300px;
+            /* Improves text rendering */
+            text-rendering: optimizeLegibility;
+            /* Makes text sharper on some browsers */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .submit-btn:hover {
-            -webkit-transform: scale(1.05, 1.05);
-            -ms-transform: scale(1.05, 1.05);
             transform: scale(1.05, 1.05);
         }
 
+        .submit-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(73, 255, 241, 0.5);
+        }
+
         .submit-btn:disabled {
-            background: #cccccc;
+            background: linear-gradient(106deg, #b9e6e0 0%, #99b7d4 100%);
             cursor: not-allowed;
-            -webkit-transform: none;
-            -ms-transform: none;
             transform: none;
         }
 
         .error-message {
-            color: var(--error-color, #ff9090);
+            color: var(--error-color);
             font-size: 14px;
             margin-top: 5px;
             display: none;
+            /* Better readability for error messages */
+            font-weight: 500;
         }
-        
+
+        /* Focus styles for accessibility */
+        input:focus-visible, select:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 1px;
+        }
+
     
       `;
       shadow.appendChild(styleElement);
@@ -235,6 +280,9 @@
             }
             @media (max-width: 540px) {
                 #entry_form-container {
+                    width: 100%;
+                }
+                .submit-btn {
                     width: 100%;
                 }
             }
