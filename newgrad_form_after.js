@@ -1,5 +1,4 @@
-
-    (function() {
+   (function() {
     const oldDiv = document.getElementById("for_form");
           if (!oldDiv) {
             console.error("Target div not found!");
@@ -154,15 +153,11 @@
             justify-content: center;
             margin: 20px 0;
         }
-
+    
         .checkbox-input {
             width: auto;
             margin-right: 10px;
-            -webkit-transform: scale(1.5);
-            -ms-transform: scale(1.5);
             transform: scale(1.5); 
-            -webkit-transform-origin: 50% 60%;
-            -ms-transform-origin: 50% 60%;
             transform-origin: 50% 60%;
             cursor: pointer;
         }
