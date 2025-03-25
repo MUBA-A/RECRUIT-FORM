@@ -1,5 +1,4 @@
-<script>
-    (function() {
+(function() {
     const oldDiv = document.getElementById("for_form");
           if (!oldDiv) {
             console.error("Target div not found!");
@@ -700,5 +699,4 @@
         });
     }
     
-    })();
-</script>
+})();
