@@ -326,7 +326,7 @@
                     <div class="error-message" id="entry_emailError">有効なメールアドレスを入力してください</div>
                 </div>
                 <div class="form-group">
-                    <label for="entry_email_confirmation" class="required-label">Eメール 再入力</label>
+                    <label for="entry_email_confirmation" class="required-label">Eメール (再入力)</label>
                     <input type="email" id="entry_email_confirmation" name="email_confirmation" required aria-required="true" placeholder="mail@example.com">
                     <div class="error-message" id="entry_emailConfirmationError">一致するメールアドレスを入力してください</div>
                 </div>
