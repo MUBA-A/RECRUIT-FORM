@@ -679,13 +679,17 @@
     function validatePhone() {
         const phone = shadow.getElementById('entry_phone');
         const phoneRegex_Marketo = /^([0-9()+. \t-])+(\s?(x|ext|extension)\s?([0-9()])+)?$/;
-        const phoneRegex_Salesforce = /^(0\d{1,4}[-\s]?\d{1,4}[-\s]?\d{3,4})$/; 
+        const phoneRegex_Salesforce = /^(0\d{1,4}[-\s]?\d{1,4}[-\s]?\d{3,4})$/;
+        const digitsOnly = phone.replace(/[^0-9]/g, ''); 
         
         if (!phone.value.trim()) {
             showError('entry_phoneError', '電話番号を入力してください');
             return false;
         } else if (phone.value.length > 255) {
             showError('entry_phoneError', '電話番号を255文字以内で入力してください');
+            return false;
+        } else if (digitsOnly.length < 10) {
+            showError('entry_phoneError', '有効な電話番号を入力してください');
             return false;
         } else if (!phoneRegex_Marketo.test(phone.value)) {
             showError('entry_phoneError', '有効な電話番号を入力してください');
@@ -853,17 +857,20 @@
         const errorElement = shadow.getElementById(errorId);
         errorElement.textContent = message;
         errorElement.setAttribute('style', 'display: block !important;');
+        errorElement.setAttribute('aria-hidden', 'false');
     }
 
     function hideError(errorId) {
         const errorElement = shadow.getElementById(errorId);
         errorElement.setAttribute('style', 'display: none !important;');
+        errorElement.setAttribute('aria-hidden', 'true');
     }
 
     function clearAllErrors() {
         const errors = shadow.querySelectorAll('.error-message');
         errors.forEach(error => {
             error.setAttribute('style', 'display: none !important;');
+            error.setAttribute('aria-hidden', 'true');
         });
     }
     
