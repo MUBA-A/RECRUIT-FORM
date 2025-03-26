@@ -81,10 +81,6 @@
             font-weight: bold;
             /* Explicit line height improves cross-browser consistency */
             line-height: 1.5;
-            /* Ensures consistent appearance across browsers */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
         }
 
         input:focus, select:focus {
@@ -267,10 +263,14 @@
       // Add media query for tablet
         const mediaQuery = document.createElement('style');
         mediaQuery.textContent = `
-            @media (min-width: 705px) {
+            @media (min-width: 1000px) {
                 #entry_form-container {
-                    max-width: 1000px;
                     width: 60%;
+                }
+            }
+            @media (min-width: 704px) and (max-width: 1000px) {
+                #entry_form-container {
+                    width: 100%;
                 }
             }
             @media (max-width: 704px) and (min-width: 541px) {
@@ -516,7 +516,7 @@
             // Create a Promise that will resolve on Marketo success or reject after timeout
             const marketoSubmissionWithTimeout = new Promise((resolve, reject) => {
                 // Set up success handler before submission
-                mktoFormEl.onSuccess(function(values, followUpUrl) {
+                mktoFormEl.onSuccess(function(values) {
                     console.log(values);
                     resolve(values);
                     return false; // Prevent default form redirect
@@ -607,7 +607,6 @@
     // Validation functions
     function validateRequiredField(fieldId, errorId) {
         const field = shadow.getElementById(fieldId);
-        const errorElement = shadow.getElementById(errorId);
         
         if (!field.value.trim()) {
             showError(errorId, `${field.previousElementSibling.textContent.replace('*', '')}を入力してください`);
