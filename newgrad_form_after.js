@@ -433,7 +433,7 @@
     const privacyPolicyTimestampField = shadow.getElementById('entry_privacyPolicyTimestamp');
 
 
-    // Set default graduation year to current year
+    // Set placeholder value of graduation year to current year minus three
     const nextYear = new Date().getFullYear() - 3;
     graduationYearPlaceholder.placeholder = nextYear;
 
@@ -680,7 +680,7 @@
         const phone = shadow.getElementById('entry_phone');
         const phoneRegex_Marketo = /^([0-9()+. \t-])+(\s?(x|ext|extension)\s?([0-9()])+)?$/;
         const phoneRegex_Salesforce = /^(0\d{1,4}[-\s]?\d{1,4}[-\s]?\d{3,4})$/;
-        const digitsOnly = phone.replace(/[^0-9]/g, ''); 
+        const digitsOnly = phone.value.replace(/[^0-9]/g, ''); 
         
         if (!phone.value.trim()) {
             showError('entry_phoneError', '電話番号を入力してください');
