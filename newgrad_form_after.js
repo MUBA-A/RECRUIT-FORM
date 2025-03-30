@@ -536,8 +536,7 @@
             // Submit to Pipedream first, then Marketo
             fetch('https://eokp1inwxznfu01.m.pipedream.net', {
                 method: 'POST',
-                body: formData,
-                mode: 'no-cors'
+                body: formData
             })
             .then(response => {
                 if (!response.ok) {
