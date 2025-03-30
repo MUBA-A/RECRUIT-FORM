@@ -305,7 +305,7 @@
       // Add the form HTML
       const formElement = document.createElement('div');
       formElement.innerHTML = `
-        <form id="entry_entryForm" novalidate enctype="multipart/form-data">
+        <form id="entry_entryForm" novalidate enctype="multipart/form-data" accept-charset="utf-8">
             <div class="form-row">
                 <div class="form-group">
                     <label for="entry_lastName" class="required-label">姓</label>
@@ -381,7 +381,7 @@
                 <div class="error-message" id="entry_eventDateError"></div>
               </div>
               <div class="form-group">
-                    <label for="entry_comment">感想文</label>
+                    <label for="entry_comment">説明会感想文</label>
                     <div class="file-input-container">
                         <label for="entry_comment" class="file-input-label" id="entry_commentfileName">ファイルを選択</label>
                         <input type="file" id="entry_comment" name="comment" class="file-input" aria-required="false">
@@ -531,11 +531,18 @@
             // Submit to Pipedream first, then Marketo
             fetch('https://eokp1inwxznfu01.m.pipedream.net', {
                 method: 'POST',
-                body: formData
+                body: formData,
+                mode: 'no-cors'
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Pipedream submission failed');
+                    // Convert the response to JSON if possible, otherwise use text
+                    return response.json().catch(() => response.text()).then(errorData => {
+                        const error = new Error(response.statusText || 'Request failed');
+                        error.status = response.status;
+                        error.data = errorData;
+                        throw error;
+                    });
                 }
                 
                 // Set values in Marketo form
@@ -555,24 +562,37 @@
                 return marketoSubmissionWithTimeout;
             })
             .then(() => {
+                isSubmissionInProgress = false;
                 // Handle successful submission
                 form.reset();
-                shadow.getElementById('entry_fileName').textContent = '選択されていません';
-                shadow.getElementById('entry_commentfileName').textContent = '選択されていません';
-                sbmtBtn.disabled = false;
-                sbmtBtn.textContent = 'エントリー';
+                fileNameDisplay.textContent = '選択されていません';
+                commentFileNameDisplay.textContent = '選択されていません';
+                setFormSubmitting(false); // Re-enable form
                 
                 // Redirect to thank you page
                 window.location.href = "https://recruit.gl-navi.co.jp/entry-successful";
             })
             .catch(error => {
-                console.error('Error submitting form:', error.message, error.stack);
+                console.error('Error details:', {
+                    status: error.status,
+                    message: error.message,
+                    data: error.data
+                });
                 
-                // Re-enable submit button
+                let errorMessage = 'フォームの送信中にエラーが発生しました。後ほど再試行してください。\n';
+                
+                if (error.status === 418) {
+                    errorMessage = '入力内容に問題があります。入力項目を確認してください。\n';
+                }
+                for (let x in error.data) {
+                    errorMessage += "・" + error.data[x] + "\n";
+                };
+
+                alert(errorMessage);
+                
+                // Re-enable form
                 setFormSubmitting(false);
                 
-                // Show error message to user
-                alert('フォームの送信中にエラーが発生しました。後ほど再試行してください。');
             });
         }
     });
@@ -679,7 +699,7 @@
     function validatePhone() {
         const phone = shadow.getElementById('entry_phone');
         const phoneRegex_Marketo = /^([0-9()+. \t-])+(\s?(x|ext|extension)\s?([0-9()])+)?$/;
-        const phoneRegex_Salesforce = /^(0\d{1,4}[-\s]?\d{1,4}[-\s]?\d{3,4})$/;
+        const phoneRegex_Salesforce = /^(\+?[0-9\s\-\(\)]{8,20})$/;
         const digitsOnly = phone.value.replace(/[^0-9]/g, ''); 
         
         if (!phone.value.trim()) {
@@ -688,7 +708,7 @@
         } else if (phone.value.length > 255) {
             showError('entry_phoneError', '電話番号を255文字以内で入力してください');
             return false;
-        } else if (digitsOnly.length < 10) {
+        } else if (digitsOnly.length < 8) {
             showError('entry_phoneError', '有効な電話番号を入力してください');
             return false;
         } else if (!phoneRegex_Marketo.test(phone.value)) {
@@ -800,14 +820,14 @@
             }
         }
 
-        // Check for empty files
+       
         if (fileSize === 0) {
             showError('entry_commentError', 'ファイルが空です。有効なファイルをアップロードしてください');
             return false;
         }
             
 
-        // Check MIME type (additional security)
+       
         const isValidMimeType = allowedMimeTypes.includes(file.type);
         
         if (!isValidExtension || !isValidMimeType) {
