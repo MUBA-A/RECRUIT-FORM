@@ -263,12 +263,17 @@
       // Add media query for tablet
         const mediaQuery = document.createElement('style');
         mediaQuery.textContent = `
-            @media (min-width: 1000px) {
+             @media (min-width: 1501px) {
                 #entry_form-container {
                     width: 60%;
                 }
             }
-            @media (min-width: 704px) and (max-width: 1000px) {
+            @media (min-width: 1240px) and (max-width: 1500px) {
+                #entry_form-container {
+                    width: 80%;
+                }
+            }
+            @media (min-width: 704px) and (max-width: 1239px) {
                 #entry_form-container {
                     width: 100%;
                 }
