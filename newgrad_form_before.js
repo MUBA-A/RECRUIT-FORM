@@ -118,7 +118,7 @@
         .referrer-container {
             background-color: #626FCE;
             margin: 50px 0;
-            padding: 15px 30px;
+            padding: 30px 30px 15px 30px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -130,6 +130,10 @@
             margin-bottom: 15px;
             text-align: center;
             width: 100%;
+        }
+        
+        .referrer-container .form-group {
+            flex: 1 1 200px;
         }
 
         .checkbox-group {
@@ -228,12 +232,17 @@
       // Add media query for tablet
       const mediaQuery = document.createElement('style');
         mediaQuery.textContent = `
-            @media (min-width: 1000px) {
+            @media (min-width: 1501px) {
                 #entry_form-container {
                     width: 60%;
                 }
             }
-            @media (min-width: 704px) and (max-width: 1000px) {
+            @media (min-width: 1240px) and (max-width: 1500px) {
+                #entry_form-container {
+                    width: 80%;
+                }
+            }
+            @media (min-width: 704px) and (max-width: 1239px) {
                 #entry_form-container {
                     width: 100%;
                 }
@@ -270,7 +279,7 @@
       // Add the form directly (not wrapped in an extra div)
       const formElement = document.createElement('div');
       formElement.innerHTML = `
-        <form id="entry_entryForm" novalidate enctype="multipart/form-data">
+        <form id="entry_entryForm" novalidate enctype="multipart/form-data" accept-charset="utf-8">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="entry_lastName" class="required-label">姓</label>
@@ -433,11 +442,18 @@
             // Submit to Pipedream first, then Marketo
             fetch('https://eoqlrj51fjyq9e6.m.pipedream.net', {
                 method: 'POST',
-                body: formData
+                body: formData,
+                mode: 'no-cors'
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Pipedream submission failed');
+                    // Convert the response to JSON if possible, otherwise use text
+                    return response.json().catch(() => response.text()).then(errorData => {
+                        const error = new Error(response.statusText || 'Request failed');
+                        error.status = response.status;
+                        error.data = errorData;
+                        throw error;
+                    });
                 }
                 
                 // Set values in Marketo form
@@ -451,7 +467,7 @@
                     'recordtype': '応募者_新卒'
                 });
                 
-                // Submit the Marketo form and return the Promise we created
+                // Submit Marketo form and return promise
                 mktoFormEl.submit();
                 return marketoSubmissionWithTimeout;
             })
@@ -459,21 +475,33 @@
                 isSubmissionInProgress = false;
                 // Handle successful submission
                 form.reset();
-                sbmtBtn.disabled = false;
-                sbmtBtn.textContent = 'エントリー';
+                setFormSubmitting(false); // Re-enable form
                 
                 // Redirect to thank you page
                 window.location.href = "https://recruit.gl-navi.co.jp/entry-successful";
             })
             .catch(error => {
                 isSubmissionInProgress = false;
-                console.error('Error submitting form:', error.message, error.stack);
+                console.error('Error details:', {
+                    status: error.status,
+                    message: error.message,
+                    data: error.data
+                });
                 
-                // Re-enable submit button
+                let errorMessage = 'フォームの送信中にエラーが発生しました。後ほど再試行してください。\n';
+                
+                if (error.status === 418) {
+                    errorMessage = '入力内容に問題があります。入力項目を確認してください。\n';
+                }
+                for (let x in error.data) {
+                    errorMessage += "・" + error.data[x] + "\n";
+                };
+
+                alert(errorMessage);
+                
+                // Re-enable form
                 setFormSubmitting(false);
                 
-                // Show error message to user
-                alert('フォームの送信中にエラーが発生しました。後ほど再試行してください。');
             });
         }
     });
@@ -574,8 +602,8 @@
     function validatePhone() {
         const phone = shadow.getElementById('entry_phone');
         const phoneRegex_Marketo = /^([0-9()+. \t-])+(\s?(x|ext|extension)\s?([0-9()])+)?$/;
-        const phoneRegex_Salesforce = /^(0\d{1,4}[-\s]?\d{1,4}[-\s]?\d{3,4})$/;
-        const digitsOnly = phone.replace(/[^0-9]/g, ''); 
+        const phoneRegex_Salesforce = /^(\+?[0-9\s\-\(\)]{8,20})$/;
+        const digitsOnly = phone.value.replace(/[^0-9]/g, ''); 
         
         if (!phone.value.trim()) {
             showError('entry_phoneError', '電話番号を入力してください');
@@ -583,7 +611,7 @@
         } else if (phone.value.length > 255) {
             showError('entry_phoneError', '電話番号を255文字以内で入力してください');
             return false;
-        } else if (digitsOnly.length < 10) {
+        } else if (digitsOnly.length < 8) {
             showError('entry_phoneError', '有効な電話番号を入力してください');
             return false;
         } else if (!phoneRegex_Marketo.test(phone.value)) {
