@@ -43,8 +43,8 @@
             display: flex;
             flex-wrap: wrap;
             margin-bottom: 20px;
-            gap: 45px;
-            /* Improves alignment on different browsers */
+            row-gap: 20px;
+            column-gap: 45px;
             align-items: flex-start;
         }
 
@@ -170,7 +170,7 @@
             align-items: center;
             justify-content: center;
             margin: 20px 0;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
         }
 
         .checkbox-input {
@@ -517,21 +517,6 @@
             const formData = new FormData(form);
             
             setFormSubmitting(true);
-            
-            // Create a Promise that will resolve on Marketo success or reject after timeout
-            const marketoSubmissionWithTimeout = new Promise((resolve, reject) => {
-                // Set up success handler before submission
-                mktoFormEl.onSuccess(function(values) {
-                    console.log(values);
-                    resolve(values);
-                    return false; // Prevent default form redirect
-                });
-                
-                // Timeout if Marketo takes too long
-                setTimeout(() => {
-                    reject(new Error('Marketo submission timed out after 20 seconds'));
-                }, 20000);
-            });
 
             // Submit to Pipedream first, then Marketo
             fetch('https://eokp1inwxznfu01.m.pipedream.net', {
@@ -548,6 +533,20 @@
                         throw error;
                     });
                 }
+                // Create a Promise that will resolve on Marketo success or reject after timeout
+                const marketoSubmissionWithTimeout = new Promise((resolve, reject) => {
+                    // Set up success handler before submission
+                    mktoFormEl.onSuccess(function(values) {
+                        console.log(values);
+                        resolve(values);
+                        return false; // Prevent default form redirect
+                    });
+                    
+                    // Timeout if Marketo takes too long
+                    setTimeout(() => {
+                        reject(new Error('Marketo submission timed out after 20 seconds'));
+                    }, 20000);
+                });
                 
                 // Set values in Marketo form
                 mktoFormEl.setValues({
