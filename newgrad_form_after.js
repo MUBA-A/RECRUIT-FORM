@@ -123,7 +123,10 @@
         }
 
         .file-input-label {
-            display: flex;
+            dipointer;
+            transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
+            width: 100splay: flex;
             align-items: center;
             justify-content: center;
             padding: 10px 20px;
@@ -131,11 +134,10 @@
             border-radius: 4px;
             background-color: var(--input-bg);
             color: var(--placeholder-color);
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            text-align: center;
-            width: 100%;
+            cursor: %;
             user-select: none;
+            margin: 0;
+            height: 47.2px;
         }
 
         .file-input-label:hover {
@@ -399,8 +401,7 @@
                 <input type="checkbox" id="entry_privacyPolicy" name="privacyPolicy" class="checkbox-input" required aria-required="true">
                 <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">
                   採用選考に関する
-                  <a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">
-                  プライバシーポリシー</a>に同意する
+                  <a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
                 </label>
             </div>
             <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
