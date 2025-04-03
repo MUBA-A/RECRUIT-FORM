@@ -123,10 +123,7 @@
         }
 
         .file-input-label {
-            dipointer;
-            transition: background-color 0.2s, transform 0.1s;
-            text-align: center;
-            width: 100splay: flex;
+            display: flex;
             align-items: center;
             justify-content: center;
             padding: 10px 20px;
@@ -134,7 +131,10 @@
             border-radius: 4px;
             background-color: var(--input-bg);
             color: var(--placeholder-color);
-            cursor: %;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
+            width: 100%;
             user-select: none;
             margin: 0;
             height: 47.2px;
@@ -405,6 +405,7 @@
                 </label>
             </div>
             <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
+            
 
             <!-- timestamp for privacy policy checkbox -->
             <input type="hidden" id="entry_privacyPolicyTimestamp" name="privacyPolicyTimestamp" value="">
@@ -574,7 +575,7 @@
                 setFormSubmitting(false); // Re-enable form
                 
                 // Redirect to thank you page
-                window.location.href = "https://recruit.gl-navi.co.jp/entry-successful";
+                window.location.href = "https://recruit.gl-navi.co.jp/apply/successful";
             })
             .catch(error => {
                 console.error('Error details:', {
