@@ -1,5 +1,4 @@
-<script>
-    (function() {
+(function() {
     const oldDiv = document.getElementById("for_form");
           if (!oldDiv) {
             console.error("Target div not found!");
@@ -349,8 +348,7 @@
             
                     <div class="checkbox-group">
                         <input type="checkbox" id="entry_privacyPolicy" name="privacyPolicy" class="checkbox-input" required aria-required="true">
-                        <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">
-                          採用選考に関する<a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
+                        <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">採用選考に関する<a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
                         </label>
                     </div>
                     <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
@@ -704,5 +702,3 @@
     }
 
 })();
-    
-</script>
