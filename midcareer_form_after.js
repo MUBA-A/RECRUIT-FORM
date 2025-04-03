@@ -86,7 +86,7 @@
             color: #333;
         }
 
-        input:focus, select:focus {
+        input:focus {
             background: #dddddd !important;
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
@@ -360,10 +360,11 @@
                         <option value="コーポレートファンクション">コーポレートファンクション</option>
                         <option value="その他">その他</option>
                     </select>
+                    <div class="error-message" id="entry_desiredOccupationError">希望職種を選択してください</div>
                 </div>
             </div>
 
-            <div class="form-row">
+            <d-iv class="form-row">
                 <div class="form-group">
                     <label for="entry_resume" class="required-label">履歴書</label>
                     <div class="file-input-container">
@@ -383,7 +384,7 @@
             </div>
 
             <div class="form-row">
-              <div class="form-group">
+            <div class="form-group">
                     <label for="entry_portfolio">ポートフォリオ</label>
                     <div class="file-input-container">
                         <label for="entry_portfolio" class="file-input-label" id="entry_portfoliofileName">ファイルを選択</label>
@@ -391,22 +392,19 @@
                     </div>
                     <div class="error-message" id="entry_portfolioError">ポートフォリオをアップロードしてください（PDF、Excel、Word, PowerPoint、JPEG、PNG、TIFF、AI、EPS、SVG形式、20MB以下）</div>
                 </div>
-              <div class="form-group">
-              <div class="form-group" style="visibility : hidden;">
-                    <label for="for-alignment"></label>
-                    <input type="hidden" id="for-alignment" name="for-alignment">
+                <div class="form-group" style="visibility : hidden;">
                 </div>
-              <div class="form-group">
             </div>
 
             <div class="checkbox-group">
                 <input type="checkbox" id="entry_privacyPolicy" name="privacyPolicy" class="checkbox-input" required aria-required="true">
                 <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">
-                  採用選考に関する
-                  <a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
+                採用選考に関する
+                <a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
                 </label>
+                <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
             </div>
-            <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
+            
 
             <!-- timestamp for privacy policy checkbox -->
             <input type="hidden" id="entry_privacyPolicyTimestamp" name="privacyPolicyTimestamp" value="">
@@ -505,6 +503,7 @@
         isValid = validateEmail() && isValid;
         isValid = validateEmailConfirmation() && isValid;
         isValid = validatePhone() && isValid;
+        isValid = validateDesiredOccupation() && isValid;
 
         isValid = validateFile(resumeInput, 'entry_resumeError') && isValid;
         isValid = validateFile(CVInput, 'entry_CVError') && isValid;
@@ -618,6 +617,8 @@
                 validateEmailConfirmation();
             } else if (this.id === 'entry_phone') {
                 validatePhone();
+            } else if (this.id === 'entry_desiredOccupation') {
+                validateDesiredOccupation();
             } else if (this.id === 'entry_resume') {
                 validateFile(this, 'entry_resumeError');
             } else if (this.id === 'entry_CV') {
@@ -714,6 +715,16 @@
             hideError('entry_phoneError');
             return true;
         }
+    }
+
+    function validateDesiredOccupation() {
+        const desiredOccupation = shadow.getElementById('entry_desiredOccupation');
+
+        if (!desiredOccupation.value.trim()) {
+            showError("entry_desiredOccupationError", "希望職種を選択してください");
+            return false;
+        }
+
     }
 
 
