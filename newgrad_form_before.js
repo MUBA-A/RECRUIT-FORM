@@ -43,8 +43,8 @@
             display: flex;
             flex-wrap: wrap;
             margin-bottom: 20px;
-            gap: 45px;
-            /* Improves alignment on different browsers */
+            row-gap: 20px;
+            column-gap: 45px;
             align-items: flex-start;
         }
 
@@ -141,7 +141,7 @@
             align-items: center;
             justify-content: center;
             margin: 20px 0;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
         }
 
         .checkbox-input {
@@ -236,6 +236,9 @@
                 #entry_form-container {
                     width: 60%;
                 }
+            }
+            @media (max-width: 1048px) {
+
             }
             @media (min-width: 1240px) and (max-width: 1500px) {
                 #entry_form-container {
@@ -336,11 +339,11 @@
                     <div class="checkbox-group">
                         <input type="checkbox" id="entry_privacyPolicy" name="privacyPolicy" class="checkbox-input" required aria-required="true">
                         <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">
-                          採用選考に関する<a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">
-                          プライバシーポリシー</a>に同意する
+                          採用選考に関する<a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
                         </label>
                     </div>
                     <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
+                    
 
                     <!-- timestamp for privacy policy checkbox -->
                     <input type="hidden" id="entry_privacyPolicyTimestamp" name="privacyPolicyTimestamp" value="">
@@ -423,27 +426,11 @@
             const formData = new FormData(form);
             
             setFormSubmitting(true);
-            
-            // Create a Promise that will resolve on Marketo success or reject after timeout
-            const marketoSubmissionWithTimeout = new Promise((resolve, reject) => {
-                // Set up success handler before submission
-                mktoFormEl.onSuccess(function(values) {
-                    console.log(values);
-                    resolve(values);
-                    return false; // Prevent default form redirect
-                });
-                
-                // Timeout if Marketo takes too long
-                setTimeout(() => {
-                    reject(new Error('Marketo submission timed out after 20 seconds'));
-                }, 20000);
-            });
 
             // Submit to Pipedream first, then Marketo
-            fetch('https://eoqlrj51fjyq9e6.m.pipedream.net', {
+            fetch('https://eoblqo00j4o8lwv.m.pipedream.net', {
                 method: 'POST',
                 body: formData,
-                mode: 'no-cors'
             })
             .then(response => {
                 if (!response.ok) {
@@ -455,6 +442,20 @@
                         throw error;
                     });
                 }
+                // Create a Promise that will resolve on Marketo success or reject after timeout
+                const marketoSubmissionWithTimeout = new Promise((resolve, reject) => {
+                    // Set up success handler before submission
+                    mktoFormEl.onSuccess(function(values) {
+                        console.log(values);
+                        resolve(values);
+                        return false; // Prevent default form redirect
+                    });
+                    
+                    // Timeout if Marketo takes too long
+                    setTimeout(() => {
+                        reject(new Error('Marketo submission timed out after 20 seconds'));
+                    }, 20000);
+                });
                 
                 // Set values in Marketo form
                 mktoFormEl.setValues({
@@ -478,7 +479,7 @@
                 setFormSubmitting(false); // Re-enable form
                 
                 // Redirect to thank you page
-                window.location.href = "https://recruit.gl-navi.co.jp/entry-successful";
+                window.location.href = "https://recruit.gl-navi.co.jp/apply/successful";
             })
             .catch(error => {
                 isSubmissionInProgress = false;
