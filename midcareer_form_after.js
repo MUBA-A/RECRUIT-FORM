@@ -863,7 +863,7 @@
 
     function showError(errorId, message='') {
         const errorElement = shadow.getElementById(errorId);
-        if (message === '') {
+        if (message != '') {
             errorElement.textContent = message;
         } 
         errorElement.setAttribute('style', 'display: block !important;');
