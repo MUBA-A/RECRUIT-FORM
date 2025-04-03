@@ -174,7 +174,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 20px 0;
+            margin: 50px 0 20px 0;
             flex-wrap: nowrap;
         }
 
@@ -392,7 +392,8 @@
                     </div>
                     <div class="error-message" id="entry_portfolioError">ポートフォリオをアップロードしてください（PDF、Excel、Word, PowerPoint、JPEG、PNG、TIFF、AI、EPS、SVG形式、20MB以下）</div>
                 </div>
-                <div class="form-group" style="visibility: hidden;"></div>
+                <div class="form-group">
+                </div>
             </div>
 
             <div class="checkbox-group">
@@ -607,7 +608,7 @@
     });
 
     // Real-time validation for better UX
-    const inputs = form.querySelectorAll('input');
+    const inputs = form.querySelectorAll('input, select');
     inputs.forEach(input => {
         input.addEventListener('blur', function() {
             if (this.id === 'entry_email') {
@@ -750,7 +751,7 @@
             
             // Check for empty files
             if (fileSize === 0) {
-                showError('entry_resumeError', 'ファイルが空です。有効なファイルをアップロードしてください');
+                showError(errorId, 'ファイルが空です。有効なファイルをアップロードしてください');
                 return false;
             }
             
@@ -767,13 +768,13 @@
             const isValidMimeType = allowedMimeTypes.includes(file.type);
             
             if (!isValidExtension || !isValidMimeType) {
-                showError('entry_resumeError', '許可されているファイル形式：PDF、Excel、Word形式のみ');
+                showError(errorId, '許可されているファイル形式：PDF、Excel、Word形式のみ');
                 return false;
             } else if (fileSize > maxSize) {
-                showError('entry_resumeError', 'ファイルサイズは10MB以下にしてください');
+                showError(errorId, 'ファイルサイズは10MB以下にしてください');
                 return false;
             } else {
-                hideError('entry_resumeError');
+                hideError(errorId);
                 return true;
             }
         }
