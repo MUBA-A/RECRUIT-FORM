@@ -446,7 +446,7 @@
         if (this.files.length > 0) {
             fileNameDisplay.textContent = this.files[0].name;
             fileNameDisplay.style.fontWeight = "bold";
-            validateFile(this); // This validates on change but the error was disappearing
+            validateFile(this, "entry_resumeError"); // This validates on change but the error was disappearing
         } else {
             fileNameDisplay.textContent = '選択されていません';
             hideError('entry_resumeError');
@@ -458,7 +458,7 @@
         if (this.files.length > 0) {
             CVFileNameDisplay.textContent = this.files[0].name;
             CVFileNameDisplay.style.fontWeight = "bold";
-            validateFile(this);
+            validateFile(this, "entry_CVError");
         } else {
             CVFileNameDisplay.textContent = '選択されていません';
             hideError('entry_CVError');
