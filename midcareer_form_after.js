@@ -384,7 +384,7 @@
             </div>
 
             <div class="form-row">
-            <div class="form-group">
+               <div class="form-group">
                     <label for="entry_portfolio">ポートフォリオ</label>
                     <div class="file-input-container">
                         <label for="entry_portfolio" class="file-input-label" id="entry_portfoliofileName">ファイルを選択</label>
@@ -393,6 +393,8 @@
                     <div class="error-message" id="entry_portfolioError">ポートフォリオをアップロードしてください（PDF、Excel、Word, PowerPoint、JPEG、PNG、TIFF、AI、EPS、SVG形式、20MB以下）</div>
                 </div>
                 <div class="form-group" style="visibility : hidden;">
+                     <label>|</label>
+                     <input type="hidden">
                 </div>
             </div>
 
