@@ -392,14 +392,7 @@
                     </div>
                     <div class="error-message" id="entry_portfolioError">ポートフォリオをアップロードしてください（PDF、Excel、Word, PowerPoint、JPEG、PNG、TIFF、AI、EPS、SVG形式、20MB以下）</div>
                 </div>
-                <div class="form-group">
-                    <label for="entry_portfolio">ポートフォリオ</label>
-                    <div class="file-input-container">
-                        <label for="entry_portfolio" class="file-input-label" id="entry_portfoliofileName">ファイルを選択</label>
-                        <input type="file" id="entry_portfolio" name="portfolio" class="file-input">
-                    </div>
-                    <div class="error-message" id="entry_portfolioError">ポートフォリオをアップロードしてください（PDF、Excel、Word, PowerPoint、JPEG、PNG、TIFF、AI、EPS、SVG形式、20MB以下）</div>
-                </div>
+                <div class="form-group" style="visibility: hidden;"></div>
             </div>
 
             <div class="checkbox-group">
