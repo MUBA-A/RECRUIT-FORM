@@ -402,9 +402,8 @@
                 採用選考に関する
                 <a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
                 </label>
-                <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
             </div>
-            
+            <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
 
             <!-- timestamp for privacy policy checkbox -->
             <input type="hidden" id="entry_privacyPolicyTimestamp" name="privacyPolicyTimestamp" value="">
@@ -724,6 +723,8 @@
             showError("entry_desiredOccupationError", "希望職種を選択してください");
             return false;
         }
+        hideError('entry_desiredOccupationError');
+        return true;
 
     }
 
