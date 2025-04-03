@@ -364,7 +364,7 @@
                 </div>
             </div>
 
-            <d-iv class="form-row">
+            <div class="form-row">
                 <div class="form-group">
                     <label for="entry_resume" class="required-label">履歴書</label>
                     <div class="file-input-container">
@@ -384,7 +384,7 @@
             </div>
 
             <div class="form-row">
-               <div class="form-group">
+                <div class="form-group">
                     <label for="entry_portfolio">ポートフォリオ</label>
                     <div class="file-input-container">
                         <label for="entry_portfolio" class="file-input-label" id="entry_portfoliofileName">ファイルを選択</label>
