@@ -738,18 +738,28 @@
     function validateGraduationYear() {
         const graduationYear = shadow.getElementById('entry_graduationYear');
         const currentYear = new Date().getFullYear();
-        
-        if (!graduationYear.value.trim()) {
+        const yearValue = graduationYear.value.trim();
+    
+        if (!yearValue) {
             showError('entry_graduationYearError', '卒業年度を入力してください');
             return false;
-        } else if (isNaN(graduationYear.value) || graduationYear.value < 1950 || graduationYear.value > currentYear + 10) {
+        } 
+        // Ensure the value contains only digits (no decimals, letters, etc.)
+        else if (!/^\d+$/.test(yearValue)) {
+            showError('entry_graduationYearError', '有効な卒業年度を整数で入力してください');
+            return false;
+        }
+    
+        const yearInt = parseInt(yearValue, 10);
+        if (yearInt < 1950 || yearInt > currentYear + 10) {
             showError('entry_graduationYearError', '有効な卒業年度を入力してください');
             return false;
-        } else {
-            hideError('entry_graduationYearError');
-            return true;
         }
+    
+        hideError('entry_graduationYearError');
+        return true;
     }
+    
 
     function validateFile(fileInput) {
         // Check if file is required and present
@@ -763,13 +773,14 @@
             const fileName = file.name.toLowerCase();
             const fileSize = file.size;
             const maxSize = 10 * 1024 * 1024; // 10MB
-            const allowedExtensions = ['.pdf', '.xlsx', '.xls', '.docx', '.doc'];
-            const allowedMimeTypes = [
-                'application/pdf',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'application/vnd.ms-excel',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'application/msword'
+            
+            // Define allowed formats with both extension and MIME type
+            const allowedFormats = [
+                { ext: '.pdf', mime: 'application/pdf' },
+                { ext: '.xlsx', mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
+                { ext: '.xls', mime: 'application/vnd.ms-excel' },
+                { ext: '.docx', mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
+                { ext: '.doc', mime: 'application/msword' }
             ];
             
             // Check for empty files
@@ -778,35 +789,41 @@
                 return false;
             }
             
-            // Check file extension
-            let isValidExtension = false;
-            for (let ext of allowedExtensions) {
-                if (fileName.endsWith(ext)) {
-                    isValidExtension = true;
-                    break;
-                }
-            }
-            
-            // Check MIME type (additional security)
-            const isValidMimeType = allowedMimeTypes.includes(file.type);
-            
-            if (!isValidExtension || !isValidMimeType) {
-                showError('entry_resumeError', '許可されているファイル形式：PDF、Excel、Word形式のみ');
-                return false;
-            } else if (fileSize > maxSize) {
+            // Check size first
+            if (fileSize > maxSize) {
                 showError('entry_resumeError', 'ファイルサイズは10MB以下にしてください');
                 return false;
-            } else {
-                hideError('entry_resumeError');
-                return true;
             }
+            
+            // Get file MIME type
+            const fileMimeType = file.type;
+            
+            // Check if file matches any of our allowed formats
+            const isValidFormat = allowedFormats.some(format => 
+                fileName.endsWith(format.ext) || fileMimeType === format.mime
+            );
+            
+            if (!isValidFormat) {
+                console.debug('File validation failed:', {
+                    filename: fileName,
+                    size: fileSize,
+                    type: file.type,
+                    validFormats: allowedFormats.map(f => `${f.ext} (${f.mime})`)
+                });
+                showError('entry_resumeError', '許可されているファイル形式：PDF、Excel、Word形式のみ');
+                return false;
+            }
+            
+            // If we got here, the file is valid
+            hideError('entry_resumeError');
+            return true;
         }
         
         return true;
     }
 
-
     function validateCommentFile(fileInput) {
+        // If no file is selected, return true (since it's optional)
         if (!fileInput.files || fileInput.files.length === 0) {
             return true;
         }
@@ -814,51 +831,55 @@
         const file = fileInput.files[0];
         const fileName = file.name.toLowerCase();
         const fileSize = file.size;
-        const maxSize = 10 * 1024 * 1024; // 10MB
-        const allowedExtensions = ['.pdf', '.docx', '.doc', '.txt', '.text'];
-        const allowedMimeTypes = [
-                'application/pdf',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'application/msword',
-                'text/plain',
-                'text/plain; charset=utf-8'
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        
+        // Define allowed formats with both extension and MIME type
+        const allowedFormats = [
+            { ext: '.pdf', mime: 'application/pdf' },
+            { ext: '.docx', mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
+            { ext: '.doc', mime: 'application/msword' },
+            { ext: '.txt', mime: 'text/plain' },
+            { ext: '.text', mime: 'text/plain' }
         ];
         
-        let isValidExtension = false;
-        for (let ext of allowedExtensions) {
-            if (fileName.endsWith(ext)) {
-                isValidExtension = true;
-                break;
-            }
-        }
-
-       
+        // Check for empty files
         if (fileSize === 0) {
             showError('entry_commentError', 'ファイルが空です。有効なファイルをアップロードしてください');
             return false;
         }
-            
-
-       
-        const isValidMimeType = allowedMimeTypes.includes(file.type);
         
-        if (!isValidExtension || !isValidMimeType) {
+        // Check size first
+        if (fileSize > maxSize) {
+            showError('entry_commentError', 'ファイルサイズは10MB以下にしてください');
+            return false;
+        }
+        
+        // Get file MIME type
+        const fileMimeType = file.type;
+        
+        // Text files can have various MIME types with charset information
+        const isTextFile = (fileName.endsWith('.txt') || fileName.endsWith('.text')) && 
+                           fileMimeType.startsWith('text/plain');
+        
+        // Check if file matches any of our allowed formats
+        const isValidFormat = allowedFormats.some(format => 
+            fileName.endsWith(format.ext) || fileMimeType === format.mime
+        ) || isTextFile;
+        
+        if (!isValidFormat) {
             console.debug('File validation failed:', {
                 filename: fileName,
                 size: fileSize,
                 type: file.type,
-                validExt: isValidExtension,
-                validMime: isValidMimeType
+                validFormats: allowedFormats.map(f => `${f.ext} (${f.mime})`)
             });
             showError('entry_commentError', '許可されているファイル形式：PDF、Text、Word形式のみ');
             return false;
-        } else if (fileSize > maxSize) {
-            showError('entry_commentError', 'ファイルサイズは10MB以下にしてください');
-            return false;
-        } else {
-            hideError('entry_commentError');
-            return true;
         }
+        
+        // If we got here, the file is valid
+        hideError('entry_commentError');
+        return true;
     }
 
     function validateEventDate() {
