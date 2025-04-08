@@ -1,4 +1,5 @@
-(function() {
+
+    (function() {
     const oldDiv = document.getElementById("for_form");
           if (!oldDiv) {
             console.error("Target div not found!");
@@ -337,7 +338,8 @@
             
                     <div class="checkbox-group">
                         <input type="checkbox" id="entry_privacyPolicy" name="privacyPolicy" class="checkbox-input" required aria-required="true">
-                        <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">採用選考に関する<a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
+                        <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">
+                          採用選考に関する<a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
                         </label>
                     </div>
                     <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
@@ -628,18 +630,28 @@
     function validateGraduationYear() {
         const graduationYear = shadow.getElementById('entry_graduationYear');
         const currentYear = new Date().getFullYear();
-        
-        if (!graduationYear.value.trim()) {
+        const yearValue = graduationYear.value.trim();
+
+        if (!yearValue) {
             showError('entry_graduationYearError', '卒業年度を入力してください');
             return false;
-        } else if (isNaN(graduationYear.value) || graduationYear.value < 1950 || graduationYear.value > currentYear + 10) {
+        } 
+        // Ensure the value contains only digits (no decimals, letters, etc.)
+        else if (!/^\d+$/.test(yearValue)) {
+            showError('entry_graduationYearError', '有効な卒業年度を整数で入力してください');
+            return false;
+        }
+
+        const yearInt = parseInt(yearValue, 10);
+        if (yearInt < 1950 || yearInt > currentYear + 10) {
             showError('entry_graduationYearError', '有効な卒業年度を入力してください');
             return false;
-        } else {
-            hideError('entry_graduationYearError');
-            return true;
         }
+
+        hideError('entry_graduationYearError');
+        return true;
     }
+
 
     function validateRefererFields() {
     const referrerLastName = shadow.getElementById('entry_referrerLastName');
