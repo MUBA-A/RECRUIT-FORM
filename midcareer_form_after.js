@@ -1,4 +1,4 @@
-   (function() {
+(function() {
     const oldDiv = document.getElementById("for_form");
           if (!oldDiv) {
             console.error("Target div not found!");
@@ -390,7 +390,7 @@
                         <label for="entry_portfolio" class="file-input-label" id="entry_portfoliofileName">ファイルを選択</label>
                         <input type="file" id="entry_portfolio" name="portfolio" class="file-input">
                     </div>
-                    <div class="error-message" id="entry_portfolioError">ポートフォリオをアップロードしてください（PDF、Excel、Word, PowerPoint、JPEG、PNG、TIFF、AI、EPS、SVG形式、20MB以下）</div>
+                    <div class="error-message" id="entry_portfolioError">ポートフォリオをアップロードしてください（PDF、Excel、Word, PowerPoint、画像形式(JPG/PNG/TIFF/AI/EPS/SVG)のみ、20MB以下）</div>
                 </div>
                 <div class="form-group">
                 </div>
@@ -746,13 +746,14 @@
             const fileName = file.name.toLowerCase();
             const fileSize = file.size;
             const maxSize = 10 * 1024 * 1024; // 10MB
-            const allowedExtensions = ['.pdf', '.xlsx', '.xls', '.docx', '.doc'];
-            const allowedMimeTypes = [
-                'application/pdf',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'application/vnd.ms-excel',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'application/msword'
+            
+            // Define allowed formats with both extension and MIME type
+            const allowedFormats = [
+                { ext: '.pdf', mime: 'application/pdf' },
+                { ext: '.xlsx', mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
+                { ext: '.xls', mime: 'application/vnd.ms-excel' },
+                { ext: '.docx', mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
+                { ext: '.doc', mime: 'application/msword' }
             ];
             
             // Check for empty files
@@ -761,35 +762,34 @@
                 return false;
             }
             
-            // Check file extension
-            let isValidExtension = false;
-            for (let ext of allowedExtensions) {
-                if (fileName.endsWith(ext)) {
-                    isValidExtension = true;
-                    break;
-                }
-            }
-            
-            // Check MIME type (additional security)
-            const isValidMimeType = allowedMimeTypes.includes(file.type);
-            
-            if (!isValidExtension || !isValidMimeType) {
-                showError(errorId, '許可されているファイル形式：PDF、Excel、Word形式のみ');
-                return false;
-            } else if (fileSize > maxSize) {
+            // Check size first
+            if (fileSize > maxSize) {
                 showError(errorId, 'ファイルサイズは10MB以下にしてください');
                 return false;
-            } else {
-                hideError(errorId);
-                return true;
             }
+            
+            // More flexible validation approach
+            const fileMimeType = file.type;
+            
+            // Check if file matches any of our allowed formats
+            const isValidFormat = allowedFormats.some(format => 
+                fileName.endsWith(format.ext) || fileMimeType === format.mime
+            );
+            
+            if (!isValidFormat) {
+                showError(errorId, '許可されているファイル形式：PDF、Excel、Word形式のみ');
+                return false;
+            }
+            
+            hideError(errorId);
+            return true;
         }
         
         return true;
     }
 
-
     function validatePortfolioFile(fileInput) {
+        // If no file is selected, return true (since it's optional)
         if (!fileInput.files || fileInput.files.length === 0) {
             return true;
         }
@@ -798,60 +798,58 @@
         const fileName = file.name.toLowerCase();
         const fileSize = file.size;
         const maxSize = 20 * 1024 * 1024; // 20MB
-        const allowedExtensions = [
-            '.pdf', '.docx', '.doc', '.pptx', '.ppt',
-            '.jpg', '.jpeg', '.png', '.tiff', '.tif',
-            '.ai', '.eps', '.svg', 
-
-        ];
-        const allowedMimeTypes = [
-                'application/pdf',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'application/msword',
-                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                'application/vnd.ms-powerpoint',
-                'image/jpeg', 
-                'image/tiff',
-                'application/postscript',
-                'application/postscript',
-                'image/svg+xml',      
+        
+        // Define allowed formats with both extension and MIME type
+        const allowedFormats = [
+            { ext: '.pdf', mime: 'application/pdf' },
+            { ext: '.docx', mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
+            { ext: '.doc', mime: 'application/msword' },
+            { ext: '.pptx', mime: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' },
+            { ext: '.ppt', mime: 'application/vnd.ms-powerpoint' },
+            { ext: '.jpg', mime: 'image/jpeg' },
+            { ext: '.jpeg', mime: 'image/jpeg' },
+            { ext: '.png', mime: 'image/png' },
+            { ext: '.tiff', mime: 'image/tiff' },
+            { ext: '.tif', mime: 'image/tiff' },
+            { ext: '.ai', mime: 'application/postscript' },
+            { ext: '.eps', mime: 'application/postscript' },
+            { ext: '.svg', mime: 'image/svg+xml' }
         ];
         
-        let isValidExtension = false;
-        for (let ext of allowedExtensions) {
-            if (fileName.endsWith(ext)) {
-                isValidExtension = true;
-                break;
-            }
-        }
-
-       
+        // Check for empty files
         if (fileSize === 0) {
             showError('entry_portfolioError', 'ファイルが空です。有効なファイルをアップロードしてください');
             return false;
         }
-            
-
-       
-        const isValidMimeType = allowedMimeTypes.includes(file.type);
         
-        if (!isValidExtension || !isValidMimeType) {
+        // Check size first
+        if (fileSize > maxSize) {
+            showError('entry_portfolioError', 'ファイルサイズは20MB以下にしてください');
+            return false;
+        }
+        
+        // Get file MIME type
+        const fileMimeType = file.type;
+        
+        // Check if file matches any of our allowed formats
+        const isValidFormat = allowedFormats.some(format => 
+            fileName.endsWith(format.ext) || fileMimeType === format.mime
+        );
+        
+        if (!isValidFormat) {
             console.debug('File validation failed:', {
                 filename: fileName,
                 size: fileSize,
                 type: file.type,
-                validExt: isValidExtension,
-                validMime: isValidMimeType
+                validFormats: allowedFormats.map(f => `${f.ext} (${f.mime})`)
             });
-            showError('entry_portfolioError');
+            showError('entry_portfolioError', '許可されているファイル形式:PDF、Word、PowerPoint、画像形式(JPG/PNG/TIFF/AI/EPS/SVG)のみ');
             return false;
-        } else if (fileSize > maxSize) {
-            showError('entry_portfolioError', 'ファイルサイズは20MB以下にしてください');
-            return false;
-        } else {
-            hideError('entry_portfolioError');
-            return true;
         }
+        
+        // If we got here, the file is valid
+        hideError('entry_portfolioError');
+        return true;
     }
 
 
