@@ -393,7 +393,7 @@
                         <label for="entry_comment" class="file-input-label" id="entry_commentfileName">ファイルを選択</label>
                         <input type="file" id="entry_comment" name="comment" class="file-input" aria-required="false">
                     </div>
-                    <div class="error-message" id="entry_commentError">感想文をアップロードしてください（PDF、TXT、Word形式、10MB以下）</div>
+                    <div class="error-message" id="entry_commentError">感想文をアップロードしてください（PDF、TXT、Word形式、5MB以下）</div>
               </div>
             </div>
 
@@ -850,7 +850,7 @@
         
         // Check size first
         if (fileSize > maxSize) {
-            showError('entry_commentError', 'ファイルサイズは10MB以下にしてください');
+            showError('entry_commentError', 'ファイルサイズは5MB以下にしてください');
             return false;
         }
         
