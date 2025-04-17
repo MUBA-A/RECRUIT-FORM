@@ -352,11 +352,11 @@
                     <label for="entry_desiredOccupation" class="required-label">希望職種</label>
                     <select id="entry_desiredOccupation" name="desiredOccupation" required aria-required="true">
                         <option value="">選択してください</option>
-                        <option value="DXコンサルタント">DXコンサルタント</option>
+                        <option value="DXコンサル">DXコンサルタント</option>
                         <option value="フィールドセールス">フィールドセールス</option>
                         <option value="インサイドセールス">インサイドセールス</option>
-                        <option value="Japan Wing">Japan Wing</option>
-                        <option value="Global Wing">Global Wing</option>
+                        <option value="Japan Wingセールス">Japan Wingセールス</option>
+                        <option value="Japan Wing講師">Japan Wing講師</option>
                         <option value="コーポレートファンクション">コーポレートファンクション</option>
                         <option value="その他">その他</option>
                     </select>
