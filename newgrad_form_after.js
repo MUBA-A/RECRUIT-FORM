@@ -762,8 +762,8 @@
     
 
     function validateFile(fileInput) {
-        // Check if file is required and present
-        if (fileInput.required && (!fileInput.files || fileInput.files.length === 0)) {
+        // Check if no file and show error
+        if (!fileInput.files || fileInput.files.length === 0) {
             showError('entry_resumeError', '履歴書をアップロードしてください');
             return false;
         }
@@ -823,7 +823,11 @@
     }
 
     function validateCommentFile(fileInput) {
-        
+        // Check if no file and show
+        if (!fileInput.files || fileInput.files.length === 0) {
+            showError('entry_resumeError', '感想文をアップロードしてください（PDF、TXT、Word形式、5MB以下）');
+            return false;
+        }
         const file = fileInput.files[0];
         const fileName = file.name.toLowerCase();
         const fileSize = file.size;
