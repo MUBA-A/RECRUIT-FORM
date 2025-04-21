@@ -388,7 +388,7 @@
                 <div class="error-message" id="entry_eventDateError"></div>
               </div>
               <div class="form-group">
-                    <label for="entry_comment">説明会感想文</label>
+                    <label for="entry_comment" class="required-label">説明会感想文</label>
                     <div class="file-input-container">
                         <label for="entry_comment" class="file-input-label" id="entry_commentfileName">ファイルを選択</label>
                         <input type="file" id="entry_comment" name="comment" class="file-input" aria-required="false">
@@ -823,10 +823,6 @@
     }
 
     function validateCommentFile(fileInput) {
-        // If no file is selected, return true (since it's optional)
-        if (!fileInput.files || fileInput.files.length === 0) {
-            return true;
-        }
         
         const file = fileInput.files[0];
         const fileName = file.name.toLowerCase();
