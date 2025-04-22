@@ -363,7 +363,7 @@
     const form = shadow.getElementById('entry_entryForm');
     const privacyPolicyCheckbox = shadow.getElementById('entry_privacyPolicy');
     const privacyPolicyTimestampField = shadow.getElementById('entry_privacyPolicyTimestamp');
-
+    const desiredOccupation = shadow.getElementById('entry_desiredOccupation');
 
 
     let occupation = "その他";
