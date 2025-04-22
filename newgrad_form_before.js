@@ -331,7 +331,7 @@
     function initializeMarketoLogicWhenReady() {
         if (typeof MktoForms2 !== "undefined") {
     
-            MktoForms2.whenReady(function(form) {
+            MktoForms2.whenReady(function(mktoForm) {
                 mktoFormEl = mktoForm;
                 sbmtBtn.disabled = false;
                 sbmtBtn.textContent = 'エントリー';
