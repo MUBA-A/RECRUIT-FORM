@@ -171,7 +171,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 20px 0;
+            margin: 50px 0 40px 0;
             flex-wrap: nowrap;
         }
 
@@ -213,7 +213,7 @@
             color: white;
             font-weight: bold;
             border: none;
-            padding: 12px 24px;
+            padding: 24px 24px;
             font-size: 16px;
             border-radius: 4px;
             cursor: pointer;
@@ -775,7 +775,7 @@
     
 
     function validateFile(fileInput) {
-        // Check if no file and show error
+        // Check if no file and present
         if (!fileInput.files || fileInput.files.length === 0) {
             showError('entry_resumeError', '履歴書をアップロードしてください');
             return false;
@@ -836,11 +836,13 @@
     }
 
     function validateCommentFile(fileInput) {
-        // Check if no file and show
+
+        // Check if no file and present
         if (!fileInput.files || fileInput.files.length === 0) {
             showError('entry_resumeError', '感想文をアップロードしてください（PDF、TXT、Word形式、5MB以下）');
             return false;
         }
+        
         const file = fileInput.files[0];
         const fileName = file.name.toLowerCase();
         const fileSize = file.size;
