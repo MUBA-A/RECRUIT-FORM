@@ -322,17 +322,30 @@
     
    // Add JS
   // Disable submit button until Marketo form loads
-  const sbmtBtn = shadow.getElementById('entry_submitBtn');
+    const sbmtBtn = shadow.getElementById('entry_submitBtn');
     sbmtBtn.disabled = true;
     sbmtBtn.textContent = '読込中...';
     let mktoFormEl;
 
-    // Watch for Marketo form to be ready and enable submit button.
-    MktoForms2.whenReady(function(mktoForm) {
-        mktoFormEl = mktoForm;
-        sbmtBtn.disabled = false;
-        sbmtBtn.textContent = 'エントリー';
-    });
+
+    function initializeMarketoLogicWhenReady() {
+        if (typeof MktoForms2 !== "undefined") {
+    
+            MktoForms2.whenReady(function(form) {
+                mktoFormEl = mktoForm;
+                sbmtBtn.disabled = false;
+                sbmtBtn.textContent = 'エントリー';
+            });
+    
+        } else {
+            // MktoForms2 doesn't exist yet. Wait and try again.
+            console.log("MktoForms2 object not found yet. Retrying in 100ms...");
+            setTimeout(initializeMarketoLogicWhenReady, 100); // Check again shortly
+        }
+    }
+    
+    // Start the process
+    initializeMarketoLogicWhenReady();
 
     // Get form and input elements
     const form = shadow.getElementById('entry_entryForm');
