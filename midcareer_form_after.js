@@ -348,18 +348,20 @@
                     <input type="tel" id="entry_phone" name="phone" required aria-required="true" placeholder="090-1234-5678">
                     <div class="error-message" id="entry_phoneError">有効な電話番号を入力してください</div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="visibility: hidden;">
                     <label for="entry_desiredOccupation">応募職種</label>
                     <select id="entry_desiredOccupation" name="desiredOccupation">
-                        <option value="">選択してください</option>
+                        <option value="その他">その他</option>
                         <option value="インサイドセールス">インサイドセールス</option>
                         <option value="フィールドセールス">フィールドセールス</option>
                         <option value="フィールドセールス・エクスパート">フィールドセールス・エクスパート</option>
+                        <option value="Japan Wingセールス">Japan Wingセールス</option>
+                        <option value="Japan Wing講師">Japan Wing講師</option>
                         <option value="DXコンサルタント・エントリーレベル">DXコンサルタント・エントリーレベル</option>
                         <option value="DXコンサルタント">DXコンサルタント</option>
                         <option value="DXコンサルタント・エクスパート">DXコンサルタント・エクスパート</option>
                         <option value="データサイエンティスト">データサイエンティスト</option>
-                        <option value="コーポレート・ファンクション">コーポレート・ファンクション</option>
+                        <option value="コーポレートファンクション">コーポレートファンクション</option>
                     </select>
                 </div>
             </div>
@@ -438,27 +440,32 @@
 
     if (window.location.search != "") {
         const params = new URLSearchParams(window.location.search);
-        const referrer = params.get("page");
-        if (referrer == "F-1") {
-            // Redirect to newgrad entry form page
-            window.location.href = "https://recruit.gl-navi.co.jp/apply/entry/newgrad#scroll_tag";
-        }
+        const referrer = params.get("occupation").toLowerCase();
+
+        let occupation = "その他";
         const occupations = {
-            "A-1": "インサイドセールス",
-            "A-2": "フィールドセールス",
-            "A-3": "フィールドセールス・エクスパート",
-            "C-1": "DXコンサルタント・エントリーレベル",
-            "C-2": "DXコンサルタント",
-            "C-3": "DXコンサルタント・エクスパート",
-            "C-4": "データサイエンティスト",
-            "D-1": "コーポレート・ファンクション",
-        }
+            "is": "インサイドセールス",
+            "fs": "フィールドセールス",
+            "fs_expert": "フィールドセールス・エクスパート",
+            "jw_sales": "Japan Wingセールス",
+            "jw_instructor": "Japan Wing講師",
+            "c_entry": "DXコンサルタント・エントリーレベル",
+            "c": "DXコンサルタント",
+            "c_expert": "DXコンサルタント・エクスパート",
+            "ds": "データサイエンティスト",
+            "cf": "コーポレートファンクション",
+        };
 
         if (Object.keys(occupations).includes(referrer)) {
-            // set the default value to the value of referrer 
-            desiredOccupation.value = occupations[referrer]
+            // set the default value to the value of referrer
+            occupation = occupations[referrer];
+            desiredOccupation.value = occupation;
+        } else {
+            desiredOccupation.value = occupation;
         }
 
+    } else {
+        desiredOccupation.value = occupation;
     }
     
 
@@ -531,16 +538,6 @@
         if (isValid) {
             // Get form data
             const formData = new FormData(form);
-
-
-            // if referrer is the same domain, add FormData. 集客元のための処理
-            const referrer = document.referrer;
-            const GLNaviDomain = window.location.hostname;
-
-            if (referrer.includes(GLNaviDomain)) {
-                formData.setAttribute("referrer", "ホームページ");
-            }
-            
             
             setFormSubmitting(true);
 
