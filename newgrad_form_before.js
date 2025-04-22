@@ -115,27 +115,6 @@
             font-family: var(--font-family);
         }
 
-        .referrer-container {
-            background-color: #626FCE;
-            margin: 50px 0;
-            padding: 30px 30px 15px 30px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .referrer-container p {
-            color: #ffffff;
-            font-weight: bold;
-            margin-bottom: 15px;
-            text-align: center;
-            width: 100%;
-        }
-        
-        .referrer-container .form-group {
-            flex: 1 1 200px;
-        }
-
         .checkbox-group {
             display: flex;
             align-items: center;
@@ -322,19 +301,6 @@
                         </div>
                     </div>
 
-                    <div class="form-row referrer-container">
-                        <p>ご紹介者さまのお名前を入力してください</p>
-                        <div class="form-group">
-                            <label for="entry_referrerLastName">姓</label>
-                            <input type="text" id="entry_referrerLastName" name="referrerLastName" aria-required="false" placeholder="山田">
-                            <div class="error-message" id="entry_referrerLastNameError">名前を255文字以内で入力してください</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="entry_referrerFirstName">名</label>
-                            <input type="text" id="entry_referrerFirstName" name="referrerFirstName" aria-required="false" placeholder="花子">
-                            <div class="error-message" id="entry_referrerFirstNameError">名前を255文字以内で入力してください</div>
-                        </div>
-                    </div>
             
                     <div class="checkbox-group">
                         <input type="checkbox" id="entry_privacyPolicy" name="privacyPolicy" class="checkbox-input" required aria-required="true">
@@ -407,7 +373,6 @@
         isValid = validateEmailConfirmation() && isValid;
         isValid = validatePhone() && isValid;
         isValid = validateGraduationYear() && isValid;
-        isValid = validateRefererFields() && isValid;
         isValid = validateCheckbox('entry_privacyPolicy', 'entry_privacyPolicyError') && isValid;
 
         function setFormSubmitting(isSubmitting) {
@@ -532,8 +497,6 @@
                 validateGraduationYear();
             } else if (this.id === 'entry_privacyPolicy') {
                 validateCheckbox(this.id, 'entry_privacyPolicyError');
-            } else if (this.id === 'entry_referrerLastName' || this.id === 'entry_referrerFirstName') {
-                validateRefererFields();
             } else if (this.required) {
                 validateRequiredField(this.id, this.id + 'Error');
             }
@@ -653,47 +616,6 @@
     }
 
 
-    function validateRefererFields() {
-    const referrerLastName = shadow.getElementById('entry_referrerLastName');
-    const referrerFirstName = shadow.getElementById('entry_referrerFirstName');
-    
-    // If both are empty, it's valid (not required)
-    if (!referrerLastName.value.trim() && !referrerFirstName.value.trim()) {
-        hideError('entry_referrerLastNameError');
-        hideError('entry_referrerFirstNameError');
-        return true;
-    }
-    
-    let isValid = true;
-    
-    // If one is filled but not the other
-    if (referrerLastName.value.trim() && !referrerFirstName.value.trim()) {
-        showError('entry_referrerFirstNameError', '名を入力してください');
-        isValid = false;
-    } else {
-        hideError('entry_referrerFirstNameError');
-    }
-    
-    if (!referrerLastName.value.trim() && referrerFirstName.value.trim()) {
-        showError('entry_referrerLastNameError', '姓を入力してください');
-        isValid = false;
-    } else {
-        hideError('entry_referrerLastNameError');
-    }
-    
-    // Check length limits
-    if (referrerLastName.value.length > 255) {
-        showError('entry_referrerLastNameError', '姓を255文字以内で入力してください');
-        isValid = false;
-    }
-    
-    if (referrerFirstName.value.length > 255) {
-        showError('entry_referrerFirstNameError', '名を255文字以内で入力してください');
-        isValid = false;
-    }
-    
-    return isValid;
-}
 
     function validateCheckbox(fieldId, errorId) {
         const field = shadow.getElementById(fieldId);
