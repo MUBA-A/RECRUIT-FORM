@@ -122,7 +122,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 20px 0;
+            margin: 50px 0 40px 0;
             flex-wrap: nowrap;
         }
 
@@ -164,7 +164,7 @@
             color: white;
             font-weight: bold;
             border: none;
-            padding: 12px 24px;
+            padding: 24px 24px;
             font-size: 16px;
             border-radius: 4px;
             cursor: pointer;
@@ -297,7 +297,21 @@
                             <input type="tel" id="entry_phone" name="phone" required aria-required="true" placeholder="090-1234-5678">
                             <div class="error-message" id="entry_phoneError">有効な電話番号を入力してください</div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="visibility: hidden;">
+                            <label for="entry_desiredOccupation">応募職種</label>
+                            <select id="entry_desiredOccupation" name="desiredOccupation">
+                                <option value="その他">その他</option>
+                                <option value="インサイドセールス">インサイドセールス</option>
+                                <option value="フィールドセールス">フィールドセールス</option>
+                                <option value="フィールドセールス・エクスパート">フィールドセールス・エクスパート</option>
+                                <option value="Japan Wingセールス">Japan Wingセールス</option>
+                                <option value="Japan Wing講師">Japan Wing講師</option>
+                                <option value="DXコンサルタント・エントリーレベル">DXコンサルタント・エントリーレベル</option>
+                                <option value="DXコンサルタント">DXコンサルタント</option>
+                                <option value="DXコンサルタント・エクスパート">DXコンサルタント・エクスパート</option>
+                                <option value="データサイエンティスト">データサイエンティスト</option>
+                                <option value="コーポレートファンクション">コーポレートファンクション</option>
+                            </select>
                         </div>
                     </div>
             
@@ -349,6 +363,38 @@
     const form = shadow.getElementById('entry_entryForm');
     const privacyPolicyCheckbox = shadow.getElementById('entry_privacyPolicy');
     const privacyPolicyTimestampField = shadow.getElementById('entry_privacyPolicyTimestamp');
+
+
+    if (window.location.search != "") {
+        const params = new URLSearchParams(window.location.search);
+        const referrer = params.get("occupation").toLowerCase();
+
+        let occupation = "その他";
+        const occupations = {
+            "is": "インサイドセールス",
+            "fs": "フィールドセールス",
+            "fs_expert": "フィールドセールス・エクスパート",
+            "jw_sales": "Japan Wingセールス",
+            "jw_instructor": "Japan Wing講師",
+            "c_entry": "DXコンサルタント・エントリーレベル",
+            "c": "DXコンサルタント",
+            "c_expert": "DXコンサルタント・エクスパート",
+            "ds": "データサイエンティスト",
+            "cf": "コーポレートファンクション",
+        };
+
+        if (Object.keys(occupations).includes(referrer)) {
+            // set the default value to the value of referrer
+            occupation = occupations[referrer];
+            desiredOccupation.value = occupation;
+        } else {
+            desiredOccupation.value = occupation;
+        }
+
+    } else {
+        desiredOccupation.value = occupation;
+    }
+
 
 
     privacyPolicyCheckbox.addEventListener('change', function() {
