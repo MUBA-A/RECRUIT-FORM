@@ -437,7 +437,26 @@
 
     if (window.location.search != "") {
         const params = new URLSearchParams(window.location.search);
-        const occupation = params.get('occupation');
+        const referrer = params.get("page");
+        if (referrer == "F-1") {
+            // Redirect to newgrad entry form page
+            window.location.href = "https://recruit.gl-navi.co.jp/apply/entry/newgrad#scroll_tag";
+        }
+        const occupations = {
+            "A-1": "インサイドセールス",
+            "A-2": "フィールドセールス",
+            "A-3": "フィールドセールス・エクスパート",
+            "C-1": "DXコンサルタント・エントリーレベル",
+            "C-2": "DXコンサルタント",
+            "C-3": "DXコンサルタント・エクスパート",
+            "C-4": "データサイエンティスト",
+            "D-1": "コーポレート・ファンクション",
+        }
+
+        if (Object.keys(occupations).includes(referrer)) {
+            // set the default value to the value of referrer 
+            desiredOccupation.value = occupations[referrer]
+        }
 
     }
     
