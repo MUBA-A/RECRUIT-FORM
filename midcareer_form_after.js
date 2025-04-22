@@ -513,7 +513,6 @@
         isValid = validateEmail() && isValid;
         isValid = validateEmailConfirmation() && isValid;
         isValid = validatePhone() && isValid;
-        isValid = validateDesiredOccupation() && isValid;
 
         isValid = validateFile(resumeInput, 'entry_resumeError') && isValid;
         isValid = validateFile(CVInput, 'entry_CVError') && isValid;
@@ -635,8 +634,6 @@
                 validateEmailConfirmation();
             } else if (this.id === 'entry_phone') {
                 validatePhone();
-            } else if (this.id === 'entry_desiredOccupation') {
-                validateDesiredOccupation();
             } else if (this.id === 'entry_resume') {
                 validateFile(this, 'entry_resumeError');
             } else if (this.id === 'entry_CV') {
