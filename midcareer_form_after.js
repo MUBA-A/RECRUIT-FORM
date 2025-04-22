@@ -174,7 +174,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 50px 0 20px 0;
+            margin: 50px 0 40px 0;
             flex-wrap: nowrap;
         }
 
@@ -216,7 +216,7 @@
             color: white;
             font-weight: bold;
             border: none;
-            padding: 12px 24px;
+            padding: 24px 24px;
             font-size: 16px;
             border-radius: 4px;
             cursor: pointer;
@@ -349,8 +349,8 @@
                     <div class="error-message" id="entry_phoneError">有効な電話番号を入力してください</div>
                 </div>
                 <div class="form-group">
-                    <label for="entry_desiredOccupation" class="required-label">希望職種</label>
-                    <select id="entry_desiredOccupation" name="desiredOccupation" required aria-required="true">
+                    <label for="entry_desiredOccupation">応募職種</label>
+                    <select id="entry_desiredOccupation" name="desiredOccupation">
                         <option value="">選択してください</option>
                         <option value="DXコンサル">DXコンサルタント</option>
                         <option value="フィールドセールス">フィールドセールス</option>
@@ -360,7 +360,6 @@
                         <option value="コーポレートファンクション">コーポレートファンクション</option>
                         <option value="その他">その他</option>
                     </select>
-                    <div class="error-message" id="entry_desiredOccupationError">希望職種を選択してください</div>
                 </div>
             </div>
 
@@ -380,19 +379,6 @@
                         <input type="file" id="entry_CV" name="CV" class="file-input" required aria-required="true">
                     </div>
                     <div class="error-message" id="entry_CVError">職務経歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="entry_portfolio">ポートフォリオ</label>
-                    <div class="file-input-container">
-                        <label for="entry_portfolio" class="file-input-label" id="entry_portfoliofileName">ファイルを選択</label>
-                        <input type="file" id="entry_portfolio" name="portfolio" class="file-input">
-                    </div>
-                    <div class="error-message" id="entry_portfolioError">ポートフォリオをアップロードしてください（PDF、Excel、Word, PowerPoint、画像形式(JPG/PNG/TIFF/AI/EPS/SVG)のみ、20MB以下）</div>
-                </div>
-                <div class="form-group">
                 </div>
             </div>
 
@@ -445,11 +431,16 @@
     const fileNameDisplay = shadow.getElementById('entry_fileName');
     const CVInput = shadow.getElementById('entry_CV');
     const CVFileNameDisplay = shadow.getElementById('entry_CVfileName');
-    const portfolioInput = shadow.getElementById('entry_portfolio');
-    const portfolioFileNameDisplay = shadow.getElementById('entry_portfoliofileName');
     const privacyPolicyCheckbox = shadow.getElementById('entry_privacyPolicy');
     const privacyPolicyTimestampField = shadow.getElementById('entry_privacyPolicyTimestamp');
+    const desiredOccupation = shadow.getElementById('entry_desiredOccupation');
 
+    if (window.location.search != "") {
+        const params = new URLSearchParams(window.location.search);
+        const occupation = params.get('occupation');
+
+    }
+    
 
 
     // Display file name when selected
@@ -473,18 +464,6 @@
         } else {
             CVFileNameDisplay.textContent = '選択されていません';
             hideError('entry_CVError');
-        }
-    });
-
-    // Display portfolio file name when selected
-    portfolioInput.addEventListener('change', function() {
-        if (this.files.length > 0) {
-            portfolioFileNameDisplay.textContent = this.files[0].name;
-            portfolioFileNameDisplay.style.fontWeight = "bold";
-            validatePortfolioFile(this);
-        } else {
-            portfolioFileNameDisplay.textContent = '選択されていません';
-            hideError('entry_portfolioError');
         }
     });
 
@@ -518,7 +497,6 @@
 
         isValid = validateFile(resumeInput, 'entry_resumeError') && isValid;
         isValid = validateFile(CVInput, 'entry_CVError') && isValid;
-        isValid = validatePortfolioFile(portfolioInput) && isValid;
 
         isValid = validateCheckbox('entry_privacyPolicy', 'entry_privacyPolicyError') && isValid;
 
@@ -535,11 +513,15 @@
             // Get form data
             const formData = new FormData(form);
 
-            const portfolio_form_file = formData.get("portfolio");
-            // Check if portfolio is empty or not provided
-            if (!portfolio_form_file || portfolio_form_file.size === 0 || portfolio_form_file.name === "") {
-                formData.delete("portfolio");
+
+            // if referrer is the same domain, add FormData. 集客元のための処理
+            const referrer = document.referrer;
+            const GLNaviDomain = window.location.hostname;
+
+            if (referrer.includes(GLNaviDomain)) {
+                formData.setAttribute("referrer", "ホームページ");
             }
+            
             
             setFormSubmitting(true);
 
@@ -593,7 +575,6 @@
                 form.reset();
                 fileNameDisplay.textContent = '選択されていません';
                 CVFileNameDisplay.textContent = '選択されていません';
-                portfolioFileNameDisplay.textContent = '選択されていません';
                 setFormSubmitting(false); // Re-enable form
                 
                 // Redirect to thank you page
@@ -640,8 +621,6 @@
                 validateFile(this, 'entry_resumeError');
             } else if (this.id === 'entry_CV') {
                 validateFile(this, 'entry_CVError');
-            } else if (this.id === 'entry_portfolio') {
-                validatePortfolioFile(this);
             } else if (this.required) {
                 validateRequiredField(this.id, this.id + 'Error');
             }
@@ -734,17 +713,17 @@
         }
     }
 
-    function validateDesiredOccupation() {
-        const desiredOccupation = shadow.getElementById('entry_desiredOccupation');
+    // function validateDesiredOccupation() {
+    //     const desiredOccupation = shadow.getElementById('entry_desiredOccupation');
 
-        if (!desiredOccupation.value.trim()) {
-            showError("entry_desiredOccupationError", "希望職種を選択してください");
-            return false;
-        }
-        hideError('entry_desiredOccupationError');
-        return true;
+    //     if (!desiredOccupation.value.trim()) {
+    //         showError("entry_desiredOccupationError", "応募職種を選択してください");
+    //         return false;
+    //     }
+    //     hideError('entry_desiredOccupationError');
+    //     return true;
 
-    }
+    // }
 
 
     function validateFile(fileInput, errorId) {
@@ -801,69 +780,6 @@
         return true;
     }
 
-    function validatePortfolioFile(fileInput) {
-        // If no file is selected, return true (since it's optional)
-        if (!fileInput.files || fileInput.files.length === 0) {
-            return true;
-        }
-        
-        const file = fileInput.files[0];
-        const fileName = file.name.toLowerCase();
-        const fileSize = file.size;
-        const maxSize = 20 * 1024 * 1024; // 20MB
-        
-        // Define allowed formats with both extension and MIME type
-        const allowedFormats = [
-            { ext: '.pdf', mime: 'application/pdf' },
-            { ext: '.docx', mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
-            { ext: '.doc', mime: 'application/msword' },
-            { ext: '.pptx', mime: 'application/vnd.openxmlformats-officedocument.presentationml.presentation' },
-            { ext: '.ppt', mime: 'application/vnd.ms-powerpoint' },
-            { ext: '.jpg', mime: 'image/jpeg' },
-            { ext: '.jpeg', mime: 'image/jpeg' },
-            { ext: '.png', mime: 'image/png' },
-            { ext: '.tiff', mime: 'image/tiff' },
-            { ext: '.tif', mime: 'image/tiff' },
-            { ext: '.ai', mime: 'application/postscript' },
-            { ext: '.eps', mime: 'application/postscript' },
-            { ext: '.svg', mime: 'image/svg+xml' }
-        ];
-        
-        // Check for empty files
-        if (fileSize === 0) {
-            showError('entry_portfolioError', 'ファイルが空です。有効なファイルをアップロードしてください');
-            return false;
-        }
-        
-        // Check size first
-        if (fileSize > maxSize) {
-            showError('entry_portfolioError', 'ファイルサイズは20MB以下にしてください');
-            return false;
-        }
-        
-        // Get file MIME type
-        const fileMimeType = file.type;
-        
-        // Check if file matches any of our allowed formats
-        const isValidFormat = allowedFormats.some(format => 
-            fileName.endsWith(format.ext) || fileMimeType === format.mime
-        );
-        
-        if (!isValidFormat) {
-            console.debug('File validation failed:', {
-                filename: fileName,
-                size: fileSize,
-                type: file.type,
-                validFormats: allowedFormats.map(f => `${f.ext} (${f.mime})`)
-            });
-            showError('entry_portfolioError', '許可されているファイル形式:PDF、Word、PowerPoint、画像形式(JPG/PNG/TIFF/AI/EPS/SVG)のみ');
-            return false;
-        }
-        
-        // If we got here, the file is valid
-        hideError('entry_portfolioError');
-        return true;
-    }
 
 
     function validateCheckbox(fieldId, errorId) {
