@@ -438,11 +438,12 @@
     const privacyPolicyTimestampField = shadow.getElementById('entry_privacyPolicyTimestamp');
     const desiredOccupation = shadow.getElementById('entry_desiredOccupation');
 
+    let occupation = "その他";
     if (window.location.search != "") {
         const params = new URLSearchParams(window.location.search);
-        const referrer = params.get("occupation").toLowerCase();
+        const referrer = params.get("occupation", "").toLowerCase();
 
-        let occupation = "その他";
+        
         const occupations = {
             "is": "インサイドセールス",
             "fs": "フィールドセールス",
