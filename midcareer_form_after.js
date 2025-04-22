@@ -352,13 +352,14 @@
                     <label for="entry_desiredOccupation">応募職種</label>
                     <select id="entry_desiredOccupation" name="desiredOccupation">
                         <option value="">選択してください</option>
-                        <option value="DXコンサル">DXコンサルタント</option>
-                        <option value="フィールドセールス">フィールドセールス</option>
                         <option value="インサイドセールス">インサイドセールス</option>
-                        <option value="Japan Wingセールス">Japan Wingセールス</option>
-                        <option value="Japan Wing講師">Japan Wing講師</option>
-                        <option value="コーポレートファンクション">コーポレートファンクション</option>
-                        <option value="その他">その他</option>
+                        <option value="フィールドセールス">フィールドセールス</option>
+                        <option value="フィールドセールス・エクスパート">フィールドセールス・エクスパート</option>
+                        <option value="DXコンサルタント・エントリーレベル">DXコンサルタント・エントリーレベル</option>
+                        <option value="DXコンサルタント">DXコンサルタント</option>
+                        <option value="DXコンサルタント・エクスパート">DXコンサルタント・エクスパート</option>
+                        <option value="データサイエンティスト">データサイエンティスト</option>
+                        <option value="コーポレート・ファンクション">コーポレート・ファンクション</option>
                     </select>
                 </div>
             </div>
