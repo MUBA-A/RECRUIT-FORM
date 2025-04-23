@@ -297,22 +297,6 @@
                             <input type="tel" id="entry_phone" name="phone" required aria-required="true" placeholder="090-1234-5678">
                             <div class="error-message" id="entry_phoneError">有効な電話番号を入力してください</div>
                         </div>
-                        <div class="form-group" style="visibility: hidden;">
-                            <label for="entry_desiredOccupation">応募職種</label>
-                            <select id="entry_desiredOccupation" name="desiredOccupation">
-                                <option value="その他">その他</option>
-                                <option value="インサイドセールス">インサイドセールス</option>
-                                <option value="フィールドセールス">フィールドセールス</option>
-                                <option value="フィールドセールス・エクスパート">フィールドセールス・エクスパート</option>
-                                <option value="Japan Wingセールス">Japan Wingセールス</option>
-                                <option value="Japan Wing講師">Japan Wing講師</option>
-                                <option value="DXコンサルタント・エントリーレベル">DXコンサルタント・エントリーレベル</option>
-                                <option value="DXコンサルタント">DXコンサルタント</option>
-                                <option value="DXコンサルタント・エクスパート">DXコンサルタント・エクスパート</option>
-                                <option value="データサイエンティスト">データサイエンティスト</option>
-                                <option value="コーポレートファンクション">コーポレートファンクション</option>
-                            </select>
-                        </div>
                     </div>
             
                     <div class="checkbox-group">
@@ -363,38 +347,53 @@
     const form = shadow.getElementById('entry_entryForm');
     const privacyPolicyCheckbox = shadow.getElementById('entry_privacyPolicy');
     const privacyPolicyTimestampField = shadow.getElementById('entry_privacyPolicyTimestamp');
-    const desiredOccupation = shadow.getElementById('entry_desiredOccupation');
+    
+    const occupations = {
+        "is": "インサイドセールス",
+        "fs": "フィールドセールス",
+        "fs_expert": "フィールドセールス・エクスパート",
+        "jw_sales": "Japan Wingセールス",
+        "jw_instructor": "Japan Wing講師",
+        "c_entry": "DXコンサルタント・エントリーレベル",
+        "c": "DXコンサルタント",
+        "c_expert": "DXコンサルタント・エクスパート",
+        "ds": "データサイエンティスト",
+        "cf": "コーポレートファンクション",
+    };
 
+    const recordTypes = {
+        "h": "中途本社レコードタイプ",
+        "c": "中途コンサルレコードタイプ",
+        "j": "JapanWingレコードタイプ",
+        "honsya": "中途本社レコードタイプ",
+        "konsaru": "中途コンサルレコードタイプ",
+        "japanwing": "JapanWingレコードタイプ",
+        "honsha": "中途本社レコードタイプ",
+        "consult": "中途コンサルレコードタイプ",
+        "jw": "JapanWingレコードタイプ",
+    };
+    let occupation = "";
+    let recordType = "中途本社レコードタイプ";    // default
 
-    let occupation = "その他";
+    // set the occupation
     if (window.location.search != "") {
         const params = new URLSearchParams(window.location.search);
-        const referrer = params.get("occupation", "").toLowerCase();
 
-        
-        const occupations = {
-            "is": "インサイドセールス",
-            "fs": "フィールドセールス",
-            "fs_expert": "フィールドセールス・エクスパート",
-            "jw_sales": "Japan Wingセールス",
-            "jw_instructor": "Japan Wing講師",
-            "c_entry": "DXコンサルタント・エントリーレベル",
-            "c": "DXコンサルタント",
-            "c_expert": "DXコンサルタント・エクスパート",
-            "ds": "データサイエンティスト",
-            "cf": "コーポレートファンクション",
-        };
-
-        if (Object.keys(occupations).includes(referrer)) {
-            // set the default value to the value of referrer
-            occupation = occupations[referrer];
-            desiredOccupation.value = occupation;
-        } else {
-            desiredOccupation.value = occupation;
+        if (params.get("occupation", false)) {
+            const referrer = params.get("occupation").toLowerCase();
+            if (Object.keys(occupations).includes(referrer)) {
+                // set the value to the value of referrer
+                occupation = occupations[referrer];
+                
+            } 
         }
+    } 
 
-    } else {
-        desiredOccupation.value = occupation;
+    const pathSegments = window.location.pathname.split("/").filter(Boolean);
+    const lastSegment = pathSegments[pathSegments.length - 1];
+    
+    if (Object.keys(recordTypes).includes(lastSegment)) {
+        recordType = recordTypes[lastSegment];
     }
 
 
@@ -441,6 +440,12 @@
             isSubmissionInProgress = true;
             // Get form data
             const formData = new FormData(form);
+            formData.set("recordType", recordType);
+
+            if (occupation) {
+                formData.set("desiredOccupation", occupation);
+            }
+
             
             setFormSubmitting(true);
 
