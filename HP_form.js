@@ -374,9 +374,9 @@
                         <option value="DXコンサルタント">・IT・コンサルタント: DXコンサルタント</option>
                         <option value="DXコンサルタント・エクスパート">・IT・コンサルタント: DXコンサルタント・エクスパート</option>
                         <option value="データサイエンティスト">・IT・コンサルタント: データサイエンティスト</option>
-                        <option value="コーポレートファンクション">コーポレートファンクション</option>
-                        <option value="新卒・第二新卒 オープンポジション">新卒・第二新卒: オープンポジション</option>
-                        <option value="その他">その他</option>
+                        <option value="コーポレートファンクション">・コーポレートファンクション</option>
+                        <option value="新卒・第二新卒 オープンポジション">・新卒・第二新卒: オープンポジション</option>
+                        <option value="その他">・その他</option>
                     </select>
                     <div class="error-message" id="entry_desiredOccupationError">応募職種を選択してください</div>
                 </div>
