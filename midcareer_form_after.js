@@ -367,7 +367,8 @@
                     </div>
                     <div class="error-message" id="entry_CVError">職務経歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
                 </div>
-                
+                <div class="form-group">
+                </div>
             </div>
 
             <div class="checkbox-group">
