@@ -374,8 +374,6 @@
 
             <div class="form-row">
                 <div class="form-group">
-                </div>
-                <div class="form-group">
                     <label for="entry_resume" class="required-label">履歴書</label>
                     <div class="file-input-container">
                         <label for="entry_resume" class="file-input-label" id="entry_fileName">ファイルを選択</label>
@@ -383,7 +381,8 @@
                     </div>
                     <div class="error-message" id="entry_resumeError">履歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
                 </div>
-
+                <div class="form-group">
+                </div>
             </div>
 
 
