@@ -448,7 +448,7 @@
         "jw": "JapanWingレコードタイプ",
     };
     let occupation = "";
-    let recordType = "h";
+    let recordType = "中途本社レコードタイプ";    // default
 
     // set the occupation
     if (window.location.search != "") {
