@@ -88,7 +88,6 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
         }
-
         select:focus {
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
@@ -352,8 +351,13 @@
                     <div class="error-message" id="entry_phoneError">有効な電話番号を入力してください</div>
                 </div>
                 <div class="form-group">
+                    <label for="entry_resume" class="required-label">履歴書</label>
+                    <div class="file-input-container">
+                        <label for="entry_resume" class="file-input-label" id="entry_fileName">ファイルを選択</label>
+                        <input type="file" id="entry_resume" name="resume" class="file-input" required aria-required="true">
+                    </div>
+                    <div class="error-message" id="entry_resumeError">履歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
                 </div>
-
             </div>
 
             <div class="form-row">
@@ -375,19 +379,6 @@
                         <option value="その他">その他</option>
                     </select>
                     <div class="error-message" id="entry_desiredOccupationError">応募職種を選択してください</div>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="entry_resume" class="required-label">履歴書</label>
-                    <div class="file-input-container">
-                        <label for="entry_resume" class="file-input-label" id="entry_fileName">ファイルを選択</label>
-                        <input type="file" id="entry_resume" name="resume" class="file-input" required aria-required="true">
-                    </div>
-                    <div class="error-message" id="entry_resumeError">履歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
-                </div>
-                <div class="form-group">
                 </div>
             </div>
 
@@ -567,7 +558,6 @@
                 // Handle successful submission
                 form.reset();
                 fileNameDisplay.textContent = '選択されていません';
-                commentFileNameDisplay.textContent = '選択されていません';
                 setFormSubmitting(false); // Re-enable form
                 
                 // Redirect to thank you page
@@ -714,9 +704,10 @@
         if (!desiredOccupation.value) {
             showError('entry_desiredOccupationError', '応募職種を選択してください');
             return false;
+        } else {
+            hideError('entry_desiredOccupationError');
+            return true;
         }
-
-        return true;
     }
 
     
