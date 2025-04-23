@@ -364,18 +364,18 @@
                 <div class="form-group">
                     <label for="entry_desiredOccupation" class="required-label">応募職種</label>
                     <select id="entry_desiredOccupation" name="desiredOccupation" required aria-required="true">
-                        <option value="">選択してください</option>
-                        <option value="インサイドセールス">インサイドセールス</option>
-                        <option value="フィールドセールス">フィールドセールス</option>
-                        <option value="フィールドセールス・エクスパート">フィールドセールス・エクスパート</option>
-                        <option value="Japan Wingセールス">Japan Wingセールス</option>
-                        <option value="Japan Wing講師">Japan Wing講師</option>
-                        <option value="DXコンサルタント・エントリーレベル">DXコンサルタント・エントリーレベル</option>
-                        <option value="DXコンサルタント">DXコンサルタント</option>
-                        <option value="DXコンサルタント・エクスパート">DXコンサルタント・エクスパート</option>
-                        <option value="データサイエンティスト">データサイエンティスト</option>
+                        <option value="">ご希望の職種を選択してください</option>
+                        <option value="インサイドセールス">・セールス: インサイドセールス</option>
+                        <option value="フィールドセールス">・セールス: フィールドセールス</option>
+                        <option value="フィールドセールス・エクスパート">・セールス: フィールドセールス・エクスパート</option>
+                        <option value="Japan Wingセールス">・教育: Japan Wingセールス</option>
+                        <option value="Japan Wing講師">・教育: Japan Wing講師</option>
+                        <option value="DXコンサルタント・エントリーレベル">・IT・コンサルタント: DXコンサルタント・エントリーレベル</option>
+                        <option value="DXコンサルタント">・IT・コンサルタント: DXコンサルタント</option>
+                        <option value="DXコンサルタント・エクスパート">・IT・コンサルタント: DXコンサルタント・エクスパート</option>
+                        <option value="データサイエンティスト">・IT・コンサルタント: データサイエンティスト</option>
                         <option value="コーポレートファンクション">コーポレートファンクション</option>
-                        <option value="新卒・第二新卒 オープンポジション">新卒・第二新卒 オープンポジション</option>
+                        <option value="新卒・第二新卒 オープンポジション">新卒・第二新卒: オープンポジション</option>
                         <option value="その他">その他</option>
                     </select>
                     <div class="error-message" id="entry_desiredOccupationError">応募職種を選択してください</div>
