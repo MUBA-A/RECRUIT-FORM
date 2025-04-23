@@ -83,10 +83,16 @@
             line-height: 1.5;
         }
 
-        input:focus, select:focus {
+        input:focus {
             background: #dddddd !important;
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
+            border-color: var(--primary-color);
         }
 
         input:hover, input:focus:hover {
