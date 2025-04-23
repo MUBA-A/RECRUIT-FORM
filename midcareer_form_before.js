@@ -297,6 +297,8 @@
                             <input type="tel" id="entry_phone" name="phone" required aria-required="true" placeholder="090-1234-5678">
                             <div class="error-message" id="entry_phoneError">有効な電話番号を入力してください</div>
                         </div>
+                        <div class="form-group">
+                        </div>
                     </div>
             
                     <div class="checkbox-group">
