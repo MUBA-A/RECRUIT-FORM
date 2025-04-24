@@ -44,12 +44,12 @@
             flex-wrap: wrap;
             margin-bottom: 20px;
             row-gap: 20px;
-            column-gap: 45px;
+            column-gap: 25px;
             align-items: flex-start;
         }
 
         .form-group {
-            flex: 1 1 300px;
+            flex: 1 1 250px;
             margin-bottom: 15px;
             /* For better vertical alignment of form elements */
             display: flex;
@@ -119,7 +119,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 20px 0;
+            margin: 50px 0 40px 0;
             flex-wrap: nowrap;
         }
 
@@ -161,7 +161,7 @@
             color: white;
             font-weight: bold;
             border: none;
-            padding: 12px 24px;
+            padding: 24px 24px;
             font-size: 16px;
             border-radius: 4px;
             cursor: pointer;
@@ -213,7 +213,8 @@
         mediaQuery.textContent = `
             @media (min-width: 1501px) {
                 #entry_form-container {
-                    width: 60%;
+                    width: 100%;
+                    max-width: 600px;
                 }
             }
             @media (max-width: 1048px) {
@@ -314,7 +315,7 @@
                     <!-- timestamp for privacy policy checkbox -->
                     <input type="hidden" id="entry_privacyPolicyTimestamp" name="privacyPolicyTimestamp" value="">
             
-                    <button type="submit" id="entry_submitBtn" class="submit-btn">エントリー</button>
+                    <button type="submit" id="entry_submitBtn" class="submit-btn">申し込み</button>
                 </form>
       `;
       shadow.appendChild(formElement);
@@ -327,14 +328,14 @@
     sbmtBtn.textContent = '読込中...';
     let mktoFormEl;
 
-
+    // Watch for Marketo form to be ready and enable submit button. 
     function initializeMarketoLogicWhenReady() {
         if (typeof MktoForms2 !== "undefined") {
     
             MktoForms2.whenReady(function(mktoForm) {
                 mktoFormEl = mktoForm;
                 sbmtBtn.disabled = false;
-                sbmtBtn.textContent = 'エントリー';
+                sbmtBtn.textContent = '申し込み';
             });
     
         } else {
@@ -394,7 +395,7 @@
                 input.disabled = isSubmitting;
             });
             sbmtBtn.disabled = isSubmitting;
-            sbmtBtn.textContent = isSubmitting ? '送信中...' : 'エントリー';
+            sbmtBtn.textContent = isSubmitting ? '送信中...' : '申し込み';
         }
         
         let isSubmissionInProgress = false;
