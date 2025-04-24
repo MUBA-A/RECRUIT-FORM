@@ -273,6 +273,7 @@
              @media (min-width: 1501px) {
                 #entry_form-container {
                     max-width: 600px;
+                    width: 100%;
                 }
             }
             @media (min-width: 1240px) and (max-width: 1500px) {
