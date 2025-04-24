@@ -459,13 +459,15 @@
                 
                 CVLabel.className = "";
                 CVLabel.innerText = "職務経歴書 (学生の方は不要です)";
-                CVLabel.required = false;
+                CVInput.required = false;
+                CVInput.ariaRequired = false;
             } else {
                 applicantType = '応募者_中途';
 
                 CVLabel.className = "required-label";
                 CVLabel.innerText = "職務経歴書";
-                CVLabel.required = true;
+                CVInput.required = true;
+                CVInput.ariaRequired = true;
             }
         }
     });
