@@ -627,23 +627,24 @@
     // Real-time validation for better UX
     const inputs = form.querySelectorAll('input');
     inputs.forEach(input => {
-        input.addEventListener('blur', function() {
-            if (this.id === 'entry_email') {
-                validateEmail();
-            } else if (this.id === 'entry_email_confirmation') {
-                validateEmailConfirmation();
-            } else if (this.id === 'entry_phone') {
-                validatePhone();
-            } else if (this.id === 'entry_privacyPolicy') {
-                validateCheckbox(this.id, 'entry_privacyPolicyError');
-            } else if (this.id === 'entry_resume') {
-                // Fixed: Ensure resume validation persists after blur
-                validateFile(this);
-            } else if (this.required) {
-                validateRequiredField(this.id, this.id + 'Error');
-            }
-        });
+    input.addEventListener('blur', function() {
+        if (this.id === 'entry_email') {
+            validateEmail();
+        } else if (this.id === 'entry_email_confirmation') {
+            validateEmailConfirmation();
+        } else if (this.id === 'entry_phone') {
+            validatePhone();
+        } else if (this.id === 'entry_privacyPolicy') {
+            validateCheckbox(this.id, 'entry_privacyPolicyError');
+        } else if (this.id === 'entry_resume') {
+            validateFile(this);
+        } else if (this.id === 'entry_CV') {
+            validateCVFile(this, 'entry_CVError');
+        } else if (this.required) {
+            validateRequiredField(this.id, this.id + 'Error');
+        }
     });
+});
 
     // Validation functions
     function validateRequiredField(fieldId, errorId) {
