@@ -44,12 +44,12 @@
             flex-wrap: wrap;
             margin-bottom: 20px;
             row-gap: 20px;
-            column-gap: 45px;
+            column-gap: 25px;
             align-items: flex-start;
         }
 
         .form-group {
-            flex: 1 1 300px;
+            flex: 1 1 250px;
             margin-bottom: 15px;
             /* For better vertical alignment of form elements */
             display: flex;
@@ -270,7 +270,8 @@
         mediaQuery.textContent = `
              @media (min-width: 1501px) {
                 #entry_form-container {
-                    width: 60%;
+                    width: 100%;
+                    max-width: 600px;
                 }
             }
             @media (min-width: 1240px) and (max-width: 1500px) {
@@ -449,7 +450,7 @@
         "jw": "JapanWingレコードタイプ",
     };
     let occupation = "";
-    let recordType = "中途本社レコードタイプ";    // default
+    let recordType = "中途コンサルレコードタイプ";    // default
 
     // set the occupation
     if (window.location.search != "") {
