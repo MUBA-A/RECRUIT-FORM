@@ -49,7 +49,7 @@
         }
 
         .form-group {
-            flex: 1 1 300px;
+            flex: 1 1 250px;
             margin-bottom: 15px;
             /* For better vertical alignment of form elements */
             display: flex;
@@ -272,7 +272,7 @@
         mediaQuery.textContent = `
              @media (min-width: 1501px) {
                 #entry_form-container {
-                    width: 60%;
+                    max-width: 600px;
                 }
             }
             @media (min-width: 1240px) and (max-width: 1500px) {
@@ -351,12 +351,6 @@
                     <div class="error-message" id="entry_phoneError">有効な電話番号を入力してください</div>
                 </div>
                 <div class="form-group">
-                    <label for="entry_resume" class="required-label">履歴書</label>
-                    <div class="file-input-container">
-                        <label for="entry_resume" class="file-input-label" id="entry_fileName">ファイルを選択</label>
-                        <input type="file" id="entry_resume" name="resume" class="file-input" required aria-required="true">
-                    </div>
-                    <div class="error-message" id="entry_resumeError">履歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
                 </div>
             </div>
 
@@ -368,17 +362,33 @@
                         <option value="インサイドセールス">・セールス: インサイドセールス</option>
                         <option value="フィールドセールス">・セールス: フィールドセールス</option>
                         <option value="フィールドセールス・エクスパート">・セールス: フィールドセールス・エクスパート</option>
-                        <option value="Japan Wingセールス">・教育: Japan Wingセールス</option>
-                        <option value="Japan Wing講師">・教育: Japan Wing講師</option>
                         <option value="DXコンサルタント・エントリーレベル">・IT・コンサルタント: DXコンサルタント・エントリーレベル</option>
                         <option value="DXコンサルタント">・IT・コンサルタント: DXコンサルタント</option>
                         <option value="DXコンサルタント・エクスパート">・IT・コンサルタント: DXコンサルタント・エクスパート</option>
                         <option value="データサイエンティスト">・IT・コンサルタント: データサイエンティスト</option>
                         <option value="コーポレートファンクション">・コーポレートファンクション</option>
                         <option value="新卒・第二新卒 オープンポジション">・新卒・第二新卒: オープンポジション</option>
-                        <option value="その他">・その他</option>
                     </select>
                     <div class="error-message" id="entry_desiredOccupationError">応募職種を選択してください</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="entry_resume" class="required-label">履歴書</label>
+                    <div class="file-input-container">
+                        <label for="entry_resume" class="file-input-label" id="entry_fileName">ファイルを選択</label>
+                        <input type="file" id="entry_resume" name="resume" class="file-input" required aria-required="true">
+                    </div>
+                    <div class="error-message" id="entry_resumeError">履歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
+                </div>
+                <div class="form-group">
+                    <label for="entry_CV" id="entry_CVLabel">職務経歴書 (学生の方は不要です)</label>
+                    <div class="file-input-container">
+                        <label for="entry_CV" class="file-input-label" id="entry_CVfileName">ファイルを選択</label>
+                        <input type="file" id="entry_CV" name="CV" class="file-input">
+                    </div>
+                    <div class="error-message" id="entry_CVError">職務経歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
                 </div>
             </div>
 
@@ -432,9 +442,12 @@
     const form = shadow.getElementById('entry_entryForm');
     const resumeInput = shadow.getElementById('entry_resume');
     const fileNameDisplay = shadow.getElementById('entry_fileName');
+    const CVInput = shadow.getElementById('entry_CV');
+    const CVFileNameDisplay = shadow.getElementById('entry_CVfileName');
     const privacyPolicyCheckbox = shadow.getElementById('entry_privacyPolicy');
     const privacyPolicyTimestampField = shadow.getElementById('entry_privacyPolicyTimestamp');
     const desiredOccupation = shadow.getElementById("entry_desiredOccupation");
+    const CVLabel = shadow.getElementById("entry_CVLabel");
 
 
     let applicantType;  // Boolean
@@ -443,10 +456,17 @@
         if (validateDesiredOccupation()) {
             if (this.value == "新卒・第二新卒 オープンポジション") {
                 applicantType = '応募者_新卒';
+                
+                CVLabel.className = "";
+                CVLabel.innerText = "職務経歴書 (学生の方は不要です)";
+                CVLabel.required = false;
             } else {
                 applicantType = '応募者_中途';
+
+                CVLabel.className = "required-label";
+                CVLabel.innerText = "職務経歴書";
+                CVLabel.required = true;
             }
-            console.log(applicantType);
         }
     });
 
@@ -460,6 +480,18 @@
         } else {
             fileNameDisplay.textContent = '選択されていません';
             hideError('entry_resumeError');
+        }
+    });
+
+    // Display CV file name when selected
+    CVInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            CVFileNameDisplay.textContent = this.files[0].name;
+            CVFileNameDisplay.style.fontWeight = "bold";
+            validateCVFile(this, "entry_CVError");
+        } else {
+            CVFileNameDisplay.textContent = '選択されていません';
+            hideError('entry_CVError');
         }
     });
 
@@ -492,6 +524,7 @@
         isValid = validateDesiredOccupation() && isValid;
 
         isValid = validateFile(resumeInput) && isValid;
+        isValid = validateCVFile(CVInput, 'entry_CVError') && isValid;
         isValid = validateCheckbox('entry_privacyPolicy', 'entry_privacyPolicyError') && isValid;
 
         function setFormSubmitting(isSubmitting) {
@@ -767,6 +800,68 @@
             
             // If we got here, the file is valid
             hideError('entry_resumeError');
+            return true;
+        }
+        
+        return true;
+    }
+
+
+    function validateCVFile(fileInput, errorId) {
+
+        // CV not required (i.e. applicant_type == "応募者_新卒")
+        if (!fileInput.required) {
+            hideError(errorId);
+            return true;
+        }
+
+        // Check if file is required and present
+        if (fileInput.required && (!fileInput.files || fileInput.files.length === 0)) {
+            showError(errorId);
+            return false;
+        }
+        
+        if (fileInput.files && fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const fileName = file.name.toLowerCase();
+            const fileSize = file.size;
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            
+            // Define allowed formats with both extension and MIME type
+            const allowedFormats = [
+                { ext: '.pdf', mime: 'application/pdf' },
+                { ext: '.xlsx', mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
+                { ext: '.xls', mime: 'application/vnd.ms-excel' },
+                { ext: '.docx', mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
+                { ext: '.doc', mime: 'application/msword' }
+            ];
+            
+            // Check for empty files
+            if (fileSize === 0) {
+                showError(errorId, 'ファイルが空です。有効なファイルをアップロードしてください');
+                return false;
+            }
+            
+            // Check size first
+            if (fileSize > maxSize) {
+                showError(errorId, 'ファイルサイズは10MB以下にしてください');
+                return false;
+            }
+            
+            // More flexible validation approach
+            const fileMimeType = file.type;
+            
+            // Check if file matches any of our allowed formats
+            const isValidFormat = allowedFormats.some(format => 
+                fileName.endsWith(format.ext) || fileMimeType === format.mime
+            );
+            
+            if (!isValidFormat) {
+                showError(errorId, '許可されているファイル形式：PDF、Excel、Word形式のみ');
+                return false;
+            }
+            
+            hideError(errorId);
             return true;
         }
         
