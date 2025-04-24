@@ -44,7 +44,7 @@
             flex-wrap: wrap;
             margin-bottom: 20px;
             row-gap: 20px;
-            column-gap: 45px;
+            column-gap: 25px;
             align-items: flex-start;
         }
 
@@ -360,12 +360,12 @@
                     <label for="entry_desiredOccupation" class="required-label">応募職種</label>
                     <select id="entry_desiredOccupation" name="desiredOccupation" required aria-required="true">
                         <option value="">ご希望の職種を選択してください</option>
-                        <option value="インサイドセールス">・セールス: インサイドセールス</option>
-                        <option value="フィールドセールス">・セールス: フィールドセールス</option>
-                        <option value="フィールドセールス・エクスパート">・セールス: フィールドセールス・エクスパート</option>
+                        <option value="インサイドセールス">・営業: インサイドセールス</option>
+                        <option value="フィールドセールス">・営業: フィールドセールス</option>
+                        <option value="フィールドセールス・エキスパート">・営業: フィールドセールス・エキスパート</option>
                         <option value="DXコンサルタント・エントリーレベル">・IT・コンサルタント: DXコンサルタント・エントリーレベル</option>
                         <option value="DXコンサルタント">・IT・コンサルタント: DXコンサルタント</option>
-                        <option value="DXコンサルタント・エクスパート">・IT・コンサルタント: DXコンサルタント・エクスパート</option>
+                        <option value="DXコンサルタント・エキスパート">・IT・コンサルタント: DXコンサルタント・エキスパート</option>
                         <option value="データサイエンティスト">・IT・コンサルタント: データサイエンティスト</option>
                         <option value="コーポレートファンクション">・コーポレートファンクション</option>
                         <option value="新卒・第二新卒 オープンポジション">・新卒・第二新卒: オープンポジション</option>
@@ -627,24 +627,24 @@
     // Real-time validation for better UX
     const inputs = form.querySelectorAll('input');
     inputs.forEach(input => {
-    input.addEventListener('blur', function() {
-        if (this.id === 'entry_email') {
-            validateEmail();
-        } else if (this.id === 'entry_email_confirmation') {
-            validateEmailConfirmation();
-        } else if (this.id === 'entry_phone') {
-            validatePhone();
-        } else if (this.id === 'entry_privacyPolicy') {
-            validateCheckbox(this.id, 'entry_privacyPolicyError');
-        } else if (this.id === 'entry_resume') {
-            validateFile(this);
-        } else if (this.id === 'entry_CV') {
-            validateCVFile(this, 'entry_CVError');
-        } else if (this.required) {
-            validateRequiredField(this.id, this.id + 'Error');
-        }
+        input.addEventListener('blur', function() {
+            if (this.id === 'entry_email') {
+                validateEmail();
+            } else if (this.id === 'entry_email_confirmation') {
+                validateEmailConfirmation();
+            } else if (this.id === 'entry_phone') {
+                validatePhone();
+            } else if (this.id === 'entry_privacyPolicy') {
+                validateCheckbox(this.id, 'entry_privacyPolicyError');
+            } else if (this.id === 'entry_resume') {
+                validateFile(this);
+            } else if (this.id === 'entry_CV') {
+                validateCVFile(this, 'entry_CVError');
+            } else if (this.required) {
+                validateRequiredField(this.id, this.id + 'Error');
+            }
+        });
     });
-});
 
     // Validation functions
     function validateRequiredField(fieldId, errorId) {
