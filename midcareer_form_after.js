@@ -450,7 +450,7 @@
         "jw": "JapanWingレコードタイプ",
     };
     let occupation = "";
-    let recordType = "中途コンサルレコードタイプ";    // default
+    let recordType = "";    // default
 
     // set the occupation
     if (window.location.search != "") {
@@ -461,6 +461,7 @@
             if (Object.keys(occupations).includes(referrer)) {
                 // set the value to the value of referrer
                 occupation = occupations[referrer];
+                console.log("応募職種: "  + occupation)
                 
             } 
         }
@@ -471,6 +472,7 @@
     
     if (Object.keys(recordTypes).includes(lastSegment)) {
         recordType = recordTypes[lastSegment];
+        console.log("record type:" + recordType);
     }
 
 
@@ -543,7 +545,10 @@
         if (isValid) {
             // Get form data
             const formData = new FormData(form);
-            formData.set("recordType", recordType);
+            if (recordType) {
+                formData.set("recordType", recordType);
+            }
+            
 
             if (occupation) {
                 formData.set("desiredOccupation", occupation);
