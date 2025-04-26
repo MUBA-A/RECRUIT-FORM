@@ -360,9 +360,9 @@
                         <option value="フィールドセールス">・フィールドセールス</option>
                         <option value="フィールドセールス・エキスパート">・フィールドセールス・エキスパート</option>
                         <option value="DXコンサルタント・エントリーレベル">・DXコンサルタント・エントリーレベル</option>
-                        <option value="DXコンサルタント">・ DXコンサルタント</option>
+                        <option value="DXコンサルタント">・DXコンサルタント</option>
                         <option value="DXコンサルタント・エキスパート">・DXコンサルタント・エキスパート</option>
-                        <option value="データサイエンティスト">・ データサイエンティスト</option>
+                        <option value="データサイエンティスト">・データサイエンティスト</option>
                         <option value="コーポレートファンクション">・コーポレートファンクション</option>
                         <option value="新卒・第二新卒 オープンポジション">・新卒・第二新卒: オープンポジション</option>
                     </select>
@@ -464,9 +464,9 @@
 
                 applicantType = '応募者_新卒';
                 
+                // make CV disappear
                 CVContainer.style.display = "none";
                 CVLabel.className = "";
-                // CVLabel.innerText = "職務経歴書 (学生の方は不要です)";
                 CVInput.required = false;
                 CVInput.ariaRequired = false;
 
@@ -475,23 +475,33 @@
                 gradYearLabel.className = "required-label";
                 gradYear.required = true;
                 gradYear.ariaRequired = true;
+
+                // make resume optional
+                resumeInput.required = false;
+                resumeInput.ariaRequired = false;
+                fileNameDisplay.className = "";
             } else {
 
                 applicantType = '応募者_中途';
 
+                // make CV appear and required
                 CVContainer.style.display = "";
                 CVLabel.className = "required-label";
-                CVLabel.innerText = "職務経歴書";
                 CVInput.required = true;
                 CVInput.ariaRequired = true;
 
 
-                // make grad year appear and required
+                // make grad year disappear and required
                 gradYearContainer.style.display = "none";
                 gradYearLabel.className = "";
                 gradYear.required = false;
                 gradYear.ariaRequired = false;
                 gradYear.value = "";
+
+                // make resume required
+                resumeInput.required = true;
+                resumeInput.ariaRequired = true;
+                fileNameDisplay.className = "required-label";
             }
         }
     });
@@ -565,13 +575,6 @@
         if (isValid) {
             // Get form data
             const formData = new FormData(form);
-
-
-            if (applicantType == "応募者_新卒") {
-                
-            } else {
-
-            }
             
             setFormSubmitting(true);
 
@@ -886,7 +889,7 @@
 
         // Check if file is required and present
         if (fileInput.required && (!fileInput.files || fileInput.files.length === 0)) {
-            showError(errorId);
+            showError(errorId, 'ファイルが空です。有効なファイルをアップロードしてください');
             return false;
         }
         
