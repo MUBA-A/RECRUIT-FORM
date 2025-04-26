@@ -778,7 +778,7 @@
     
         // if gradyear not required (i.e. applicant_type != "応募者_新卒")
         if (!graduationYear.required) {
-            hideError(errorId);
+            hideError('entry_graduationYearError');
             return true;
         }
 
