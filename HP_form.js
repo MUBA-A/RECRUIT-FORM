@@ -351,22 +351,18 @@
                     <input type="tel" id="entry_phone" name="phone" required aria-required="true" placeholder="090-1234-5678">
                     <div class="error-message" id="entry_phoneError">有効な電話番号を入力してください</div>
                 </div>
-                <div class="form-group">
-                </div>
-            </div>
 
-            <div class="form-row">
                 <div class="form-group">
                     <label for="entry_desiredOccupation" class="required-label">応募職種</label>
                     <select id="entry_desiredOccupation" name="desiredOccupation" required aria-required="true">
                         <option value="">ご希望の職種を選択してください</option>
-                        <option value="インサイドセールス">・営業: インサイドセールス</option>
-                        <option value="フィールドセールス">・営業: フィールドセールス</option>
-                        <option value="フィールドセールス・エキスパート">・営業: フィールドセールス・エキスパート</option>
-                        <option value="DXコンサルタント・エントリーレベル">・IT・コンサルタント: DXコンサルタント・エントリーレベル</option>
-                        <option value="DXコンサルタント">・IT・コンサルタント: DXコンサルタント</option>
-                        <option value="DXコンサルタント・エキスパート">・IT・コンサルタント: DXコンサルタント・エキスパート</option>
-                        <option value="データサイエンティスト">・IT・コンサルタント: データサイエンティスト</option>
+                        <option value="インサイドセールス">・インサイドセールス</option>
+                        <option value="フィールドセールス">・フィールドセールス</option>
+                        <option value="フィールドセールス・エキスパート">・フィールドセールス・エキスパート</option>
+                        <option value="DXコンサルタント・エントリーレベル">・DXコンサルタント・エントリーレベル</option>
+                        <option value="DXコンサルタント">・ DXコンサルタント</option>
+                        <option value="DXコンサルタント・エキスパート">・DXコンサルタント・エキスパート</option>
+                        <option value="データサイエンティスト">・ データサイエンティスト</option>
                         <option value="コーポレートファンクション">・コーポレートファンクション</option>
                         <option value="新卒・第二新卒 オープンポジション">・新卒・第二新卒: オープンポジション</option>
                     </select>
@@ -383,7 +379,7 @@
                     </div>
                     <div class="error-message" id="entry_resumeError">履歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="CVContainer">
                     <label for="entry_CV" id="entry_CVLabel">職務経歴書 (学生の方は不要です)</label>
                     <div class="file-input-container">
                         <label for="entry_CV" class="file-input-label" id="entry_CVfileName">ファイルを選択</label>
@@ -391,14 +387,17 @@
                     </div>
                     <div class="error-message" id="entry_CVError">職務経歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
                 </div>
+                <div class="form-group" id="gradYearContainer" style="display:none;">
+                    <label for="entry_graduationYear">卒業年度 (学生の方のみ)</label>
+                    <input type="number" id="entry_graduationYear" name="graduationYear" placeholder="2023">
+                    <div class="error-message" id="entry_graduationYearError">卒業年度を入力してください</div>
+                </div>
             </div>
 
 
             <div class="checkbox-group">
                 <input type="checkbox" id="entry_privacyPolicy" name="privacyPolicy" class="checkbox-input" required aria-required="true">
-                <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">
-                  採用選考に関する
-                  <a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
+                <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">採用選考に関する<a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
                 </label>
             </div>
             <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
@@ -449,26 +448,49 @@
     const privacyPolicyTimestampField = shadow.getElementById('entry_privacyPolicyTimestamp');
     const desiredOccupation = shadow.getElementById("entry_desiredOccupation");
     const CVLabel = shadow.getElementById("entry_CVLabel");
+    const gradYear = shadow.getElementById("entry_graduationYear");
+    const gradYearContainer = shadow.getElementById("gradYearContainer");
+    const CVContainer = shadow.getElementById("CVContainer");
 
+    const nextYear = new Date().getFullYear() - 3;
+    gradYear.placeholder = nextYear;
 
     let applicantType;  // Boolean
 
     desiredOccupation.addEventListener("change", function () {
         if (validateDesiredOccupation()) {
             if (this.value == "新卒・第二新卒 オープンポジション") {
+
                 applicantType = '応募者_新卒';
                 
+                CVContainer.style.display = "none";
                 CVLabel.className = "";
-                CVLabel.innerText = "職務経歴書 (学生の方は不要です)";
+                // CVLabel.innerText = "職務経歴書 (学生の方は不要です)";
                 CVInput.required = false;
                 CVInput.ariaRequired = false;
+
+                // make grad year appear and required
+                gradYearContainer.style.display = "";
+                gradYear.className = "required-label";
+                gradYear.required = true;
+                gradYear.ariaRequired = true;
             } else {
+
                 applicantType = '応募者_中途';
 
+                CVContainer.style.display = "";
                 CVLabel.className = "required-label";
                 CVLabel.innerText = "職務経歴書";
                 CVInput.required = true;
                 CVInput.ariaRequired = true;
+
+
+                // make grad year appear and required
+                gradYearContainer.style.display = "none";
+                gradYear.className = "";
+                gradYear.required = false;
+                gradYear.ariaRequired = false;
+                gradYear.value = "";
             }
         }
     });
@@ -479,7 +501,7 @@
         if (this.files.length > 0) {
             fileNameDisplay.textContent = this.files[0].name;
             fileNameDisplay.style.fontWeight = "bold";
-            validateFile(this); // This validates on change but the error was disappearing
+            validateFile(this);
         } else {
             fileNameDisplay.textContent = '選択されていません';
             hideError('entry_resumeError');
@@ -504,7 +526,6 @@
             const now = new Date();
             privacyPolicyTimestampField.value = now.toISOString();
         } else {
-            // Clear the timestamp if unchecked
             privacyPolicyTimestampField.value = '';
         }
     });
@@ -527,7 +548,8 @@
         isValid = validateDesiredOccupation() && isValid;
 
         isValid = validateFile(resumeInput) && isValid;
-        isValid = validateCVFile(CVInput, 'entry_CVError') && isValid;
+        isValid = validateCVFile(CVInput) && isValid;
+        isValid = validateGraduationYear() && isValid;
         isValid = validateCheckbox('entry_privacyPolicy', 'entry_privacyPolicyError') && isValid;
 
         function setFormSubmitting(isSubmitting) {
@@ -542,11 +564,18 @@
         if (isValid) {
             // Get form data
             const formData = new FormData(form);
+
+
+            if (applicantType == "応募者_新卒") {
+                
+            } else {
+
+            }
             
             setFormSubmitting(true);
 
             // Submit to Pipedream first, then Marketo
-            fetch('https://eojyw7f24hzl5c6.m.pipedream.net', {
+            fetch('https://eo4oramamadwsus.m.pipedream.net', {
                 method: 'POST',
                 body: formData
             })
@@ -581,6 +610,7 @@
                     'FirstName': formData.get('firstName'),
                     'Email': formData.get('email'),
                     'Phone': formData.get('phone'),
+                    'graduation': formData.get('graduationYear'),
                     'praivacyPolicy': formData.get('privacyPolicy') !== null ? "yes" : "no",
                     'recordtype': applicantType
                 });
@@ -639,7 +669,9 @@
             } else if (this.id === 'entry_resume') {
                 validateFile(this);
             } else if (this.id === 'entry_CV') {
-                validateCVFile(this, 'entry_CVError');
+                validateCVFile(this);
+            } else if (this.id === 'entry_graduationYear') {
+                validateGraduationYear();
             } else if (this.required) {
                 validateRequiredField(this.id, this.id + 'Error');
             }
@@ -734,6 +766,37 @@
     }
 
 
+    function validateGraduationYear() {
+        const graduationYear = shadow.getElementById('entry_graduationYear');
+        const currentYear = new Date().getFullYear();
+        const yearValue = graduationYear.value.trim();
+    
+        // if gradyear not required (i.e. applicant_type != "応募者_新卒")
+        if (!graduationYear.required) {
+            hideError(errorId);
+            return true;
+        }
+
+        if (!yearValue) {
+            showError('entry_graduationYearError', '卒業年度を入力してください');
+            return false;
+        } 
+        // Ensure the value contains only digits (no decimals, letters, etc.)
+        else if (!/^\d+$/.test(yearValue)) {
+            showError('entry_graduationYearError', '有効な卒業年度を整数で入力してください');
+            return false;
+        }
+    
+        const yearInt = parseInt(yearValue, 10);
+        if (yearInt < 1950 || yearInt > currentYear + 10) {
+            showError('entry_graduationYearError', '有効な卒業年度を入力してください');
+            return false;
+        }
+    
+        hideError('entry_graduationYearError');
+        return true;
+    }
+
 
     function validateDesiredOccupation() {
         const desiredOccupation = shadow.getElementById("entry_desiredOccupation");
@@ -811,7 +874,8 @@
     }
 
 
-    function validateCVFile(fileInput, errorId) {
+    function validateCVFile(fileInput) {
+        const errorId = "entry_CVError"
 
         // CV not required (i.e. applicant_type == "応募者_新卒")
         if (!fileInput.required) {
