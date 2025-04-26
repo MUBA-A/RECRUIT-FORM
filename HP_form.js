@@ -818,6 +818,14 @@
     
 
     function validateFile(fileInput) {
+
+         // resume not required (i.e. applicant_type == "応募者_新卒")
+        if (!fileInput.required) {
+            hideError('entry_resumeError');
+            return true;
+        }
+
+       
         // Check if no file and present
         if (!fileInput.files || fileInput.files.length === 0) {
             showError('entry_resumeError', '履歴書をアップロードしてください');
