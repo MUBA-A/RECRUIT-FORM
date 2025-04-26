@@ -388,7 +388,7 @@
                     <div class="error-message" id="entry_CVError">職務経歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
                 </div>
                 <div class="form-group" id="gradYearContainer" style="display:none;">
-                    <label for="entry_graduationYear">卒業年度 (学生の方のみ)</label>
+                    <label for="entry_graduationYear" id="entry_GradYearLabel">卒業年度 (学生の方のみ)</label>
                     <input type="number" id="entry_graduationYear" name="graduationYear" placeholder="2023">
                     <div class="error-message" id="entry_graduationYearError">卒業年度を入力してください</div>
                 </div>
@@ -449,6 +449,7 @@
     const desiredOccupation = shadow.getElementById("entry_desiredOccupation");
     const CVLabel = shadow.getElementById("entry_CVLabel");
     const gradYear = shadow.getElementById("entry_graduationYear");
+    const gradYearLabel = shadow.getElementById("entry_GradYearLabel");
     const gradYearContainer = shadow.getElementById("gradYearContainer");
     const CVContainer = shadow.getElementById("CVContainer");
 
@@ -471,7 +472,7 @@
 
                 // make grad year appear and required
                 gradYearContainer.style.display = "";
-                gradYear.className = "required-label";
+                gradYearLabel.className = "required-label";
                 gradYear.required = true;
                 gradYear.ariaRequired = true;
             } else {
@@ -487,7 +488,7 @@
 
                 // make grad year appear and required
                 gradYearContainer.style.display = "none";
-                gradYear.className = "";
+                gradYearLabel.className = "";
                 gradYear.required = false;
                 gradYear.ariaRequired = false;
                 gradYear.value = "";
