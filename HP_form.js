@@ -372,7 +372,7 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="entry_resume" class="required-label">履歴書</label>
+                    <label for="entry_resume" class="required-label" id="entry_resumeLabel">履歴書</label>
                     <div class="file-input-container">
                         <label for="entry_resume" class="file-input-label" id="entry_fileName">ファイルを選択</label>
                         <input type="file" id="entry_resume" name="resume" class="file-input" required aria-required="true">
@@ -442,6 +442,7 @@
     const form = shadow.getElementById('entry_entryForm');
     const resumeInput = shadow.getElementById('entry_resume');
     const fileNameDisplay = shadow.getElementById('entry_fileName');
+    const resumeLabel = shadow.getElementById("entry_resumeLabel");
     const CVInput = shadow.getElementById('entry_CV');
     const CVFileNameDisplay = shadow.getElementById('entry_CVfileName');
     const privacyPolicyCheckbox = shadow.getElementById('entry_privacyPolicy');
@@ -479,7 +480,7 @@
                 // make resume optional
                 resumeInput.required = false;
                 resumeInput.ariaRequired = false;
-                fileNameDisplay.className = "";
+                resumeLabel.className = "";
             } else {
 
                 applicantType = '応募者_中途';
@@ -501,7 +502,7 @@
                 // make resume required
                 resumeInput.required = true;
                 resumeInput.ariaRequired = true;
-                fileNameDisplay.className = "required-label";
+                resumeLabel.className = "required-label";
             }
         }
     });
