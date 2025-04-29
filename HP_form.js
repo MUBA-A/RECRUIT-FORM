@@ -82,6 +82,10 @@
             /* Explicit line height improves cross-browser consistency */
             line-height: 1.5;
         }
+        
+        select {
+            color: var(--placeholder-color);
+        }
 
         input:focus {
             background: #dddddd !important;
@@ -270,25 +274,26 @@
       // Add media query for tablet
         const mediaQuery = document.createElement('style');
         mediaQuery.textContent = `
-             @media (min-width: 1501px) {
+             @media (min-width: 1139px) {
                 #entry_form-container {
                     max-width: 600px;
                     width: 100%;
                 }
             }
-            @media (min-width: 1240px) and (max-width: 1500px) {
-                #entry_form-container {
-                    width: 80%;
-                }
-            }
-            @media (min-width: 704px) and (max-width: 1239px) {
+            @media (min-width: 704px) and (max-width: 1139px) {
                 #entry_form-container {
                     width: 100%;
+                }
+                #form_text {
+                    font-size: 16px;
                 }
             }
             @media (max-width: 704px) and (min-width: 541px) {
                 #entry_form-container {
                     width: 300px;
+                }
+                #form_text {
+                    font-size: 12px;
                 }
             }
             @media (max-width: 540px) {
@@ -380,7 +385,7 @@
                     <div class="error-message" id="entry_resumeError">履歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
                 </div>
                 <div class="form-group" id="CVContainer">
-                    <label for="entry_CV" id="entry_CVLabel">職務経歴書 (学生の方は不要です)</label>
+                    <label for="entry_CV" id="entry_CVLabel">職務経歴書</label>
                     <div class="file-input-container">
                         <label for="entry_CV" class="file-input-label" id="entry_CVfileName">ファイルを選択</label>
                         <input type="file" id="entry_CV" name="CV" class="file-input">
@@ -819,13 +824,13 @@
 
     function validateFile(fileInput) {
 
-         // resume not required (i.e. applicant_type == "応募者_新卒")
+        // resume not required (i.e. applicant_type == "応募者_新卒")
         if (!fileInput.required) {
             hideError('entry_resumeError');
             return true;
         }
 
-       
+
         // Check if no file and present
         if (!fileInput.files || fileInput.files.length === 0) {
             showError('entry_resumeError', '履歴書をアップロードしてください');
