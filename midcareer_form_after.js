@@ -268,25 +268,26 @@
       // Add media query for tablet
         const mediaQuery = document.createElement('style');
         mediaQuery.textContent = `
-             @media (min-width: 1501px) {
+             @media (min-width: 1139px) {
                 #entry_form-container {
-                    width: 100%;
                     max-width: 600px;
+                    width: 100%;
                 }
             }
-            @media (min-width: 1240px) and (max-width: 1500px) {
-                #entry_form-container {
-                    width: 80%;
-                }
-            }
-            @media (min-width: 704px) and (max-width: 1239px) {
+            @media (min-width: 704px) and (max-width: 1139px) {
                 #entry_form-container {
                     width: 100%;
+                }
+                #form_text {
+                    font-size: 16px;
                 }
             }
             @media (max-width: 704px) and (min-width: 541px) {
                 #entry_form-container {
                     width: 300px;
+                }
+                #form_text {
+                    font-size: 12px;
                 }
             }
             @media (max-width: 540px) {
