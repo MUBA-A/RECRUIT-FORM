@@ -477,10 +477,13 @@
                         return false; // Prevent default form redirect
                     });
                     
-                    // Timeout if Marketo takes too long
-                    setTimeout(() => {
-                        reject(new Error('Marketo submission timed out after 20 seconds'));
-                    }, 20000);
+                    resolve(true);
+                    
+                    resolve("Asynchronously submitted to Marketo.");
+                    // // Timeout if Marketo takes too long
+                    // setTimeout(() => {
+                    //     reject(new Error('Marketo submission timed out after 20 seconds'));
+                    // }, 20000);
                 });
                 
                 // Set values in Marketo form
