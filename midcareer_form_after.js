@@ -451,7 +451,7 @@
         "jw": "JapanWingレコードタイプ",
     };
     let occupation = "";
-    let recordType = "";    // default
+    let recordType = "中途コンサルレコードタイプ";    // default
 
     // set the occupation
     if (window.location.search != "") {
