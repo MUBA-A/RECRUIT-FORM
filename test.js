@@ -88,12 +88,12 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 17.7px;
-            height: 17.5px;
+            width: 15px;
+            height: 15px;
             background-color: #95aaaf;
             color: white;
             border-radius: 50%;
-            font-size: 12px;
+            font-size: 15.4px;
             font-weight: bold;
             user-select: none;
         }
