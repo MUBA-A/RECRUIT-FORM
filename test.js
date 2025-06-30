@@ -90,7 +90,7 @@
             justify-content: center;
             width: 17.7px;
             height: 17.5px;
-            background-color: #67a6ab;
+            background-color: #95aaaf;
             color: white;
             border-radius: 50%;
             font-size: 12px;
