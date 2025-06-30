@@ -95,7 +95,6 @@
             border-radius: 50%;
             font-size: 12px;
             font-weight: bold;
-            cursor: help;
             user-select: none;
         }
 
