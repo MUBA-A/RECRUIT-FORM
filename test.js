@@ -88,9 +88,9 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 18px;
-            height: 18px;
-            background-color: #0078d7;
+            width: 17.7px;
+            height: 17.5px;
+            background-color: #67a6ab;
             color: white;
             border-radius: 50%;
             font-size: 12px;
