@@ -125,8 +125,8 @@
             position: absolute;
             bottom: 125%;
             left: 50%;
-            /* Apply the same horizontal shift to the arrow */
-            transform: translateX(calc(-50% + 50px)) translateY(100%);
+            /* This keeps the arrow centered on the icon, ignoring the bubble's offset */
+            transform: translateX(-50%) translateY(100%); 
             border-width: 5px;
             border-style: solid;
             border-color: #333 transparent transparent transparent;
