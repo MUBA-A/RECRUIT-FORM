@@ -103,7 +103,8 @@
             position: absolute;
             bottom: 125%; /* Position above the icon */
             left: 50%;
-            transform: translateX(-50%);
+            /* This calculation first centers the element (-50%) then shifts it 50px right */
+            transform: translateX(calc(-50% + 50px));
             background-color: #333;
             color: #fff;
             padding: 8px 12px;
@@ -124,7 +125,8 @@
             position: absolute;
             bottom: 125%;
             left: 50%;
-            transform: translateX(-50%) translateY(100%); /* Position it at the bottom of the tooltip bubble */
+            /* Apply the same horizontal shift to the arrow */
+            transform: translateX(calc(-50% + 50px)) translateY(100%);
             border-width: 5px;
             border-style: solid;
             border-color: #333 transparent transparent transparent;
@@ -134,6 +136,7 @@
             z-index: 11;
             pointer-events: none;
         }
+
 
         .tooltip-icon:hover::after,
         .tooltip-icon:hover::before {
