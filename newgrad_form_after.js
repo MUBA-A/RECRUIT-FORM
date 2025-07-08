@@ -68,6 +68,79 @@
             color: var(--error-color);
             margin-left: 4px;
         }
+         /* --- TOOLTIP STYLES START --- */
+        .label-with-tooltip {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Space between label and icon */
+            margin-bottom: 8px; /* Replaces the label's margin-bottom */
+        }
+
+        .label-with-tooltip > label {
+            margin-bottom: 0; /* Remove margin from the label itself */
+        }
+
+        .tooltip-icon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 15px;
+            height: 15px;
+            background-color: #95aaaf;
+            color: white;
+            border-radius: 50%;
+            font-size: 15.4px;
+            font-weight: bold;
+            user-select: none;
+        }
+
+        .tooltip-icon::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%; /* Position above the icon */
+            left: 50%;
+            /* This calculation first centers the element (-50%) then shifts it 50px right */
+            transform: translateX(calc(-50% + 50px));
+            background-color: #333;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: normal; /* Normal weight for tooltip text */
+            white-space: nowrap;
+            z-index: 10;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            pointer-events: none; /* Prevent the tooltip from interfering with mouse events */
+        }
+
+        /* Arrow for the tooltip */
+        .tooltip-icon::before {
+            content: '';
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            /* This keeps the arrow centered on the icon, ignoring the bubble's offset */
+            transform: translateX(-50%) translateY(100%); 
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 11;
+            pointer-events: none;
+        }
+
+
+        .tooltip-icon:hover::after,
+        .tooltip-icon:hover::before {
+            visibility: visible;
+            opacity: 1;
+        }
+        /* --- TOOLTIP STYLES END --- */
 
         input, select {
             width: 100%;
