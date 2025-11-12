@@ -361,6 +361,7 @@
                     <label for="entry_desiredOccupation" class="required-label">応募職種</label>
                     <select id="entry_desiredOccupation" name="desiredOccupation" required aria-required="true">
                         <option value="">ご希望の職種を選択してください</option>
+                        <option value="新卒・第二新卒 オープンポジション">・新卒・第二新卒: オープンポジション</option>
                         <option value="インサイドセールス">・インサイドセールス</option>
                         <option value="フィールドセールス">・フィールドセールス</option>
                         <option value="フィールドセールス・エキスパート">・フィールドセールス・エキスパート</option>
@@ -369,7 +370,6 @@
                         <option value="DXコンサルタント・エキスパート">・DXコンサルタント・エキスパート</option>
                         <option value="データサイエンティスト">・データサイエンティスト</option>
                         <option value="コーポレートファンクション">・コーポレートファンクション</option>
-                        <option value="新卒・第二新卒 オープンポジション">・新卒・第二新卒: オープンポジション</option>
                     </select>
                     <div class="error-message" id="entry_desiredOccupationError">応募職種を選択してください</div>
                 </div>
