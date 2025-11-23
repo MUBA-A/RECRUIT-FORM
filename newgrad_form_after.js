@@ -634,7 +634,10 @@
                         throw error;
                     });
                 }
-                // Create a Promise that will resolve on Marketo success or reject after timeout
+                // --- MODIFIED START: Made Marketo submission asynchronous ---
+                
+                // 1. Commented out the Promise wrapper that waits for success
+                /* 
                 const marketoSubmissionWithTimeout = new Promise((resolve, reject) => {
                     // Set up success handler before submission
                     mktoFormEl.onSuccess(function(values) {
@@ -648,6 +651,10 @@
                         reject(new Error('Marketo submission timed out after 20 seconds'));
                     }, 10000);
                 });
+                */
+
+                // 2. Added simple handler to prevent Marketo from redirecting if it finishes very quickly
+                mktoFormEl.onSuccess(function() { return false; });
                 
                 // Set values in Marketo form
                 mktoFormEl.setValues({
@@ -656,14 +663,17 @@
                     'Email': formData.get('email'),
                     'Phone': formData.get('phone'),
                     'graduation': formData.get('graduationYear'),
-                    'OrientationAttendanceDay': formData.get('eventDate'),
                     'praivacyPolicy': formData.get('privacyPolicy') !== null ? "yes" : "no",
                     'recordtype': '応募者_新卒'
                 });
                 
-                // Submit the Marketo form and return the Promise we created
+                // Submit Marketo form (Fire and forget)
                 mktoFormEl.submit();
-                return marketoSubmissionWithTimeout;
+
+                // 3. Commented out the return of the promise so we don't wait
+                // return marketoSubmissionWithTimeout;
+                
+                // --- MODIFIED END ---
             })
             .then(() => {
                 isSubmissionInProgress = false;
