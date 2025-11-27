@@ -553,7 +553,7 @@
                     data: error.data
                 });
                 
-                let errorMessage = 'フォームの送信中にエラーが発生しました。後ほど再試行してください。\n';
+                let errorMessage = let errorMessage = '[' + error.message.toString() + '] フォームの送信中にエラーが発生しました。デバイスを変えて再試行してください。\n';
                 
                 if (error.status === 418) {
                     errorMessage = '入力内容に問題があります。入力項目を確認してください。\n';
