@@ -68,6 +68,79 @@
             color: var(--error-color);
             margin-left: 4px;
         }
+         /* --- TOOLTIP STYLES START --- */
+        .label-with-tooltip {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Space between label and icon */
+            margin-bottom: 8px; /* Replaces the label's margin-bottom */
+        }
+
+        .label-with-tooltip > label {
+            margin-bottom: 0; /* Remove margin from the label itself */
+        }
+
+        .tooltip-icon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 15px;
+            height: 15px;
+            background-color: #95aaaf;
+            color: white;
+            border-radius: 50%;
+            font-size: 15.4px;
+            font-weight: bold;
+            user-select: none;
+        }
+
+        .tooltip-icon::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%; /* Position above the icon */
+            left: 50%;
+            /* This calculation first centers the element (-50%) then shifts it 50px right */
+            transform: translateX(calc(-50% + 50px));
+            background-color: #333;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: normal; /* Normal weight for tooltip text */
+            white-space: nowrap;
+            z-index: 10;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            pointer-events: none; /* Prevent the tooltip from interfering with mouse events */
+        }
+
+        /* Arrow for the tooltip */
+        .tooltip-icon::before {
+            content: '';
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            /* This keeps the arrow centered on the icon, ignoring the bubble's offset */
+            transform: translateX(-50%) translateY(100%); 
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 11;
+            pointer-events: none;
+        }
+
+
+        .tooltip-icon:hover::after,
+        .tooltip-icon:hover::before {
+            visibility: visible;
+            opacity: 1;
+        }
+        /* --- TOOLTIP STYLES END --- */
 
         input, select {
             width: 100%;
@@ -82,11 +155,8 @@
             /* Explicit line height improves cross-browser consistency */
             line-height: 1.5;
         }
-        select {
-            color: #333;
-        }
 
-        input:focus {
+        input:focus, select:focus {
             background: #dddddd !important;
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
@@ -279,7 +349,10 @@
             
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="entry_email" class="required-label">Eメール</label>
+                            <div class="label-with-tooltip">
+                                <label for="entry_email" class="required-label">Eメール</label>
+                                <span class="tooltip-icon" data-tooltip="ご登録の媒体と同じメールアドレスをご記入ください">i</span>
+                            </div>
                             <input type="email" id="entry_email" name="email" required aria-required="true" placeholder="mail@example.com">
                             <div class="error-message" id="entry_emailError">有効なメールアドレスを入力してください</div>
                         </div>
@@ -297,8 +370,12 @@
                             <div class="error-message" id="entry_phoneError">有効な電話番号を入力してください</div>
                         </div>
                         <div class="form-group">
+                          <label for="entry_graduationYear" class="required-label">卒業年度</label>
+                          <input type="number" id="entry_graduationYear" name="graduationYear" required aria-required="true" placeholder="2023">
+                          <div class="error-message" id="entry_graduationYearError">卒業年度を入力してください</div>
                         </div>
                     </div>
+
             
                     <div class="checkbox-group">
                         <input type="checkbox" id="entry_privacyPolicy" name="privacyPolicy" class="checkbox-input" required aria-required="true">
@@ -307,6 +384,7 @@
                         </label>
                     </div>
                     <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
+                    
 
                     <!-- timestamp for privacy policy checkbox -->
                     <input type="hidden" id="entry_privacyPolicyTimestamp" name="privacyPolicyTimestamp" value="">
@@ -319,12 +397,12 @@
     
    // Add JS
   // Disable submit button until Marketo form loads
-  const sbmtBtn = shadow.getElementById('entry_submitBtn');
+    const sbmtBtn = shadow.getElementById('entry_submitBtn');
     sbmtBtn.disabled = true;
     sbmtBtn.textContent = '読込中...';
     let mktoFormEl;
 
-    // Watch for Marketo form to be ready and enable submit button.
+    // Watch for Marketo form to be ready and enable submit button. 
     function initializeMarketoLogicWhenReady() {
         if (typeof MktoForms2 !== "undefined") {
     
@@ -346,57 +424,14 @@
 
     // Get form and input elements
     const form = shadow.getElementById('entry_entryForm');
+    const graduationYearPlaceholder = shadow.getElementById('entry_graduationYear');
     const privacyPolicyCheckbox = shadow.getElementById('entry_privacyPolicy');
     const privacyPolicyTimestampField = shadow.getElementById('entry_privacyPolicyTimestamp');
-    
-    const occupations = {
-        "is": "インサイドセールス",
-        "fs": "フィールドセールス",
-        "fs_expert": "フィールドセールス・エクスパート",
-        "jw_sales": "Japan Wingセールス",
-        "jw_instructor": "Japan Wing講師",
-        "c_entry": "DXコンサルタント・エントリーレベル",
-        "c": "DXコンサルタント",
-        "c_expert": "DXコンサルタント・エクスパート",
-        "ds": "データサイエンティスト",
-        "cf": "コーポレートファンクション",
-    };
 
-    const recordTypes = {
-        "h": "中途本社レコードタイプ",
-        "c": "中途コンサルレコードタイプ",
-        "j": "JapanWingレコードタイプ",
-        "honsya": "中途本社レコードタイプ",
-        "konsaru": "中途コンサルレコードタイプ",
-        "japanwing": "JapanWingレコードタイプ",
-        "honsha": "中途本社レコードタイプ",
-        "consult": "中途コンサルレコードタイプ",
-        "jw": "JapanWingレコードタイプ",
-    };
-    let occupation = "";
-    let recordType = "中途コンサルレコードタイプ";    // default
 
-    // set the occupation
-    if (window.location.search != "") {
-        const params = new URLSearchParams(window.location.search);
-
-        if (params.get("occupation", false)) {
-            const referrer = params.get("occupation").toLowerCase();
-            if (Object.keys(occupations).includes(referrer)) {
-                // set the value to the value of referrer
-                occupation = occupations[referrer];
-                
-            } 
-        }
-    } 
-
-    const pathSegments = window.location.pathname.split("/").filter(Boolean);
-    const lastSegment = pathSegments[pathSegments.length - 1];
-    
-    if (Object.keys(recordTypes).includes(lastSegment)) {
-        recordType = recordTypes[lastSegment];
-    }
-
+    // Set default graduation year to current year
+    const nextYear = new Date().getFullYear() - 3;
+    graduationYearPlaceholder.placeholder = nextYear;
 
 
     privacyPolicyCheckbox.addEventListener('change', function() {
@@ -425,6 +460,7 @@
         isValid = validateEmail() && isValid;
         isValid = validateEmailConfirmation() && isValid;
         isValid = validatePhone() && isValid;
+        isValid = validateGraduationYear() && isValid;
         isValid = validateCheckbox('entry_privacyPolicy', 'entry_privacyPolicyError') && isValid;
 
         function setFormSubmitting(isSubmitting) {
@@ -441,15 +477,6 @@
             isSubmissionInProgress = true;
             // Get form data
             const formData = new FormData(form);
-            if (recordType) {
-                formData.set("recordType", recordType);
-            }
-            
-
-            if (occupation) {
-                formData.set("desiredOccupation", occupation);
-            }
-
             
             setFormSubmitting(true);
 
@@ -468,7 +495,7 @@
                         throw error;
                     });
                 }
-                // --- MODIFIED START: Made Marketo submission asynchronous ---
+               // --- MODIFIED START: Made Marketo submission asynchronous ---
                 
                 // 1. Commented out the Promise wrapper that waits for success
                 /* 
@@ -526,8 +553,7 @@
                     data: error.data
                 });
                 
-                let errorMessage = 'フォームの送信中にエラーが発生しました。後ほど再試行してください。\n';
-                
+                let errorMessage = '[' + error.message.toString() + '] フォームの送信中にエラーが発生しました。デバイスを変えて再試行してください。\n';
                 if (error.status === 418) {
                     errorMessage = '入力内容に問題があります。入力項目を確認してください。\n';
                 }
@@ -565,6 +591,8 @@
                 validateEmailConfirmation();
             } else if (this.id === 'entry_phone') {
                 validatePhone();
+            } else if (this.id === 'entry_graduationYear') {
+                validateGraduationYear();
             } else if (this.id === 'entry_privacyPolicy') {
                 validateCheckbox(this.id, 'entry_privacyPolicyError');
             } else if (this.required) {
@@ -658,6 +686,31 @@
             hideError('entry_phoneError');
             return true;
         }
+    }
+
+    function validateGraduationYear() {
+        const graduationYear = shadow.getElementById('entry_graduationYear');
+        const currentYear = new Date().getFullYear();
+        const yearValue = graduationYear.value.trim();
+
+        if (!yearValue) {
+            showError('entry_graduationYearError', '卒業年度を入力してください');
+            return false;
+        } 
+        // Ensure the value contains only digits (no decimals, letters, etc.)
+        else if (!/^\d+$/.test(yearValue)) {
+            showError('entry_graduationYearError', '有効な卒業年度を整数で入力してください');
+            return false;
+        }
+
+        const yearInt = parseInt(yearValue, 10);
+        if (yearInt < 1950 || yearInt > currentYear + 10) {
+            showError('entry_graduationYearError', '有効な卒業年度を入力してください');
+            return false;
+        }
+
+        hideError('entry_graduationYearError');
+        return true;
     }
 
 
