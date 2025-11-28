@@ -705,6 +705,18 @@
                   
                   ■卒業年度
                   ${formData.get('graduationYear')}
+
+                  ■学校名
+                  ${formData.get('school')}
+
+                  ■学部名
+                  ${formData.get('department')}
+
+                  ■学科名
+                  ${formData.get('faculty')}
+
+                  ■説明会参加日
+                  ${formData.get('eventDate')}
                   --------------------------------------------------
                   
                   ※履歴書・ポートフォリオを添付いたしました。
