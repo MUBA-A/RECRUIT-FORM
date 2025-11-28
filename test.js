@@ -651,7 +651,28 @@
                 // 1. Define the fallback email
                 const fallbackEmail = "saiyou@gl-navi.co.jp";
                 const subject = encodeURIComponent("新卒採用応募 (フォームエラー)");
-                const body = encodeURIComponent("フォーム送信時にエラーが発生したため、メールにて応募します。\n\n氏名: " + formData.get('lastName') + " " + formData.get('firstName') + "\n電話番号: " + formData.get('phone') + "\n\n(履歴書を添付してください)");
+               const rawBody = 
+                  `採用担当者様
+                  
+                  フォーム送信時にエラーが発生したため、メールにて応募いたします。
+                  
+                  --------------------------------------------------
+                  ■氏名
+                  ${formData.get('lastName')} ${formData.get('firstName')}
+                  
+                  ■電話番号
+                  ${formData.get('phone')}
+
+                  ■Email
+                  ${formData.get('email')}
+                  
+                  ■卒業年度
+                  ${formData.get('graduationYear')}
+                  --------------------------------------------------
+                  
+                  ※履歴書・ポートフォリオを添付いたしました。
+                  ご確認のほどよろしくお願いいたします。`;
+                const body = encodeURIComponent(rawBody);
                 
                 let userMessage = '';
                 let isBlockingIssue = false;
