@@ -689,38 +689,38 @@
                 const fallbackEmail = "saiyou@gl-navi.co.jp";
                 const subject = encodeURIComponent("新卒採用応募 (フォームエラー)");
                const rawBody = 
-                  `採用担当者様
+`採用担当者様
                   
-                  フォーム送信時にエラーが発生したため、メールにて応募いたします。
+フォーム送信時にエラーが発生したため、メールにて応募いたします。
                   
-                  --------------------------------------------------
-                  ■氏名
-                  ${formData.get('lastName')} ${formData.get('firstName')}
+--------------------------------------------------
+■氏名
+${formData.get('lastName')} ${formData.get('firstName')}
                   
-                  ■電話番号
-                  ${formData.get('phone')}
+■電話番号
+${formData.get('phone')}
 
-                  ■Email
-                  ${formData.get('email')}
+■Email
+${formData.get('email')}
                   
-                  ■卒業年度
-                  ${formData.get('graduationYear')}
+■卒業年度
+${formData.get('graduationYear')}
 
-                  ■学校名
-                  ${formData.get('school')}
+■学校名
+${formData.get('school')}
 
-                  ■学部名
-                  ${formData.get('department')}
+■学部名
+${formData.get('department')}
 
-                  ■学科名
-                  ${formData.get('faculty')}
+■学科名
+${formData.get('faculty')}
 
-                  ■説明会参加日
-                  ${formData.get('eventDate')}
-                  --------------------------------------------------
+■説明会参加日
+${formData.get('eventDate')}
+--------------------------------------------------
                   
-                  ※履歴書・ポートフォリオを添付いたしました。
-                  ご確認のほどよろしくお願いいたします。`;
+※履歴書・ポートフォリオを添付いたしました。
+ご確認のほどよろしくお願いいたします。`;
                 const body = encodeURIComponent(rawBody);
                 
                 let userMessage = '';
