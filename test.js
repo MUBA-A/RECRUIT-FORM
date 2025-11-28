@@ -546,7 +546,6 @@
             .then(() => {
                 // Success: Redirect
                 form.reset();
-                fileNameDisplay.textContent = '選択されていません';
                 setFormSubmitting(false);
                 window.location.href = "https://recruit.gl-navi.co.jp/apply/successful";
             })
