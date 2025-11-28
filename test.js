@@ -685,8 +685,10 @@
                     const fallbackDiv = document.createElement('div');
                     fallbackDiv.style.cssText = 'margin-top: 20px; padding: 15px; background: #fff3cd; border: 1px solid #ffeeba; color: #856404; border-radius: 4px;';
                     fallbackDiv.innerHTML = `
-                        <p style="margin-bottom:10px; font-weight:bold;">送信がブロックされました。</p>
-                        <p>以下のボタンからメーラーを起動して、履歴書を添付の上ご応募ください。</p>
+                        <p style="margin-bottom:10px; font-weight:bold;">送信できませんでした。</p>
+                        <p>1．別の端末から再度お試しください。</p>
+                        <p>2．解決しない場合は、お手数ですが、saiyou@gl-navi.co.jp宛に、履歴書を添付の上直接メールをお送りください。</p>
+                        <p>※以下のボタンからもメールソフトを起動できます。</p>
                         <a href="mailto:${fallbackEmail}?subject=${subject}&body=${body}" 
                         style="display:inline-block; padding:10px 20px; background:#d9534f; color:white; text-decoration:none; border-radius:4px; font-weight:bold;">
                         メールで応募する
