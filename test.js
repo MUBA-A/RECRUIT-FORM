@@ -68,6 +68,79 @@
             color: var(--error-color);
             margin-left: 4px;
         }
+         /* --- TOOLTIP STYLES START --- */
+        .label-with-tooltip {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Space between label and icon */
+            margin-bottom: 8px; /* Replaces the label's margin-bottom */
+        }
+
+        .label-with-tooltip > label {
+            margin-bottom: 0; /* Remove margin from the label itself */
+        }
+
+        .tooltip-icon {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 15px;
+            height: 15px;
+            background-color: #95aaaf;
+            color: white;
+            border-radius: 50%;
+            font-size: 15.4px;
+            font-weight: bold;
+            user-select: none;
+        }
+
+        .tooltip-icon::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%; /* Position above the icon */
+            left: 50%;
+            /* This calculation first centers the element (-50%) then shifts it 50px right */
+            transform: translateX(calc(-50% + 50px));
+            background-color: #333;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: normal; /* Normal weight for tooltip text */
+            white-space: nowrap;
+            z-index: 10;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            pointer-events: none; /* Prevent the tooltip from interfering with mouse events */
+        }
+
+        /* Arrow for the tooltip */
+        .tooltip-icon::before {
+            content: '';
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            /* This keeps the arrow centered on the icon, ignoring the bubble's offset */
+            transform: translateX(-50%) translateY(100%); 
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 11;
+            pointer-events: none;
+        }
+
+
+        .tooltip-icon:hover::after,
+        .tooltip-icon:hover::before {
+            visibility: visible;
+            opacity: 1;
+        }
+        /* --- TOOLTIP STYLES END --- */
 
         input, select {
             width: 100%;
@@ -82,20 +155,11 @@
             /* Explicit line height improves cross-browser consistency */
             line-height: 1.5;
         }
-        
-        select {
-            color: var(--placeholder-color);
-        }
 
-        input:focus {
+        input:focus, select:focus {
             background: #dddddd !important;
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
-        }
-        select:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
-            border-color: var(--primary-color);
         }
 
         input:hover, input:focus:hover {
@@ -323,7 +387,7 @@
       // Add the form HTML
       const formElement = document.createElement('div');
       formElement.innerHTML = `
-        <form id="entry_entryForm" novalidate enctype="multipart/form-data" accept-charset="utf-8">
+        <form id="entry_entryForm" novalidate enctype="multipart/form-data" accept-charset="utf-8" class="notranslate">
             <div class="form-row">
                 <div class="form-group">
                     <label for="entry_lastName" class="required-label">姓</label>
@@ -339,7 +403,10 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="entry_email" class="required-label">Eメール</label>
+                    <div class="label-with-tooltip">
+                        <label for="entry_email" class="required-label">Eメール</label>
+                        <span class="tooltip-icon" data-tooltip="ご登録の媒体と同じメールアドレスをご記入ください">i</span>
+                    </div>
                     <input type="email" id="entry_email" name="email" required aria-required="true" placeholder="mail@example.com">
                     <div class="error-message" id="entry_emailError">有効なメールアドレスを入力してください</div>
                 </div>
@@ -356,53 +423,63 @@
                     <input type="tel" id="entry_phone" name="phone" required aria-required="true" placeholder="090-1234-5678">
                     <div class="error-message" id="entry_phoneError">有効な電話番号を入力してください</div>
                 </div>
-
                 <div class="form-group">
-                    <label for="entry_desiredOccupation" class="required-label">応募職種</label>
-                    <select id="entry_desiredOccupation" name="desiredOccupation" required aria-required="true">
-                        <option value="">ご希望の職種を選択してください</option>
-                        <option value="新卒・第二新卒 オープンポジション">・新卒・第二新卒: オープンポジション</option>
-                        <option value="インサイドセールス">・インサイドセールス</option>
-                        <option value="フィールドセールス">・フィールドセールス</option>
-                        <option value="フィールドセールス・エキスパート">・フィールドセールス・エキスパート</option>
-                        <option value="DXコンサルタント・エントリーレベル">・DXコンサルタント・エントリーレベル</option>
-                        <option value="DXコンサルタント">・DXコンサルタント</option>
-                        <option value="DXコンサルタント・エキスパート">・DXコンサルタント・エキスパート</option>
-                        <option value="データサイエンティスト">・データサイエンティスト</option>
-                        <option value="コーポレートファンクション">・コーポレートファンクション</option>
-                    </select>
-                    <div class="error-message" id="entry_desiredOccupationError">応募職種を選択してください</div>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="entry_resume" class="required-label" id="entry_resumeLabel">履歴書</label>
+                    <label for="entry_resume" class="required-label">履歴書</label>
                     <div class="file-input-container">
                         <label for="entry_resume" class="file-input-label" id="entry_fileName">ファイルを選択</label>
                         <input type="file" id="entry_resume" name="resume" class="file-input" required aria-required="true">
                     </div>
                     <div class="error-message" id="entry_resumeError">履歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
                 </div>
-                <div class="form-group" id="CVContainer">
-                    <label for="entry_CV" id="entry_CVLabel">職務経歴書</label>
-                    <div class="file-input-container">
-                        <label for="entry_CV" class="file-input-label" id="entry_CVfileName">ファイルを選択</label>
-                        <input type="file" id="entry_CV" name="CV" class="file-input">
-                    </div>
-                    <div class="error-message" id="entry_CVError">職務経歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="entry_school" class="required-label">学校名</label>
+                    <input type="text" id="entry_school" name="school" required aria-required="true" placeholder="○○大学、○○大学院">
+                    <div class="error-message" id="entry_schoolError">学校名を入力してください</div>
                 </div>
-                <div class="form-group" id="gradYearContainer" style="display:none;">
-                    <label for="entry_graduationYear" id="entry_GradYearLabel">卒業年度 (学生の方のみ)</label>
-                    <input type="number" id="entry_graduationYear" name="graduationYear" placeholder="2023">
-                    <div class="error-message" id="entry_graduationYearError">卒業年度を入力してください</div>
+                <div class="form-group">
+                    <label for="entry_department">学部名</label>
+                    <input type="text" id="entry_department" name="department" placeholder="○○学部">
+                    <div class="error-message" id="entry_departmentError">学部名を入力してください</div>
                 </div>
             </div>
 
+            <div class="form-row">
+              <div class="form-group">
+                    <label for="entry_faculty">学科名</label>
+                    <input type="text" id="entry_faculty" name="faculty" placeholder="○○学科">
+                    <div class="error-message" id="entry_facultyError">学科名を入力してください</div>
+                </div>
+              <div class="form-group">
+                <label for="entry_graduationYear" class="required-label">卒業年度</label>
+                <input type="number" id="entry_graduationYear" name="graduationYear" required aria-required="true" placeholder="2023">
+                <div class="error-message" id="entry_graduationYearError">卒業年度を入力してください</div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="entry_eventDate" class="required-label">説明会参加日</label>
+                <input type="date" id="entry_eventDate" name="eventDate" required aria-required="true">
+                <div class="error-message" id="entry_eventDateError"></div>
+              </div>
+              <div class="form-group">
+                    <label for="entry_comment" class="required-label">説明会感想文</label>
+                    <div class="file-input-container">
+                        <label for="entry_comment" class="file-input-label" id="entry_commentfileName">ファイルを選択</label>
+                        <input type="file" id="entry_comment" name="comment" class="file-input" aria-required="false">
+                    </div>
+                    <div class="error-message" id="entry_commentError">感想文をアップロードしてください（PDF、TXT、Word形式、5MB以下）</div>
+              </div>
+            </div>
 
             <div class="checkbox-group">
                 <input type="checkbox" id="entry_privacyPolicy" name="privacyPolicy" class="checkbox-input" required aria-required="true">
-                <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">採用選考に関する<a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
+                <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">
+                  採用選考に関する
+                  <a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
                 </label>
             </div>
             <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
@@ -447,93 +524,39 @@
     const form = shadow.getElementById('entry_entryForm');
     const resumeInput = shadow.getElementById('entry_resume');
     const fileNameDisplay = shadow.getElementById('entry_fileName');
-    const resumeLabel = shadow.getElementById("entry_resumeLabel");
-    const CVInput = shadow.getElementById('entry_CV');
-    const CVFileNameDisplay = shadow.getElementById('entry_CVfileName');
+    const commentInput = shadow.getElementById('entry_comment');
+    const commentFileNameDisplay = shadow.getElementById('entry_commentfileName');
+    const graduationYearPlaceholder = shadow.getElementById('entry_graduationYear');
     const privacyPolicyCheckbox = shadow.getElementById('entry_privacyPolicy');
     const privacyPolicyTimestampField = shadow.getElementById('entry_privacyPolicyTimestamp');
-    const desiredOccupation = shadow.getElementById("entry_desiredOccupation");
-    const CVLabel = shadow.getElementById("entry_CVLabel");
-    const gradYear = shadow.getElementById("entry_graduationYear");
-    const gradYearLabel = shadow.getElementById("entry_GradYearLabel");
-    const gradYearContainer = shadow.getElementById("gradYearContainer");
-    const CVContainer = shadow.getElementById("CVContainer");
 
+
+
+    // Set placeholder value of graduation year to current year minus three
     const nextYear = new Date().getFullYear() - 3;
-    gradYear.placeholder = nextYear;
-
-    let applicantType;  // Boolean
-
-    desiredOccupation.addEventListener("change", function () {
-        if (validateDesiredOccupation()) {
-            if (this.value == "新卒・第二新卒 オープンポジション") {
-
-                applicantType = '応募者_新卒';
-                
-                // make CV disappear
-                CVContainer.style.display = "none";
-                CVLabel.className = "";
-                CVInput.required = false;
-                CVInput.ariaRequired = false;
-
-                // make grad year appear and required
-                gradYearContainer.style.display = "";
-                gradYearLabel.className = "required-label";
-                gradYear.required = true;
-                gradYear.ariaRequired = true;
-
-                // make resume optional
-                resumeInput.required = false;
-                resumeInput.ariaRequired = false;
-                resumeLabel.className = "";
-            } else {
-
-                applicantType = '応募者_中途';
-
-                // make CV appear and required
-                CVContainer.style.display = "";
-                CVLabel.className = "required-label";
-                CVInput.required = true;
-                CVInput.ariaRequired = true;
-
-
-                // make grad year disappear and required
-                gradYearContainer.style.display = "none";
-                gradYearLabel.className = "";
-                gradYear.required = false;
-                gradYear.ariaRequired = false;
-                gradYear.value = "";
-
-                // make resume required
-                resumeInput.required = true;
-                resumeInput.ariaRequired = true;
-                resumeLabel.className = "required-label";
-            }
-        }
-    });
-
+    graduationYearPlaceholder.placeholder = nextYear;
 
     // Display file name when selected
     resumeInput.addEventListener('change', function() {
         if (this.files.length > 0) {
             fileNameDisplay.textContent = this.files[0].name;
             fileNameDisplay.style.fontWeight = "bold";
-            validateFile(this);
+            validateFile(this); // This validates on change but the error was disappearing
         } else {
             fileNameDisplay.textContent = '選択されていません';
             hideError('entry_resumeError');
         }
     });
 
-    // Display CV file name when selected
-    CVInput.addEventListener('change', function() {
+    // Display comment file name when selected
+    commentInput.addEventListener('change', function() {
         if (this.files.length > 0) {
-            CVFileNameDisplay.textContent = this.files[0].name;
-            CVFileNameDisplay.style.fontWeight = "bold";
-            validateCVFile(this, "entry_CVError");
+            commentFileNameDisplay.textContent = this.files[0].name;
+            commentFileNameDisplay.style.fontWeight = "bold";
+            validateCommentFile(this);
         } else {
-            CVFileNameDisplay.textContent = '選択されていません';
-            hideError('entry_CVError');
+            commentFileNameDisplay.textContent = '選択されていません';
+            hideError('entry_commentError');
         }
     });
 
@@ -543,6 +566,7 @@
             const now = new Date();
             privacyPolicyTimestampField.value = now.toISOString();
         } else {
+            // Clear the timestamp if unchecked
             privacyPolicyTimestampField.value = '';
         }
     });
@@ -562,11 +586,15 @@
         isValid = validateEmail() && isValid;
         isValid = validateEmailConfirmation() && isValid;
         isValid = validatePhone() && isValid;
-        isValid = validateDesiredOccupation() && isValid;
+        isValid = validateRequiredField('entry_school', 'entry_schoolError') && isValid;
+        // Department and faculty are optional but need length validation
+        isValid = validateOptionalField('entry_department', 'entry_departmentError') && isValid;
+        isValid = validateOptionalField('entry_faculty', 'entry_facultyError') && isValid;
 
-        isValid = validateFile(resumeInput) && isValid;
-        isValid = validateCVFile(CVInput) && isValid;
         isValid = validateGraduationYear() && isValid;
+        isValid = validateFile(resumeInput) && isValid;
+        isValid = validateEventDate() && isValid; // might delete
+        isValid = validateCommentFile(commentInput) && isValid;
         isValid = validateCheckbox('entry_privacyPolicy', 'entry_privacyPolicyError') && isValid;
 
         function setFormSubmitting(isSubmitting) {
@@ -751,16 +779,19 @@
                 validateEmailConfirmation();
             } else if (this.id === 'entry_phone') {
                 validatePhone();
-            } else if (this.id === 'entry_privacyPolicy') {
-                validateCheckbox(this.id, 'entry_privacyPolicyError');
-            } else if (this.id === 'entry_resume') {
-                validateFile(this);
-            } else if (this.id === 'entry_CV') {
-                validateCVFile(this);
             } else if (this.id === 'entry_graduationYear') {
                 validateGraduationYear();
+            } else if (this.id === 'entry_privacyPolicy') {
+                validateCheckbox(this.id, 'entry_privacyPolicyError');
+            } else if (this.id === 'entry_department' || this.id === 'entry_faculty') {
+                validateOptionalField(this.id, this.id + 'Error');
+            } else if (this.id === 'entry_resume') {
+                // Fixed: Ensure resume validation persists after blur
+                validateFile(this);
             } else if (this.required) {
                 validateRequiredField(this.id, this.id + 'Error');
+            } else if (this.id === 'entry_eventDate') {
+                validateEventDate();
             }
         });
     });
@@ -781,6 +812,18 @@
         }
     }
 
+    // Added function for optional fields that still need length validation
+    function validateOptionalField(fieldId, errorId) {
+        const field = shadow.getElementById(fieldId);
+        
+        if (field.value.trim() && field.value.length > 255) {
+            showError(errorId, `${field.previousElementSibling.textContent.replace('*', '')}を255文字以内で入力してください`);
+            return false;
+        } else {
+            hideError(errorId);
+            return true;
+        }
+    }
 
     function validateEmail() {
         const email = shadow.getElementById('entry_email');
@@ -852,18 +895,11 @@
         }
     }
 
-
     function validateGraduationYear() {
         const graduationYear = shadow.getElementById('entry_graduationYear');
         const currentYear = new Date().getFullYear();
         const yearValue = graduationYear.value.trim();
     
-        // if gradyear not required (i.e. applicant_type != "応募者_新卒")
-        if (!graduationYear.required) {
-            hideError('entry_graduationYearError');
-            return true;
-        }
-
         if (!yearValue) {
             showError('entry_graduationYearError', '卒業年度を入力してください');
             return false;
@@ -883,31 +919,9 @@
         hideError('entry_graduationYearError');
         return true;
     }
-
-
-    function validateDesiredOccupation() {
-        const desiredOccupation = shadow.getElementById("entry_desiredOccupation");
-
-        if (!desiredOccupation.value) {
-            showError('entry_desiredOccupationError', '応募職種を選択してください');
-            return false;
-        } else {
-            hideError('entry_desiredOccupationError');
-            return true;
-        }
-    }
-
     
 
     function validateFile(fileInput) {
-
-        // resume not required (i.e. applicant_type == "応募者_新卒")
-        if (!fileInput.required) {
-            hideError('entry_resumeError');
-            return true;
-        }
-
-
         // Check if no file and present
         if (!fileInput.files || fileInput.files.length === 0) {
             showError('entry_resumeError', '履歴書をアップロードしてください');
@@ -968,67 +982,78 @@
         return true;
     }
 
+    function validateCommentFile(fileInput) {
 
-    function validateCVFile(fileInput) {
-        const errorId = "entry_CVError"
-
-        // CV not required (i.e. applicant_type == "応募者_新卒")
-        if (!fileInput.required) {
-            hideError(errorId);
-            return true;
-        }
-
-        // Check if file is required and present
-        if (fileInput.required && (!fileInput.files || fileInput.files.length === 0)) {
-            showError(errorId, 'ファイルが空です。有効なファイルをアップロードしてください');
+        // Check if no file and present
+        if (!fileInput.files || fileInput.files.length === 0) {
+            showError('entry_resumeError', '感想文をアップロードしてください（PDF、TXT、Word形式、5MB以下）');
             return false;
         }
         
-        if (fileInput.files && fileInput.files.length > 0) {
-            const file = fileInput.files[0];
-            const fileName = file.name.toLowerCase();
-            const fileSize = file.size;
-            const maxSize = 10 * 1024 * 1024; // 10MB
-            
-            // Define allowed formats with both extension and MIME type
-            const allowedFormats = [
-                { ext: '.pdf', mime: 'application/pdf' },
-                { ext: '.xlsx', mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
-                { ext: '.xls', mime: 'application/vnd.ms-excel' },
-                { ext: '.docx', mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
-                { ext: '.doc', mime: 'application/msword' }
-            ];
-            
-            // Check for empty files
-            if (fileSize === 0) {
-                showError(errorId, 'ファイルが空です。有効なファイルをアップロードしてください');
-                return false;
-            }
-            
-            // Check size first
-            if (fileSize > maxSize) {
-                showError(errorId, 'ファイルサイズは10MB以下にしてください');
-                return false;
-            }
-            
-            // More flexible validation approach
-            const fileMimeType = file.type;
-            
-            // Check if file matches any of our allowed formats
-            const isValidFormat = allowedFormats.some(format => 
-                fileName.endsWith(format.ext) || fileMimeType === format.mime
-            );
-            
-            if (!isValidFormat) {
-                showError(errorId, '許可されているファイル形式：PDF、Excel、Word形式のみ');
-                return false;
-            }
-            
-            hideError(errorId);
-            return true;
+        const file = fileInput.files[0];
+        const fileName = file.name.toLowerCase();
+        const fileSize = file.size;
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        
+        // Define allowed formats with both extension and MIME type
+        const allowedFormats = [
+            { ext: '.pdf', mime: 'application/pdf' },
+            { ext: '.docx', mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
+            { ext: '.doc', mime: 'application/msword' },
+            { ext: '.txt', mime: 'text/plain' },
+            { ext: '.text', mime: 'text/plain' }
+        ];
+        
+        // Check for empty files
+        if (fileSize === 0) {
+            showError('entry_commentError', 'ファイルが空です。有効なファイルをアップロードしてください');
+            return false;
         }
         
+        // Check size first
+        if (fileSize > maxSize) {
+            showError('entry_commentError', 'ファイルサイズは5MB以下にしてください');
+            return false;
+        }
+        
+        // Get file MIME type
+        const fileMimeType = file.type;
+        
+        // Text files can have various MIME types with charset information
+        const isTextFile = (fileName.endsWith('.txt') || fileName.endsWith('.text')) && 
+                           fileMimeType.startsWith('text/plain');
+        
+        // Check if file matches any of our allowed formats
+        const isValidFormat = allowedFormats.some(format => 
+            fileName.endsWith(format.ext) || fileMimeType === format.mime
+        ) || isTextFile;
+        
+        if (!isValidFormat) {
+            console.debug('File validation failed:', {
+                filename: fileName,
+                size: fileSize,
+                type: file.type,
+                validFormats: allowedFormats.map(f => `${f.ext} (${f.mime})`)
+            });
+            showError('entry_commentError', '許可されているファイル形式：PDF、Text、Word形式のみ');
+            return false;
+        }
+        
+        // If we got here, the file is valid
+        hideError('entry_commentError');
         return true;
+    }
+
+    function validateEventDate() {
+        const eventDate = shadow.getElementById('entry_eventDate');
+        
+        if (!eventDate.value) {
+            showError('entry_eventDateError', '説明会参加日を入力してください');
+            return false;
+        } else {
+            hideError('entry_eventDateError');
+            return true;
+        }
     }
 
     function validateCheckbox(fieldId, errorId) {
