@@ -695,7 +695,7 @@
                         </a>
                     `;
                     
-                    formContainer.appendChild(fallbackDiv);
+                    formContainer.prepend(fallbackDiv);
                     
                     // Hide the submit button so they don't keep clicking
                     const submitBtn = document.querySelector('button[type="submit"]'); // Adjust selector
