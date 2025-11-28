@@ -567,14 +567,27 @@
             
             setFormSubmitting(true);
 
-            // Submit to Pipedream first, then Marketo
-            fetch('https://eo1jbij8tb2xgqu.m.pipedream.net', {
+            // Helper function to retry fetch
+            const fetchWithRetry = async (url, options, retries = 3) => {
+                try {
+                    return await fetch(url, options);
+                } catch (err) {
+                    if (retries > 0) {
+                        console.log(`Retrying... attempts left: ${retries}`);
+                        await new Promise(res => setTimeout(res, 1000)); // Wait 1s
+                        return fetchWithRetry(url, options, retries - 1);
+                    }
+                    throw err;
+                }
+            };
+
+            // 1. Submit to Pipedream
+            fetchWithRetry('https://eo1jbij8tb2xgqu.m.pipedream.net', {
                 method: 'POST',
                 body: formData
             })
             .then(response => {
                 if (!response.ok) {
-                    // Convert the response to JSON if possible, otherwise use text
                     return response.json().catch(() => response.text()).then(errorData => {
                         const error = new Error(response.statusText || 'Request failed');
                         error.status = response.status;
@@ -582,45 +595,32 @@
                         throw error;
                     });
                 }
-                // --- MODIFIED START: Made Marketo submission asynchronous ---
                 
-                // 1. Commented out the Promise wrapper that waits for success
-                /* 
-                const marketoSubmissionWithTimeout = new Promise((resolve, reject) => {
-                    // Set up success handler before submission
-                    mktoFormEl.onSuccess(function(values) {
-                        console.log(values);
-                        resolve(values);
-                        return false; // Prevent default form redirect
+                // 2. Submit to Marketo (PROPERLY WAITING)
+                return new Promise((resolve, reject) => {
+                    // Safety timeout: If Marketo hangs, proceed anyway after 3 seconds
+                    const timeoutId = setTimeout(() => {
+                        console.warn("Marketo submission timed out, proceeding to redirect.");
+                        resolve(); 
+                    }, 3000);
+
+                    mktoFormEl.onSuccess(function() {
+                        clearTimeout(timeoutId);
+                        resolve();
+                        return false; // Prevent Marketo's default redirect
                     });
-                    
-                    // Timeout if Marketo takes too long
-                    setTimeout(() => {
-                        reject(new Error('Marketo submission timed out after 20 seconds'));
-                    }, 10000);
-                });
-                */
 
-                // 2. Added simple handler to prevent Marketo from redirecting if it finishes very quickly
-                mktoFormEl.onSuccess(function() { return false; });
-                
-                // Set values in Marketo form
-                mktoFormEl.setValues({
-                    'LastName': formData.get('lastName'),
-                    'FirstName': formData.get('firstName'),
-                    'Email': formData.get('email'),
-                    'Phone': formData.get('phone'),
-                    'praivacyPolicy': formData.get('privacyPolicy') !== null ? "yes" : "no",
-                    'recordtype': '応募者_中途'
-                });
-                
-                // Submit Marketo form (Fire and forget)
-                mktoFormEl.submit();
+                    mktoFormEl.setValues({
+                        'LastName': formData.get('lastName'),
+                        'FirstName': formData.get('firstName'),
+                        'Email': formData.get('email'),
+                        'Phone': formData.get('phone'),
+                        'praivacyPolicy': formData.get('privacyPolicy') !== null ? "yes" : "no",
+                        'recordtype': '応募者_中途'
+                    });
 
-                // 3. Commented out the return of the promise so we don't wait
-                // return marketoSubmissionWithTimeout;
-                
-                // --- MODIFIED END ---
+                    mktoFormEl.submit();
+                });
             })
             .then(() => {
                 isSubmissionInProgress = false;
@@ -634,26 +634,85 @@
                 window.location.href = "https://recruit.gl-navi.co.jp/apply/successful";
             })
             .catch(error => {
-                console.error('Error details:', {
-                    status: error.status,
-                    message: error.message,
-                    data: error.data
-                });
+                console.error('Submission Error:', error);
                 
-                let errorMessage = '[' + error.message.toString() + '] フォームの送信中にエラーが発生しました。デバイスを変えて再試行してください。\n';
-                
-                if (error.status === 418) {
-                    errorMessage = '入力内容に問題があります。入力項目を確認してください。\n';
-                }
-                for (let x in error.data) {
-                    errorMessage += "・" + error.data[x] + "\n";
-                };
+                // 1. Define the fallback email
+                const fallbackEmail = "saiyou@gl-navi.co.jp";
+                const subject = encodeURIComponent("中途採用応募 (フォームエラー)");
+               const rawBody = 
+                  `採用担当者様
+                  
+                  フォーム送信時にエラーが発生したため、メールにて応募いたします。
+                  
+                  --------------------------------------------------
+                  ■氏名
+                  ${formData.get('lastName')} ${formData.get('firstName')}
+                  
+                  ■電話番号
+                  ${formData.get('phone')}
 
-                alert(errorMessage);
+                  ■Email
+                  ${formData.get('email')}
+                  --------------------------------------------------
+                  
+                  ※履歴書・ポートフォリオを添付いたしました。
+                  ご確認のほどよろしくお願いいたします。`;
+                const body = encodeURIComponent(rawBody);
                 
-                // Re-enable form
+                let userMessage = '';
+                let isBlockingIssue = false;
+
+                // 2. Detect Adblocker / Network Block
+                // If there is no status code (0 or undefined) and it's a TypeError, 
+                // it means the request never left the browser.
+                if (!error.status && error.name === 'TypeError') {
+                    isBlockingIssue = true;
+                    userMessage = '【通信エラー】\nセキュリティソフトや広告ブロック機能により、送信がブロックされた可能性があります。\n\nお手数ですが、このままメールでの応募に切り替えていただけますか？';
+                } 
+                // 3. Detect Pipedream/Server Errors
+                else {
+                    userMessage = 'システムエラーが発生しました。';
+                    if (error.data) {
+                        for (let x in error.data) {
+                            userMessage += "\n・" + error.data[x];
+                        }
+                    }
+                }
+
+                // 4. Show the alert
+                alert(userMessage);
+                
+                // 5. If it was a blocking issue, modify the UI to show a mailto link
+                // This ensures you don't lose the applicant!
+                let fallback = false;
+                if (isBlockingIssue && !fallback) {
+                    const formContainer = form.parentNode
+                    
+                    // Create a fallback button/link
+                    const fallbackDiv = document.createElement('div');
+                    fallbackDiv.style.cssText = 'margin: 20px 0 20px 0; margin-bottom: 10px; padding: 15px; background: #fff3cd; border: 1px solid #ffeeba; color: #856404; border-radius: 4px;';
+                    fallbackDiv.innerHTML = `
+                        <p style="margin-bottom:10px; font-weight:bold;">送信できませんでした。</p>
+                        <p>1．別の端末から再度お試しください。</p>
+                        <p>2．解決しない場合は、お手数ですが、saiyou@gl-navi.co.jp宛に、履歴書を添付の上直接メールをお送りください。</p>
+                        <p style="margin-top:5px;">※以下のボタンからもメールソフトを起動できます。</p>
+                        <a href="mailto:${fallbackEmail}?subject=${subject}&body=${body}" 
+                        style="display:inline-block; margin-top: 3px; padding:10px 20px; background:#d9534f; color:white; text-decoration:none; border-radius:4px; font-weight:bold;">
+                        メールで応募する
+                        </a>
+                    `;
+                    
+                    formContainer.prepend(fallbackDiv);
+                    fallback = true;
+                    fallbackDiv.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'center',
+                        inline: 'nearest'
+                    });
+
+                }
+                
                 setFormSubmitting(false);
-                
             });
         }
     });
