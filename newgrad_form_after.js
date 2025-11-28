@@ -387,7 +387,7 @@
       // Add the form HTML
       const formElement = document.createElement('div');
       formElement.innerHTML = `
-        <form id="entry_entryForm" novalidate enctype="multipart/form-data" accept-charset="utf-8">
+        <form id="entry_entryForm" novalidate enctype="multipart/form-data" accept-charset="utf-8" class="notranslate">
             <div class="form-row">
                 <div class="form-group">
                     <label for="entry_lastName" class="required-label">姓</label>
