@@ -679,7 +679,7 @@
                 // 5. If it was a blocking issue, modify the UI to show a mailto link
                 // This ensures you don't lose the applicant!
                 if (isBlockingIssue) {
-                    const formContainer = document.querySelector('form').parentNode; // Or specific ID
+                    const formContainer = form.parentNode
                     
                     // Create a fallback button/link
                     const fallbackDiv = document.createElement('div');
