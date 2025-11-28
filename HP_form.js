@@ -579,30 +579,19 @@
         }
         
         if (isValid) {
+            // Get form data
             const formData = new FormData(form);
+            
             setFormSubmitting(true);
 
-            // Helper function to retry fetch
-            const fetchWithRetry = async (url, options, retries = 3) => {
-                try {
-                    return await fetch(url, options);
-                } catch (err) {
-                    if (retries > 0) {
-                        console.log(`Retrying... attempts left: ${retries}`);
-                        await new Promise(res => setTimeout(res, 1000)); // Wait 1s
-                        return fetchWithRetry(url, options, retries - 1);
-                    }
-                    throw err;
-                }
-            };
-
-            // 1. Submit to Pipedream
-            fetchWithRetry('https://eo4oramamadwsus.m.pipedream.net', {
+            // Submit to Pipedream first, then Marketo
+            fetch('https://eo4oramamadwsus.m.pipedream.net', {
                 method: 'POST',
                 body: formData
             })
             .then(response => {
                 if (!response.ok) {
+                    // Convert the response to JSON if possible, otherwise use text
                     return response.json().catch(() => response.text()).then(errorData => {
                         const error = new Error(response.statusText || 'Request failed');
                         error.status = response.status;
@@ -610,70 +599,78 @@
                         throw error;
                     });
                 }
+                // --- MODIFIED START: Made Marketo submission asynchronous ---
                 
-                // 2. Submit to Marketo (PROPERLY WAITING)
-                return new Promise((resolve, reject) => {
-                    // Safety timeout: If Marketo hangs, proceed anyway after 3 seconds
-                    const timeoutId = setTimeout(() => {
-                        console.warn("Marketo submission timed out, proceeding to redirect.");
-                        resolve(); 
-                    }, 3000);
-
-                    mktoFormEl.onSuccess(function() {
-                        clearTimeout(timeoutId);
-                        resolve();
-                        return false; // Prevent Marketo's default redirect
+                // 1. Commented out the Promise wrapper that waits for success
+                /* 
+                const marketoSubmissionWithTimeout = new Promise((resolve, reject) => {
+                    // Set up success handler before submission
+                    mktoFormEl.onSuccess(function(values) {
+                        console.log(values);
+                        resolve(values);
+                        return false; // Prevent default form redirect
                     });
-
-                    mktoFormEl.setValues({
-                        'LastName': formData.get('lastName'),
-                        'FirstName': formData.get('firstName'),
-                        'Email': formData.get('email'),
-                        'Phone': formData.get('phone'),
-                        'graduation': formData.get('graduationYear'),
-                        'praivacyPolicy': formData.get('privacyPolicy') !== null ? "yes" : "no",
-                        'recordtype': '応募者_新卒'
-                    });
-
-                    mktoFormEl.submit();
+                    
+                    // Timeout if Marketo takes too long
+                    setTimeout(() => {
+                        reject(new Error('Marketo submission timed out after 20 seconds'));
+                    }, 10000);
                 });
+                */
+
+                // 2. Added simple handler to prevent Marketo from redirecting if it finishes very quickly
+                mktoFormEl.onSuccess(function() { return false; });
+                
+                // Set values in Marketo form
+                mktoFormEl.setValues({
+                    'LastName': formData.get('lastName'),
+                    'FirstName': formData.get('firstName'),
+                    'Email': formData.get('email'),
+                    'Phone': formData.get('phone'),
+                    'graduation': formData.get('graduationYear'),
+                    'praivacyPolicy': formData.get('privacyPolicy') !== null ? "yes" : "no",
+                    'recordtype': '応募者_新卒'
+                });
+                
+                // Submit Marketo form (Fire and forget)
+                mktoFormEl.submit();
+
+                // 3. Commented out the return of the promise so we don't wait
+                // return marketoSubmissionWithTimeout;
+                
+                // --- MODIFIED END ---
             })
             .then(() => {
-                // Success: Redirect
+                isSubmissionInProgress = false;
+                // Handle successful submission
                 form.reset();
                 fileNameDisplay.textContent = '選択されていません';
-                setFormSubmitting(false);
+                setFormSubmitting(false); // Re-enable form
+                
+                // Redirect to thank you page
                 window.location.href = "https://recruit.gl-navi.co.jp/apply/successful";
             })
             .catch(error => {
-                console.error('Submission Error:', error);
+                console.error('Error details:', {
+                    status: error.status,
+                    message: error.message,
+                    data: error.data
+                });
                 
-                let userMessage = '';
-
-                // Case A: Network Error / Adblocker (TypeError)
-                if (!error.status && error.name === 'TypeError') {
-                    userMessage = '通信エラーが発生しました。アドブロック（広告ブロック）機能やセキュリティ拡張機能が有効になっている場合、一時的に無効にして再試行してください。';
-                    // (Translation: Communication error. If adblock or security extensions are enabled, please disable them temporarily.)
-                } 
-                // Case B: Pipedream Validation Error (e.g. 418 or 400)
-                else if (error.status === 418) {
-                    userMessage = '入力内容に問題があります。入力項目を確認してください。\n';
+                let errorMessage = '[' + error.message.toString() + '] フォームの送信中にエラーが発生しました。デバイスを変えて再試行してください。\n';
+                
+                if (error.status === 418) {
+                    errorMessage = '入力内容に問題があります。入力項目を確認してください。\n';
                 }
-                // Case C: Server Error / Other
-                else {
-                    userMessage = 'システムエラーが発生しました。時間をおいて再試行するか、別のブラウザをお試しください。\n';
-                    if (error.message) userMessage += `(詳細: ${error.message})`;
-                }
+                for (let x in error.data) {
+                    errorMessage += "・" + error.data[x] + "\n";
+                };
 
-                // Append specific data errors if available
-                if (error.data && typeof error.data === 'object') {
-                    for (let x in error.data) {
-                        userMessage += "\n・" + error.data[x];
-                    }
-                }
-
-                alert(userMessage);
+                alert(errorMessage);
+                
+                // Re-enable form
                 setFormSubmitting(false);
+                
             });
         }
     });
