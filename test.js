@@ -726,10 +726,8 @@
                     `;
                     
                     formContainer.prepend(fallbackDiv);
-                    
-                    // Hide the submit button so they don't keep clicking
-                    const submitBtn = document.querySelector('button[type="submit"]'); // Adjust selector
-                    if(submitBtn) submitBtn.style.display = 'none';
+                   fallbackDiv.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+
                 }
 
                 setFormSubmitting(false);
