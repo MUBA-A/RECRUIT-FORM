@@ -450,7 +450,16 @@
                 formData.set("desiredOccupation", occupation);
             }
 
-            
+            // rename the files to safe name (no mojibake)
+            for (const [key, value] of [...formData.entries()]) {
+                 if (value instanceof File) {
+                     // Create safe name
+                     const safeName = `upload-${Date.now()}.${value.name.split('.').pop()}`;
+                     
+                     // Overwrite the file in the existing formData with the renamed version
+                     formData.set(key, new File([value], safeName, { type: value.type }));
+                 }
+             }
             setFormSubmitting(true);
 
             // Submit to Pipedream first, then Marketo
