@@ -728,10 +728,14 @@
                     
                     formContainer.prepend(fallbackDiv);
                     fallback = true;
-                   
+                    fallbackDiv.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'center',
+                        inline: 'nearest'
+                    });
 
                 }
-                fallbackDiv.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                
                 setFormSubmitting(false);
             });
         }
