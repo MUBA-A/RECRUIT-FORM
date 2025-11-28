@@ -708,7 +708,8 @@
                 
                 // 5. If it was a blocking issue, modify the UI to show a mailto link
                 // This ensures you don't lose the applicant!
-                if (isBlockingIssue) {
+                let fallback = false;
+                if (isBlockingIssue && !fallback) {
                     const formContainer = form.parentNode
                     
                     // Create a fallback button/link
@@ -726,10 +727,11 @@
                     `;
                     
                     formContainer.prepend(fallbackDiv);
-                   fallbackDiv.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                    fallback = true;
+                   
 
                 }
-
+                fallbackDiv.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
                 setFormSubmitting(false);
             });
         }
