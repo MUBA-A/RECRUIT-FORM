@@ -640,23 +640,23 @@
                 const fallbackEmail = "saiyou@gl-navi.co.jp";
                 const subject = encodeURIComponent("中途採用応募 (フォームエラー)");
                const rawBody = 
-                  `採用担当者様
-                  
-                  フォーム送信時にエラーが発生したため、メールにて応募いたします。
-                  
-                  --------------------------------------------------
-                  ■氏名
-                  ${formData.get('lastName')} ${formData.get('firstName')}
-                  
-                  ■電話番号
-                  ${formData.get('phone')}
+`採用担当者様
 
-                  ■Email
-                  ${formData.get('email')}
-                  --------------------------------------------------
-                  
-                  ※履歴書・ポートフォリオを添付いたしました。
-                  ご確認のほどよろしくお願いいたします。`;
+フォーム送信時にエラーが発生したため、メールにて応募いたします。
+
+--------------------------------------------------
+■氏名
+${formData.get('lastName')} ${formData.get('firstName')}
+
+■電話番号
+${formData.get('phone')}
+
+■Email
+${formData.get('email')}
+--------------------------------------------------
+
+※履歴書・ポートフォリオを添付いたしました。
+ご確認のほどよろしくお願いいたします。`;
                 const body = encodeURIComponent(rawBody);
                 
                 let userMessage = '';
