@@ -610,7 +610,6 @@
                     'FirstName': formData.get('firstName'),
                     'Email': formData.get('email'),
                     'Phone': formData.get('phone'),
-                    'graduation': formData.get('graduationYear'),
                     'praivacyPolicy': formData.get('privacyPolicy') !== null ? "yes" : "no",
                     'recordtype': '応募者_中途'
                 });
