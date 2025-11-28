@@ -1,5 +1,4 @@
-
-    (function() {
+(function() {
     const oldDiv = document.getElementById("for_form");
           if (!oldDiv) {
             console.error("Target div not found!");
@@ -12,6 +11,7 @@
       
     const container = newDivElement;
       if (!container) console.log("Container not found");
+      
       // Create shadow DOM
       const shadow = container.attachShadow({ mode: 'open' });
       
@@ -68,79 +68,6 @@
             color: var(--error-color);
             margin-left: 4px;
         }
-         /* --- TOOLTIP STYLES START --- */
-        .label-with-tooltip {
-            display: flex;
-            align-items: center;
-            gap: 8px; /* Space between label and icon */
-            margin-bottom: 8px; /* Replaces the label's margin-bottom */
-        }
-
-        .label-with-tooltip > label {
-            margin-bottom: 0; /* Remove margin from the label itself */
-        }
-
-        .tooltip-icon {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 15px;
-            height: 15px;
-            background-color: #95aaaf;
-            color: white;
-            border-radius: 50%;
-            font-size: 15.4px;
-            font-weight: bold;
-            user-select: none;
-        }
-
-        .tooltip-icon::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 125%; /* Position above the icon */
-            left: 50%;
-            /* This calculation first centers the element (-50%) then shifts it 50px right */
-            transform: translateX(calc(-50% + 50px));
-            background-color: #333;
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: normal; /* Normal weight for tooltip text */
-            white-space: nowrap;
-            z-index: 10;
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            pointer-events: none; /* Prevent the tooltip from interfering with mouse events */
-        }
-
-        /* Arrow for the tooltip */
-        .tooltip-icon::before {
-            content: '';
-            position: absolute;
-            bottom: 125%;
-            left: 50%;
-            /* This keeps the arrow centered on the icon, ignoring the bubble's offset */
-            transform: translateX(-50%) translateY(100%); 
-            border-width: 5px;
-            border-style: solid;
-            border-color: #333 transparent transparent transparent;
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            z-index: 11;
-            pointer-events: none;
-        }
-
-
-        .tooltip-icon:hover::after,
-        .tooltip-icon:hover::before {
-            visibility: visible;
-            opacity: 1;
-        }
-        /* --- TOOLTIP STYLES END --- */
 
         input, select {
             width: 100%;
@@ -155,8 +82,11 @@
             /* Explicit line height improves cross-browser consistency */
             line-height: 1.5;
         }
+        select {
+            color: #333;
+        }
 
-        input:focus, select:focus {
+        input:focus {
             background: #dddddd !important;
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
@@ -186,6 +116,58 @@
             color: var(--placeholder-color);
             font-weight: bold;
             font-family: var(--font-family);
+        }
+
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border: var(--input-border);
+            border-radius: 4px;
+            background-color: var(--input-bg);
+            color: var(--placeholder-color);
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
+            width: 100%;
+            user-select: none;
+            margin: 0;
+            height: 47.2px;
+        }
+
+        .file-input-label:hover {
+            background-color: #005a9e;
+        }
+
+        .file-input-label:active {
+            transform: translateY(1px);
+        }
+
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .file-name {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #ffffff;
+            font-weight: normal;
+            word-break: break-all;
         }
 
         .checkbox-group {
@@ -278,11 +260,13 @@
             outline: 2px solid var(--primary-color);
             outline-offset: 1px;
         }
+
+    
       `;
       shadow.appendChild(styleElement);
 
       // Add media query for tablet
-      const mediaQuery = document.createElement('style');
+        const mediaQuery = document.createElement('style');
         mediaQuery.textContent = `
              @media (min-width: 1139px) {
                 #entry_form-container {
@@ -330,86 +314,96 @@
         `;
         container.appendChild(mediaQuery);
       
-      // Add the form directly (not wrapped in an extra div)
+      // Add the form HTML
       const formElement = document.createElement('div');
       formElement.innerHTML = `
         <form id="entry_entryForm" novalidate enctype="multipart/form-data" accept-charset="utf-8" class="notranslate">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="entry_lastName" class="required-label">姓</label>
-                            <input type="text" id="entry_lastName" name="lastName" required aria-required="true" placeholder="山田">
-                            <div class="error-message" id="entry_lastNameError">姓を入力してください</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="entry_firstName" class="required-label">名</label>
-                            <input type="text" id="entry_firstName" name="firstName" required aria-required="true" placeholder="太郎">
-                            <div class="error-message" id="entry_firstNameError">名を入力してください</div>
-                        </div>
-                    </div>
-            
-                    <div class="form-row">
-                        <div class="form-group">
-                            <div class="label-with-tooltip">
-                                <label for="entry_email" class="required-label">Eメール</label>
-                                <span class="tooltip-icon" data-tooltip="ご登録の媒体と同じメールアドレスをご記入ください">i</span>
-                            </div>
-                            <input type="email" id="entry_email" name="email" required aria-required="true" placeholder="mail@example.com">
-                            <div class="error-message" id="entry_emailError">有効なメールアドレスを入力してください</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="entry_email_confirmation" class="required-label">Eメール (再入力)</label>
-                            <input type="email" id="entry_email_confirmation" name="email_confirmation" required aria-required="true" placeholder="mail@example.com">
-                            <div class="error-message" id="entry_emailConfirmationError">一致するメールアドレスを入力してください</div>
-                        </div>
-                    </div>
-            
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="entry_phone" class="required-label">電話番号</label>
-                            <input type="tel" id="entry_phone" name="phone" required aria-required="true" placeholder="090-1234-5678">
-                            <div class="error-message" id="entry_phoneError">有効な電話番号を入力してください</div>
-                        </div>
-                        <div class="form-group">
-                          <label for="entry_graduationYear" class="required-label">卒業年度</label>
-                          <input type="number" id="entry_graduationYear" name="graduationYear" required aria-required="true" placeholder="2023">
-                          <div class="error-message" id="entry_graduationYearError">卒業年度を入力してください</div>
-                        </div>
-                    </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="entry_lastName" class="required-label">姓</label>
+                    <input type="text" id="entry_lastName" name="lastName" required aria-required="true" placeholder="山田">
+                    <div class="error-message" id="entry_lastNameError">姓を入力してください</div>
+                </div>
+                <div class="form-group">
+                    <label for="entry_firstName" class="required-label">名</label>
+                    <input type="text" id="entry_firstName" name="firstName" required aria-required="true" placeholder="太郎">
+                    <div class="error-message" id="entry_firstNameError">名を入力してください</div>
+                </div>
+            </div>
 
-            
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="entry_privacyPolicy" name="privacyPolicy" class="checkbox-input" required aria-required="true">
-                        <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">
-                          採用選考に関する<a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
-                        </label>
-                    </div>
-                    <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
-                    
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="entry_email" class="required-label">Eメール</label>
+                    <input type="email" id="entry_email" name="email" required aria-required="true" placeholder="mail@example.com">
+                    <div class="error-message" id="entry_emailError">有効なメールアドレスを入力してください</div>
+                </div>
+                <div class="form-group">
+                    <label for="entry_email_confirmation" class="required-label">Eメール (再入力)</label>
+                    <input type="email" id="entry_email_confirmation" name="email_confirmation" required aria-required="true" placeholder="mail@example.com">
+                    <div class="error-message" id="entry_emailConfirmationError">一致するメールアドレスを入力してください</div>
+                </div>
+            </div>
 
-                    <!-- timestamp for privacy policy checkbox -->
-                    <input type="hidden" id="entry_privacyPolicyTimestamp" name="privacyPolicyTimestamp" value="">
-            
-                    <button type="submit" id="entry_submitBtn" class="submit-btn">申し込み</button>
-                </form>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="entry_phone" class="required-label">電話番号</label>
+                    <input type="tel" id="entry_phone" name="phone" required aria-required="true" placeholder="090-1234-5678">
+                    <div class="error-message" id="entry_phoneError">有効な電話番号を入力してください</div>
+                </div>
+                <div class="form-group">
+                    <label for="entry_resume" class="required-label">履歴書</label>
+                    <div class="file-input-container">
+                        <label for="entry_resume" class="file-input-label" id="entry_fileName">ファイルを選択</label>
+                        <input type="file" id="entry_resume" name="resume" class="file-input" required aria-required="true">
+                    </div>
+                    <div class="error-message" id="entry_resumeError">履歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="entry_CV" class="required-label">職務経歴書</label>
+                    <div class="file-input-container">
+                        <label for="entry_CV" class="file-input-label" id="entry_CVfileName">ファイルを選択</label>
+                        <input type="file" id="entry_CV" name="CV" class="file-input" required aria-required="true">
+                    </div>
+                    <div class="error-message" id="entry_CVError">職務経歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
+                </div>
+                <div class="form-group">
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="entry_privacyPolicy" name="privacyPolicy" class="checkbox-input" required aria-required="true">
+                <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">
+                採用選考に関する<a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
+                </label>
+            </div>
+            <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
+
+            <!-- timestamp for privacy policy checkbox -->
+            <input type="hidden" id="entry_privacyPolicyTimestamp" name="privacyPolicyTimestamp" value="">
+
+            <button type="submit" id="entry_submitBtn" class="submit-btn">エントリー</button>
+        </form>
       `;
       shadow.appendChild(formElement);
-      
-    
-   // Add JS
-  // Disable submit button until Marketo form loads
+
+
+    // Disable submit button until Marketo form loads
     const sbmtBtn = shadow.getElementById('entry_submitBtn');
     sbmtBtn.disabled = true;
     sbmtBtn.textContent = '読込中...';
     let mktoFormEl;
 
-    // Watch for Marketo form to be ready and enable submit button. 
+    // Watch for Marketo form to be ready and enable submit button.
     function initializeMarketoLogicWhenReady() {
         if (typeof MktoForms2 !== "undefined") {
     
             MktoForms2.whenReady(function(mktoForm) {
                 mktoFormEl = mktoForm;
                 sbmtBtn.disabled = false;
-                sbmtBtn.textContent = '申し込み';
+                sbmtBtn.textContent = 'エントリー';
             });
     
         } else {
@@ -424,15 +418,89 @@
 
     // Get form and input elements
     const form = shadow.getElementById('entry_entryForm');
-    const graduationYearPlaceholder = shadow.getElementById('entry_graduationYear');
+    const resumeInput = shadow.getElementById('entry_resume');
+    const fileNameDisplay = shadow.getElementById('entry_fileName');
+    const CVInput = shadow.getElementById('entry_CV');
+    const CVFileNameDisplay = shadow.getElementById('entry_CVfileName');
     const privacyPolicyCheckbox = shadow.getElementById('entry_privacyPolicy');
     const privacyPolicyTimestampField = shadow.getElementById('entry_privacyPolicyTimestamp');
 
 
-    // Set default graduation year to current year
-    const nextYear = new Date().getFullYear() - 3;
-    graduationYearPlaceholder.placeholder = nextYear;
+    const occupations = {
+        "is": "インサイドセールス",
+        "fs": "フィールドセールス",
+        "fs_expert": "フィールドセールス・エクスパート",
+        "jw_sales": "Japan Wingセールス",
+        "jw_instructor": "Japan Wing講師",
+        "c_entry": "DXコンサルタント・エントリーレベル",
+        "c": "DXコンサルタント",
+        "c_expert": "DXコンサルタント・エクスパート",
+        "ds": "データサイエンティスト",
+        "cf": "コーポレートファンクション",
+    };
 
+    const recordTypes = {
+        "h": "中途本社レコードタイプ",
+        "c": "中途コンサルレコードタイプ",
+        "j": "JapanWingレコードタイプ",
+        "honsya": "中途本社レコードタイプ",
+        "konsaru": "中途コンサルレコードタイプ",
+        "japanwing": "JapanWingレコードタイプ",
+        "honsha": "中途本社レコードタイプ",
+        "consult": "中途コンサルレコードタイプ",
+        "jw": "JapanWingレコードタイプ",
+    };
+    let occupation = "";
+    let recordType = "中途コンサルレコードタイプ";    // default
+
+    // set the occupation
+    if (window.location.search != "") {
+        const params = new URLSearchParams(window.location.search);
+
+        if (params.get("occupation", false)) {
+            const referrer = params.get("occupation").toLowerCase();
+            if (Object.keys(occupations).includes(referrer)) {
+                // set the value to the value of referrer
+                occupation = occupations[referrer];
+                console.log("応募職種: "  + occupation)
+                
+            } 
+        }
+    } 
+
+    const pathSegments = window.location.pathname.split("/").filter(Boolean);
+    const lastSegment = pathSegments[pathSegments.length - 1];
+    
+    if (Object.keys(recordTypes).includes(lastSegment)) {
+        recordType = recordTypes[lastSegment];
+        console.log("record type:" + recordType);
+    }
+
+
+
+    // Display file name when selected
+    resumeInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            fileNameDisplay.textContent = this.files[0].name;
+            fileNameDisplay.style.fontWeight = "bold";
+            validateFile(this, "entry_resumeError"); // This validates on change but the error was disappearing
+        } else {
+            fileNameDisplay.textContent = '選択されていません';
+            hideError('entry_resumeError');
+        }
+    });
+
+    // Display CV file name when selected
+    CVInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            CVFileNameDisplay.textContent = this.files[0].name;
+            CVFileNameDisplay.style.fontWeight = "bold";
+            validateFile(this, "entry_CVError");
+        } else {
+            CVFileNameDisplay.textContent = '選択されていません';
+            hideError('entry_CVError');
+        }
+    });
 
     privacyPolicyCheckbox.addEventListener('change', function() {
         if (this.checked) {
@@ -460,7 +528,10 @@
         isValid = validateEmail() && isValid;
         isValid = validateEmailConfirmation() && isValid;
         isValid = validatePhone() && isValid;
-        isValid = validateGraduationYear() && isValid;
+
+        isValid = validateFile(resumeInput, 'entry_resumeError') && isValid;
+        isValid = validateFile(CVInput, 'entry_CVError') && isValid;
+
         isValid = validateCheckbox('entry_privacyPolicy', 'entry_privacyPolicyError') && isValid;
 
         function setFormSubmitting(isSubmitting) {
@@ -469,13 +540,21 @@
                 input.disabled = isSubmitting;
             });
             sbmtBtn.disabled = isSubmitting;
-            sbmtBtn.textContent = isSubmitting ? '送信中...' : '申し込み';
+            sbmtBtn.textContent = isSubmitting ? '送信中...' : 'エントリー';
         }
         
-        let isSubmissionInProgress = false;
-        if (isValid && !isSubmissionInProgress) {
-            isSubmissionInProgress = true;
+        if (isValid) {
+            // Get form data
             const formData = new FormData(form);
+            if (recordType) {
+                formData.set("recordType", recordType);
+            }
+            
+
+            if (occupation) {
+                formData.set("desiredOccupation", occupation);
+            }
+
             for (const [key, value] of [...formData.entries()]) {
                  if (value instanceof File) {
                      // Create safe name
@@ -485,6 +564,7 @@
                      formData.set(key, new File([value], safeName, { type: value.type }));
                  }
              }
+            
             setFormSubmitting(true);
 
             // Helper function to retry fetch
@@ -502,7 +582,7 @@
             };
 
             // 1. Submit to Pipedream
-            fetchWithRetry('https://eo82mc181i1aie2.m.fdsfsdfsd.net', {
+            fetchWithRetry('https://eolwjomy1yiwp37.m.pipedream.net', {
                 method: 'POST',
                 body: formData
             })
@@ -535,18 +615,22 @@
                         'FirstName': formData.get('firstName'),
                         'Email': formData.get('email'),
                         'Phone': formData.get('phone'),
-                        'graduation': formData.get('graduationYear'),
                         'praivacyPolicy': formData.get('privacyPolicy') !== null ? "yes" : "no",
-                        'recordtype': '応募者_新卒'
+                        'recordtype': '応募者_中途'
                     });
 
                     mktoFormEl.submit();
                 });
             })
             .then(() => {
-                // Success: Redirect
+                isSubmissionInProgress = false;
+                // Handle successful submission
                 form.reset();
-                setFormSubmitting(false);
+                fileNameDisplay.textContent = '選択されていません';
+                CVFileNameDisplay.textContent = '選択されていません';
+                setFormSubmitting(false); // Re-enable form
+                
+                // Redirect to thank you page
                 window.location.href = "https://recruit.gl-navi.co.jp/apply/successful";
             })
             .catch(error => {
@@ -554,11 +638,11 @@
                 
                 // 1. Define the fallback email
                 const fallbackEmail = "saiyou@gl-navi.co.jp";
-                const subject = encodeURIComponent("新卒採用説明会申し込み (フォームエラー)");
+                const subject = encodeURIComponent("新卒採用応募 (フォームエラー)");
                const rawBody = 
                   `採用担当者様
                   
-                  フォーム送信時にエラーが発生したため、メールにて説明会に応募いたします。
+                  フォーム送信時にエラーが発生したため、メールにて応募いたします。
                   
                   --------------------------------------------------
                   ■氏名
@@ -569,9 +653,6 @@
 
                   ■Email
                   ${formData.get('email')}
-                  
-                  ■卒業年度
-                  ${formData.get('graduationYear')}
                   --------------------------------------------------
                   
                   ※履歴書・ポートフォリオを添付いたしました。
@@ -637,19 +718,8 @@
     });
 
     // Real-time validation for better UX
-    const inputs = form.querySelectorAll('input');
+    const inputs = form.querySelectorAll('input, select');
     inputs.forEach(input => {
-
-        // For email confirmation, add input event to check match in real-time
-        if (this.id === 'entry_email_confirmation') {
-            input.addEventListener('input', function() {
-                if (shadow.getElementById('entry_email').value) {
-                    validateEmailConfirmation();
-                }
-            });
-        }
-
-
         input.addEventListener('blur', function() {
             if (this.id === 'entry_email') {
                 validateEmail();
@@ -657,10 +727,10 @@
                 validateEmailConfirmation();
             } else if (this.id === 'entry_phone') {
                 validatePhone();
-            } else if (this.id === 'entry_graduationYear') {
-                validateGraduationYear();
-            } else if (this.id === 'entry_privacyPolicy') {
-                validateCheckbox(this.id, 'entry_privacyPolicyError');
+            } else if (this.id === 'entry_resume') {
+                validateFile(this, 'entry_resumeError');
+            } else if (this.id === 'entry_CV') {
+                validateFile(this, 'entry_CVError');
             } else if (this.required) {
                 validateRequiredField(this.id, this.id + 'Error');
             }
@@ -682,7 +752,6 @@
             return true;
         }
     }
-
 
     function validateEmail() {
         const email = shadow.getElementById('entry_email');
@@ -754,28 +823,70 @@
         }
     }
 
-    function validateGraduationYear() {
-        const graduationYear = shadow.getElementById('entry_graduationYear');
-        const currentYear = new Date().getFullYear();
-        const yearValue = graduationYear.value.trim();
+    // function validateDesiredOccupation() {
+    //     const desiredOccupation = shadow.getElementById('entry_desiredOccupation');
 
-        if (!yearValue) {
-            showError('entry_graduationYearError', '卒業年度を入力してください');
-            return false;
-        } 
-        // Ensure the value contains only digits (no decimals, letters, etc.)
-        else if (!/^\d+$/.test(yearValue)) {
-            showError('entry_graduationYearError', '有効な卒業年度を整数で入力してください');
+    //     if (!desiredOccupation.value.trim()) {
+    //         showError("entry_desiredOccupationError", "応募職種を選択してください");
+    //         return false;
+    //     }
+    //     hideError('entry_desiredOccupationError');
+    //     return true;
+
+    // }
+
+
+    function validateFile(fileInput, errorId) {
+        // Check if file is required and present
+        if (fileInput.required && (!fileInput.files || fileInput.files.length === 0)) {
+            showError(errorId);
             return false;
         }
-
-        const yearInt = parseInt(yearValue, 10);
-        if (yearInt < 1950 || yearInt > currentYear + 10) {
-            showError('entry_graduationYearError', '有効な卒業年度を入力してください');
-            return false;
+        
+        if (fileInput.files && fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const fileName = file.name.toLowerCase();
+            const fileSize = file.size;
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            
+            // Define allowed formats with both extension and MIME type
+            const allowedFormats = [
+                { ext: '.pdf', mime: 'application/pdf' },
+                { ext: '.xlsx', mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
+                { ext: '.xls', mime: 'application/vnd.ms-excel' },
+                { ext: '.docx', mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
+                { ext: '.doc', mime: 'application/msword' }
+            ];
+            
+            // Check for empty files
+            if (fileSize === 0) {
+                showError(errorId, 'ファイルが空です。有効なファイルをアップロードしてください');
+                return false;
+            }
+            
+            // Check size first
+            if (fileSize > maxSize) {
+                showError(errorId, 'ファイルサイズは10MB以下にしてください');
+                return false;
+            }
+            
+            // More flexible validation approach
+            const fileMimeType = file.type;
+            
+            // Check if file matches any of our allowed formats
+            const isValidFormat = allowedFormats.some(format => 
+                fileName.endsWith(format.ext) || fileMimeType === format.mime
+            );
+            
+            if (!isValidFormat) {
+                showError(errorId, '許可されているファイル形式：PDF、Excel、Word形式のみ');
+                return false;
+            }
+            
+            hideError(errorId);
+            return true;
         }
-
-        hideError('entry_graduationYearError');
+        
         return true;
     }
 
@@ -793,9 +904,11 @@
         }
     }
 
-    function showError(errorId, message) {
+    function showError(errorId, message='') {
         const errorElement = shadow.getElementById(errorId);
-        errorElement.textContent = message;
+        if (message != '') {
+            errorElement.textContent = message;
+        } 
         errorElement.setAttribute('style', 'display: block !important;');
         errorElement.setAttribute('aria-hidden', 'false');
     }
@@ -813,5 +926,5 @@
             error.setAttribute('aria-hidden', 'true');
         });
     }
-
-})();
+    
+    })();
