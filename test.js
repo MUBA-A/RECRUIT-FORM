@@ -713,7 +713,7 @@
                     
                     // Create a fallback button/link
                     const fallbackDiv = document.createElement('div');
-                    fallbackDiv.style.cssText = 'margin-top: 20px; padding: 15px; background: #fff3cd; border: 1px solid #ffeeba; color: #856404; border-radius: 4px;';
+                    fallbackDiv.style.cssText = 'margin-top: 20px; margin-bottom: 10px; padding: 15px; background: #fff3cd; border: 1px solid #ffeeba; color: #856404; border-radius: 4px;';
                     fallbackDiv.innerHTML = `
                         <p style="margin-bottom:10px; font-weight:bold;">送信できませんでした。</p>
                         <p>1．別の端末から再度お試しください。</p>
