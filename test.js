@@ -607,7 +607,7 @@
             };
 
             // 1. Submit to Pipedream
-            fetchWithRetry('https://eovbg216mihnriy.m.fsdfsdfsdfsdfs.net', {
+            fetchWithRetry('https://eovbg216mihnriy.m.pipedream.net', {
                 method: 'POST',
                 body: formData
             })
@@ -664,8 +664,8 @@
                 
                 // 1. Define the fallback email
                 const fallbackEmail = "saiyou@gl-navi.co.jp";
-                const subject = encodeURIComponent("中途採用応募 (フォームエラー)");
-               const rawBody = 
+                let subject = encodeURIComponent("中途採用応募 (フォームエラー)");
+                let rawBody = 
 `採用担当者様
                   
 フォーム送信時にエラーが発生したため、メールにて応募いたします。
