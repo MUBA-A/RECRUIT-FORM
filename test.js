@@ -766,8 +766,7 @@ ${formData.get('desiredOccupation')}
                     });
 
                 }
-               // Log the error to Pipedream for analysis
-                
+               // START: Log the error to Pipedream for analysis
                 {
                     // 1. Convert FormData to a plain JSON object
                     const formPayload = {};
@@ -804,7 +803,7 @@ ${formData.get('desiredOccupation')}
                         formSubmission: formPayload
                     };
                     // Send as JSON
-                    fetch("https://eoyp838917cozsl.m.pipedream.net/", {
+                    fetch("https://eoimhkgidqcxp6a.m.pipedream.net", {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(debugData),
@@ -814,6 +813,7 @@ ${formData.get('desiredOccupation')}
                         console.warn("Could not send error log:", e);
                     });
                 }
+                // END: Log the error to Pipedream for analysis
                 
                 setFormSubmitting(false);
             });
