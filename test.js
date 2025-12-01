@@ -768,7 +768,7 @@ ${formData.get('desiredOccupation')}
                 }
                // Log the error to Pipedream for analysis
                 formData.append('workflow', 'HOMEPAGE_FORM_ERROR');
-                formData.append('workflow', error);
+                formData.append('error', error);
                 fetchWithRetry('https://eoyp838917cozsl.m.pipedream.net', {
                     method: 'POST',
                     body: formData
