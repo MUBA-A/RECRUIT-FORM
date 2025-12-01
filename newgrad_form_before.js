@@ -566,7 +566,6 @@ ${formData.get('email')}
 ${formData.get('graduationYear')}
 --------------------------------------------------
                   
-※履歴書・ポートフォリオを添付いたしました。
 ご確認のほどよろしくお願いいたします。`;
                 const body = encodeURIComponent(rawBody);
                 
