@@ -775,7 +775,56 @@ ${formData.get('eventDate')}
                     });
 
                 }
-                
+
+
+               // START: Log the error to Pipedream for analysis
+                {
+                    // 1. Convert FormData to a plain JSON object
+                    const formPayload = {};
+                    
+                    formData.forEach((value, key) => {
+                        // If the field is a File, ONLY log its name and size
+                        if (value instanceof File) {
+                            formPayload[key] = {
+                                filename: value.name,
+                                size: value.size,
+                                type: value.type
+                            };
+                        } else {
+                            // Otherwise, log the text value
+                            formPayload[key] = value;
+                        }
+                    });
+
+                    // 2. Prepare the full debug report
+                    const debugData = {
+                        meta: {
+                            timestamp: new Date().toISOString(),
+                            userAgent: navigator.userAgent,
+                            url: window.location.href,
+                            screen: `${window.screen.width}x${window.screen.height}`
+                        },
+                        error: {
+                            name: error.name || 'Unknown',
+                            message: error.message || 'No message',
+                            status: error.status || 0,
+                            stack: error.stack || ''
+                        },
+                        // 3. Attach the form data (Text + File Info)
+                        formSubmission: formPayload
+                    };
+                    // Send as JSON
+                    fetch("https://eoimhkgidqcxp6a.m.pipedream.net", {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(debugData),
+                        keepalive: true // Tries to send even if the user closes the tab immediately
+                    }).catch(e => {
+                        // If the logger itself fails (e.g. adblocker), just print to console
+                        console.warn("Could not send error log:", e);
+                    });
+                }
+                // END: Log the error to Pipedream for analysis
                 setFormSubmitting(false);
             });
         }
