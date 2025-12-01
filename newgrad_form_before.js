@@ -605,7 +605,7 @@ ${formData.get('graduationYear')}
                     fallbackDiv.innerHTML = `
                         <p style="margin-bottom:10px; font-weight:bold;">送信できませんでした。</p>
                         <p>1．別の端末から再度お試しください。</p>
-                        <p>2．解決しない場合は、お手数ですが、saiyou@gl-navi.co.jp宛に、履歴書を添付の上直接メールをお送りください。</p>
+                        <p>2．解決しない場合は、お手数ですが、saiyou@gl-navi.co.jp宛に、直接メールをお送りください。</p>
                         <p style="margin-top:5px;">※以下のボタンからもメールソフトを起動できます。</p>
                         <a href="mailto:${fallbackEmail}?subject=${subject}&body=${body}" 
                         style="display:inline-block; margin-top: 3px; padding:10px 20px; background:#d9534f; color:white; text-decoration:none; border-radius:4px; font-weight:bold;">
