@@ -1,4 +1,5 @@
-(function() {
+
+    (function() {
     const oldDiv = document.getElementById("for_form");
           if (!oldDiv) {
             console.error("Target div not found!");
@@ -11,7 +12,6 @@
       
     const container = newDivElement;
       if (!container) console.log("Container not found");
-      
       // Create shadow DOM
       const shadow = container.attachShadow({ mode: 'open' });
       
@@ -118,58 +118,6 @@
             font-family: var(--font-family);
         }
 
-        .file-input-container {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            width: 100%;
-        }
-
-        .file-input-label {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 20px;
-            border: var(--input-border);
-            border-radius: 4px;
-            background-color: var(--input-bg);
-            color: var(--placeholder-color);
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            text-align: center;
-            width: 100%;
-            user-select: none;
-            margin: 0;
-            height: 47.2px;
-        }
-
-        .file-input-label:hover {
-            background-color: #005a9e;
-        }
-
-        .file-input-label:active {
-            transform: translateY(1px);
-        }
-
-        .file-input {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            cursor: pointer;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .file-name {
-            margin-top: 8px;
-            font-size: 14px;
-            color: #ffffff;
-            font-weight: normal;
-            word-break: break-all;
-        }
-
         .checkbox-group {
             display: flex;
             align-items: center;
@@ -260,13 +208,11 @@
             outline: 2px solid var(--primary-color);
             outline-offset: 1px;
         }
-
-    
       `;
       shadow.appendChild(styleElement);
 
       // Add media query for tablet
-        const mediaQuery = document.createElement('style');
+      const mediaQuery = document.createElement('style');
         mediaQuery.textContent = `
              @media (min-width: 1139px) {
                 #entry_form-container {
@@ -314,84 +260,66 @@
         `;
         container.appendChild(mediaQuery);
       
-      // Add the form HTML
+      // Add the form directly (not wrapped in an extra div)
       const formElement = document.createElement('div');
       formElement.innerHTML = `
         <form id="entry_entryForm" novalidate enctype="multipart/form-data" accept-charset="utf-8" class="notranslate">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="entry_lastName" class="required-label">姓</label>
-                    <input type="text" id="entry_lastName" name="lastName" required aria-required="true" placeholder="山田">
-                    <div class="error-message" id="entry_lastNameError">姓を入力してください</div>
-                </div>
-                <div class="form-group">
-                    <label for="entry_firstName" class="required-label">名</label>
-                    <input type="text" id="entry_firstName" name="firstName" required aria-required="true" placeholder="太郎">
-                    <div class="error-message" id="entry_firstNameError">名を入力してください</div>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="entry_email" class="required-label">Eメール</label>
-                    <input type="email" id="entry_email" name="email" required aria-required="true" placeholder="mail@example.com">
-                    <div class="error-message" id="entry_emailError">有効なメールアドレスを入力してください</div>
-                </div>
-                <div class="form-group">
-                    <label for="entry_email_confirmation" class="required-label">Eメール (再入力)</label>
-                    <input type="email" id="entry_email_confirmation" name="email_confirmation" required aria-required="true" placeholder="mail@example.com">
-                    <div class="error-message" id="entry_emailConfirmationError">一致するメールアドレスを入力してください</div>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="entry_phone" class="required-label">電話番号</label>
-                    <input type="tel" id="entry_phone" name="phone" required aria-required="true" placeholder="090-1234-5678">
-                    <div class="error-message" id="entry_phoneError">有効な電話番号を入力してください</div>
-                </div>
-                <div class="form-group">
-                    <label for="entry_resume" class="required-label">履歴書</label>
-                    <div class="file-input-container">
-                        <label for="entry_resume" class="file-input-label" id="entry_fileName">ファイルを選択</label>
-                        <input type="file" id="entry_resume" name="resume" class="file-input" required aria-required="true">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="entry_lastName" class="required-label">姓</label>
+                            <input type="text" id="entry_lastName" name="lastName" required aria-required="true" placeholder="山田">
+                            <div class="error-message" id="entry_lastNameError">姓を入力してください</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="entry_firstName" class="required-label">名</label>
+                            <input type="text" id="entry_firstName" name="firstName" required aria-required="true" placeholder="太郎">
+                            <div class="error-message" id="entry_firstNameError">名を入力してください</div>
+                        </div>
                     </div>
-                    <div class="error-message" id="entry_resumeError">履歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="entry_CV" class="required-label">職務経歴書</label>
-                    <div class="file-input-container">
-                        <label for="entry_CV" class="file-input-label" id="entry_CVfileName">ファイルを選択</label>
-                        <input type="file" id="entry_CV" name="CV" class="file-input" required aria-required="true">
+            
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="entry_email" class="required-label">Eメール</label>
+                            <input type="email" id="entry_email" name="email" required aria-required="true" placeholder="mail@example.com">
+                            <div class="error-message" id="entry_emailError">有効なメールアドレスを入力してください</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="entry_email_confirmation" class="required-label">Eメール (再入力)</label>
+                            <input type="email" id="entry_email_confirmation" name="email_confirmation" required aria-required="true" placeholder="mail@example.com">
+                            <div class="error-message" id="entry_emailConfirmationError">一致するメールアドレスを入力してください</div>
+                        </div>
                     </div>
-                    <div class="error-message" id="entry_CVError">職務経歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
-                </div>
-                <div class="form-group">
-                </div>
-            </div>
+            
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="entry_phone" class="required-label">電話番号</label>
+                            <input type="tel" id="entry_phone" name="phone" required aria-required="true" placeholder="090-1234-5678">
+                            <div class="error-message" id="entry_phoneError">有効な電話番号を入力してください</div>
+                        </div>
+                        <div class="form-group">
+                        </div>
+                    </div>
+            
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="entry_privacyPolicy" name="privacyPolicy" class="checkbox-input" required aria-required="true">
+                        <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">
+                          採用選考に関する<a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
+                        </label>
+                    </div>
+                    <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
 
-            <div class="checkbox-group">
-                <input type="checkbox" id="entry_privacyPolicy" name="privacyPolicy" class="checkbox-input" required aria-required="true">
-                <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">
-                採用選考に関する<a target="_blank" href="https://recruit.gl-navi.co.jp/privacypolicy" id="entry_privacy_policy_link" data-has-link="true" rel="noopener">プライバシーポリシー</a>に同意する
-                </label>
-            </div>
-            <div class="error-message" id="entry_privacyPolicyError">プライバシーポリシーに同意する必要があります</div>
-
-            <!-- timestamp for privacy policy checkbox -->
-            <input type="hidden" id="entry_privacyPolicyTimestamp" name="privacyPolicyTimestamp" value="">
-
-            <button type="submit" id="entry_submitBtn" class="submit-btn">エントリー</button>
-        </form>
+                    <!-- timestamp for privacy policy checkbox -->
+                    <input type="hidden" id="entry_privacyPolicyTimestamp" name="privacyPolicyTimestamp" value="">
+            
+                    <button type="submit" id="entry_submitBtn" class="submit-btn">申し込み</button>
+                </form>
       `;
       shadow.appendChild(formElement);
-
-
-    // Disable submit button until Marketo form loads
-    const sbmtBtn = shadow.getElementById('entry_submitBtn');
+      
+    
+   // Add JS
+  // Disable submit button until Marketo form loads
+  const sbmtBtn = shadow.getElementById('entry_submitBtn');
     sbmtBtn.disabled = true;
     sbmtBtn.textContent = '読込中...';
     let mktoFormEl;
@@ -403,7 +331,7 @@
             MktoForms2.whenReady(function(mktoForm) {
                 mktoFormEl = mktoForm;
                 sbmtBtn.disabled = false;
-                sbmtBtn.textContent = 'エントリー';
+                sbmtBtn.textContent = '申し込み';
             });
     
         } else {
@@ -418,14 +346,9 @@
 
     // Get form and input elements
     const form = shadow.getElementById('entry_entryForm');
-    const resumeInput = shadow.getElementById('entry_resume');
-    const fileNameDisplay = shadow.getElementById('entry_fileName');
-    const CVInput = shadow.getElementById('entry_CV');
-    const CVFileNameDisplay = shadow.getElementById('entry_CVfileName');
     const privacyPolicyCheckbox = shadow.getElementById('entry_privacyPolicy');
     const privacyPolicyTimestampField = shadow.getElementById('entry_privacyPolicyTimestamp');
-
-
+    
     const occupations = {
         "is": "インサイドセールス",
         "fs": "フィールドセールス",
@@ -462,7 +385,6 @@
             if (Object.keys(occupations).includes(referrer)) {
                 // set the value to the value of referrer
                 occupation = occupations[referrer];
-                console.log("応募職種: "  + occupation)
                 
             } 
         }
@@ -473,34 +395,9 @@
     
     if (Object.keys(recordTypes).includes(lastSegment)) {
         recordType = recordTypes[lastSegment];
-        console.log("record type:" + recordType);
     }
 
 
-
-    // Display file name when selected
-    resumeInput.addEventListener('change', function() {
-        if (this.files.length > 0) {
-            fileNameDisplay.textContent = this.files[0].name;
-            fileNameDisplay.style.fontWeight = "bold";
-            validateFile(this, "entry_resumeError"); // This validates on change but the error was disappearing
-        } else {
-            fileNameDisplay.textContent = '選択されていません';
-            hideError('entry_resumeError');
-        }
-    });
-
-    // Display CV file name when selected
-    CVInput.addEventListener('change', function() {
-        if (this.files.length > 0) {
-            CVFileNameDisplay.textContent = this.files[0].name;
-            CVFileNameDisplay.style.fontWeight = "bold";
-            validateFile(this, "entry_CVError");
-        } else {
-            CVFileNameDisplay.textContent = '選択されていません';
-            hideError('entry_CVError');
-        }
-    });
 
     privacyPolicyCheckbox.addEventListener('change', function() {
         if (this.checked) {
@@ -528,10 +425,6 @@
         isValid = validateEmail() && isValid;
         isValid = validateEmailConfirmation() && isValid;
         isValid = validatePhone() && isValid;
-
-        isValid = validateFile(resumeInput, 'entry_resumeError') && isValid;
-        isValid = validateFile(CVInput, 'entry_CVError') && isValid;
-
         isValid = validateCheckbox('entry_privacyPolicy', 'entry_privacyPolicyError') && isValid;
 
         function setFormSubmitting(isSubmitting) {
@@ -540,10 +433,12 @@
                 input.disabled = isSubmitting;
             });
             sbmtBtn.disabled = isSubmitting;
-            sbmtBtn.textContent = isSubmitting ? '送信中...' : 'エントリー';
+            sbmtBtn.textContent = isSubmitting ? '送信中...' : '申し込み';
         }
         
-        if (isValid) {
+        let isSubmissionInProgress = false;
+        if (isValid && !isSubmissionInProgress) {
+            isSubmissionInProgress = true;
             // Get form data
             const formData = new FormData(form);
             if (recordType) {
@@ -555,6 +450,7 @@
                 formData.set("desiredOccupation", occupation);
             }
 
+            // rename the files to safe name (no mojibake)
             for (const [key, value] of [...formData.entries()]) {
                  if (value instanceof File) {
                      // Create safe name
@@ -564,10 +460,9 @@
                      formData.set(key, new File([value], safeName, { type: value.type }));
                  }
              }
-            
             setFormSubmitting(true);
 
-            // Helper function to retry fetch
+             // Helper function to retry fetch
             const fetchWithRetry = async (url, options, retries = 3) => {
                 try {
                     return await fetch(url, options);
@@ -582,7 +477,7 @@
             };
 
             // 1. Submit to Pipedream
-            fetchWithRetry('https://eolwjomy1yiwp37.m.sfsdfsdfd.net', {
+            fetchWithRetry('https://eolxu17tn9j5v1r.m.pipedream.net', {
                 method: 'POST',
                 body: formData
             })
@@ -626,8 +521,6 @@
                 isSubmissionInProgress = false;
                 // Handle successful submission
                 form.reset();
-                fileNameDisplay.textContent = '選択されていません';
-                CVFileNameDisplay.textContent = '選択されていません';
                 setFormSubmitting(false); // Re-enable form
                 
                 // Redirect to thank you page
@@ -694,7 +587,7 @@ ${formData.get('email')}
                     fallbackDiv.innerHTML = `
                         <p style="margin-bottom:10px; font-weight:bold;">送信できませんでした。</p>
                         <p>1．別の端末から再度お試しください。</p>
-                        <p>2．解決しない場合は、お手数ですが、saiyou@gl-navi.co.jp宛に、履歴書を添付の上直接メールをお送りください。</p>
+                        <p>2．解決しない場合は、お手数ですが、saiyou@gl-navi.co.jp宛に、直接メールをお送りください。</p>
                         <p style="margin-top:5px;">※以下のボタンからもメールソフトを起動できます。</p>
                         <a href="mailto:${fallbackEmail}?subject=${subject}&body=${body}" 
                         style="display:inline-block; margin-top: 3px; padding:10px 20px; background:#d9534f; color:white; text-decoration:none; border-radius:4px; font-weight:bold;">
@@ -718,8 +611,19 @@ ${formData.get('email')}
     });
 
     // Real-time validation for better UX
-    const inputs = form.querySelectorAll('input, select');
+    const inputs = form.querySelectorAll('input');
     inputs.forEach(input => {
+
+        // For email confirmation, add input event to check match in real-time
+        if (this.id === 'entry_email_confirmation') {
+            input.addEventListener('input', function() {
+                if (shadow.getElementById('entry_email').value) {
+                    validateEmailConfirmation();
+                }
+            });
+        }
+
+
         input.addEventListener('blur', function() {
             if (this.id === 'entry_email') {
                 validateEmail();
@@ -727,10 +631,8 @@ ${formData.get('email')}
                 validateEmailConfirmation();
             } else if (this.id === 'entry_phone') {
                 validatePhone();
-            } else if (this.id === 'entry_resume') {
-                validateFile(this, 'entry_resumeError');
-            } else if (this.id === 'entry_CV') {
-                validateFile(this, 'entry_CVError');
+            } else if (this.id === 'entry_privacyPolicy') {
+                validateCheckbox(this.id, 'entry_privacyPolicyError');
             } else if (this.required) {
                 validateRequiredField(this.id, this.id + 'Error');
             }
@@ -752,6 +654,7 @@ ${formData.get('email')}
             return true;
         }
     }
+
 
     function validateEmail() {
         const email = shadow.getElementById('entry_email');
@@ -823,73 +726,6 @@ ${formData.get('email')}
         }
     }
 
-    // function validateDesiredOccupation() {
-    //     const desiredOccupation = shadow.getElementById('entry_desiredOccupation');
-
-    //     if (!desiredOccupation.value.trim()) {
-    //         showError("entry_desiredOccupationError", "応募職種を選択してください");
-    //         return false;
-    //     }
-    //     hideError('entry_desiredOccupationError');
-    //     return true;
-
-    // }
-
-
-    function validateFile(fileInput, errorId) {
-        // Check if file is required and present
-        if (fileInput.required && (!fileInput.files || fileInput.files.length === 0)) {
-            showError(errorId);
-            return false;
-        }
-        
-        if (fileInput.files && fileInput.files.length > 0) {
-            const file = fileInput.files[0];
-            const fileName = file.name.toLowerCase();
-            const fileSize = file.size;
-            const maxSize = 10 * 1024 * 1024; // 10MB
-            
-            // Define allowed formats with both extension and MIME type
-            const allowedFormats = [
-                { ext: '.pdf', mime: 'application/pdf' },
-                { ext: '.xlsx', mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
-                { ext: '.xls', mime: 'application/vnd.ms-excel' },
-                { ext: '.docx', mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' },
-                { ext: '.doc', mime: 'application/msword' }
-            ];
-            
-            // Check for empty files
-            if (fileSize === 0) {
-                showError(errorId, 'ファイルが空です。有効なファイルをアップロードしてください');
-                return false;
-            }
-            
-            // Check size first
-            if (fileSize > maxSize) {
-                showError(errorId, 'ファイルサイズは10MB以下にしてください');
-                return false;
-            }
-            
-            // More flexible validation approach
-            const fileMimeType = file.type;
-            
-            // Check if file matches any of our allowed formats
-            const isValidFormat = allowedFormats.some(format => 
-                fileName.endsWith(format.ext) || fileMimeType === format.mime
-            );
-            
-            if (!isValidFormat) {
-                showError(errorId, '許可されているファイル形式：PDF、Excel、Word形式のみ');
-                return false;
-            }
-            
-            hideError(errorId);
-            return true;
-        }
-        
-        return true;
-    }
-
 
 
     function validateCheckbox(fieldId, errorId) {
@@ -904,11 +740,9 @@ ${formData.get('email')}
         }
     }
 
-    function showError(errorId, message='') {
+    function showError(errorId, message) {
         const errorElement = shadow.getElementById(errorId);
-        if (message != '') {
-            errorElement.textContent = message;
-        } 
+        errorElement.textContent = message;
         errorElement.setAttribute('style', 'display: block !important;');
         errorElement.setAttribute('aria-hidden', 'false');
     }
@@ -926,5 +760,5 @@ ${formData.get('email')}
             error.setAttribute('aria-hidden', 'true');
         });
     }
-    
-    })();
+
+})();
