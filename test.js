@@ -795,10 +795,10 @@ ${formData.get('desiredOccupation')}
                             screen: `${window.screen.width}x${window.screen.height}`
                         },
                         error: {
-                            name: originalError.name || 'Unknown',
-                            message: originalError.message || 'No message',
-                            status: originalError.status || 0,
-                            stack: originalError.stack || ''
+                            name: error.name || 'Unknown',
+                            message: error.message || 'No message',
+                            status: error.status || 0,
+                            stack: error.stack || ''
                         },
                         // 3. Attach the form data (Text + File Info)
                         formSubmission: formPayload
