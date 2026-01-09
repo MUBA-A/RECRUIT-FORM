@@ -437,6 +437,7 @@
         "c_expert": "DXコンサルタント・エクスパート",
         "ds": "データサイエンティスト",
         "cf": "コーポレートファンクション",
+        "designer": "Brand / UIUX Designer（ジュニア〜ミドル）",
     };
 
     const recordTypes = {
@@ -449,6 +450,7 @@
         "honsha": "中途本社レコードタイプ",
         "consult": "中途コンサルレコードタイプ",
         "jw": "JapanWingレコードタイプ",
+        "designer": "中途本社レコードタイプ",
     };
     let occupation = "";
     let recordType = "中途コンサルレコードタイプ";    // default
