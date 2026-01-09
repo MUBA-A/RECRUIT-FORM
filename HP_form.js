@@ -370,6 +370,7 @@
                         <option value="DXコンサルタント・エキスパート">・DXコンサルタント・エキスパート</option>
                         <option value="データサイエンティスト">・データサイエンティスト</option>
                         <option value="コーポレートファンクション">・コーポレートファンクション</option>
+                        <option value="Brand / UIUX Designer（ジュニア〜ミドル）">・Brand / UIUX Designer（ジュニア〜ミドル）</option>
                     </select>
                     <div class="error-message" id="entry_desiredOccupationError">応募職種を選択してください</div>
                 </div>
