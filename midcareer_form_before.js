@@ -387,6 +387,9 @@
             if (Object.keys(occupations).includes(referrer)) {
                 // set the value to the value of referrer
                 occupation = occupations[referrer];
+                if (occupation == "Brand / UIUX Designer（ジュニア〜ミドル）") {
+                    window.location.href = "https://recruit.gl-navi.co.jp/";
+                }
                 
             } 
         }
