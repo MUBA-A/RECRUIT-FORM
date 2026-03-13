@@ -580,6 +580,14 @@
         }
         
         if (isValid) {
+
+           // This tells GA4: "Someone clicked the submit button!"
+             if (typeof gtag === 'function') {
+                 gtag('event', 'form_submit_attempt', {
+                     'event_category': 'Application',
+                     'event_label': 'New Grad Form'
+                 });
+             }
             // Get form data
             const formData = new FormData(form);
             for (const [key, value] of [...formData.entries()]) {
