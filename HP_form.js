@@ -1,4 +1,13 @@
    (function() {
+
+if (typeof gtag === 'function') {
+        console.log("✅ GA4 Test: Sending 'form_submit_attempt' event to Google Analytics...");
+    } else {
+        console.warn("⚠️ GA4 Test: gtag is not defined. Google Analytics might not be loaded on this page.");
+    }
+
+
+      
     const oldDiv = document.getElementById("for_form");
           if (!oldDiv) {
             console.error("Target div not found!");
