@@ -386,7 +386,7 @@
                         <option value="データサイエンティスト">・ホームページ</option>
                         <option value="コーポレートファンクション">・その他</option>
                     </select>
-                    <div class="error-message" id="entry_CVError">職務経歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
+                    <div class="error-message" id="entry_CVError">媒体を選択してください</div>
                 </div>
                 <div class="form-group">
                 </div>
