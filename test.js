@@ -386,8 +386,6 @@
                     </select>
                     <div class="error-message" id="entry_CVError">媒体を選択してください</div>
                 </div>
-                <div class="form-group">
-                </div>
             </div>
 
             <div class="checkbox-group">
