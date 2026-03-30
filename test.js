@@ -380,7 +380,7 @@
                         <option value="フィールドセールス・エキスパート">・RCC（リクルートキャリアコンサルティング）</option>
                         <option value="DXコンサルタント・エントリーレベル">・パソナ</option>
                         <option value="DXコンサルタント">・Green</option>
-                        <option value="DXコンサルタント・エキスパート">・DXコンサルタント・日経転職版</option>
+                        <option value="DXコンサルタント・エキスパート">・日経転職版</option>
                         <option value="データサイエンティスト">・ホームページ</option>
                         <option value="コーポレートファンクション">・その他</option>
                     </select>
