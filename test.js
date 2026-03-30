@@ -371,9 +371,7 @@
                 </div>
                 <div class="form-group">
                 </div>
-            </div>
 
-            <div class="form-row">
                 <div class="form-group">
                     <label for="entry_CV" class="required-label">応募媒体</label>
                     <select id="entry_desiredOccupation" name="desiredOccupation" required aria-required="true">
@@ -613,6 +611,7 @@
             };
 
             // 1. Submit to Pipedream
+            
             fetchWithRetry('https://eo1jbij8tb2xgqu.m.pipedream.net', {
                 method: 'POST',
                 body: formData
