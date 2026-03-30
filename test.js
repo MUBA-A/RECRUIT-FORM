@@ -84,7 +84,7 @@
         }
         
         select {
-            color: var(--placeholder-color);
+            color: var(--placeholder-color) !important;
         }
 
         input:focus {
