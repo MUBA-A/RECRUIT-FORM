@@ -28,7 +28,7 @@
             --success-color: #388e3c;
         }
 
-        * {
+         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -82,14 +82,20 @@
             /* Explicit line height improves cross-browser consistency */
             line-height: 1.5;
         }
+        
         select {
-            color: #333;
+            color: var(--placeholder-color);
         }
 
         input:focus {
             background: #dddddd !important;
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
+        }
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 120, 215, 0.2);
+            border-color: var(--primary-color);
         }
 
         input:hover, input:focus:hover {
