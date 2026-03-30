@@ -377,7 +377,7 @@
                 <div class="form-group">
                     <label for="entry_CV" class="required-label">応募媒体</label>
                     <select id="entry_desiredOccupation" name="desiredOccupation" required aria-required="true">
-                        <option value="">ご応募の媒体を選択してください</option>
+                        <option value="">ご登録の媒体を選択してください</option>
                         <option value="Indeed">・Indeed</option>
                         <option value="リクナビHRTech">・リクナビHRTech</option>
                         <option value="フィールドセールス">・フィールドセールス</option>
