@@ -373,6 +373,27 @@
                 </div>
             </div>
 
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="entry_CV" class="required-label">応募媒体</label>
+                    <select id="entry_desiredOccupation" name="desiredOccupation" required aria-required="true">
+                        <option value="">ご応募の媒体を選択してください</option>
+                        <option value="Indeed">・Indeed</option>
+                        <option value="リクナビHRTech">・リクナビHRTech</option>
+                        <option value="フィールドセールス">・フィールドセールス</option>
+                        <option value="フィールドセールス・エキスパート">・RCC（リクルートキャリアコンサルティング）</option>
+                        <option value="DXコンサルタント・エントリーレベル">・パソナ</option>
+                        <option value="DXコンサルタント">・Green</option>
+                        <option value="DXコンサルタント・エキスパート">・DXコンサルタント・日経転職版</option>
+                        <option value="データサイエンティスト">・ホームページ</option>
+                        <option value="コーポレートファンクション">・その他</option>
+                    </select>
+                    <div class="error-message" id="entry_CVError">職務経歴書をアップロードしてください（PDF、Excel、Word形式、10MB以下）</div>
+                </div>
+                <div class="form-group">
+                </div>
+            </div>
+
             <div class="checkbox-group">
                 <input type="checkbox" id="entry_privacyPolicy" name="privacyPolicy" class="checkbox-input" required aria-required="true">
                 <label for="entry_privacyPolicy" id="entry_privacyPolicyLabel">
