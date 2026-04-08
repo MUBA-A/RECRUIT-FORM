@@ -454,11 +454,13 @@
     };
     let occupation = "";
     let recordType = "中途コンサルレコードタイプ";    // default
+    let source_platform = "";
 
-    // set the occupation
+    // set the query string values to the hidden fields in the form so that they can be submitted to Marketo and Pipedream
     if (window.location.search != "") {
         const params = new URLSearchParams(window.location.search);
 
+        // 応募職種
         if (params.get("occupation", false)) {
             const referrer = params.get("occupation").toLowerCase();
             if (Object.keys(occupations).includes(referrer)) {
@@ -468,6 +470,9 @@
                 
             } 
         }
+
+        // 集客元 (応募媒体)
+        source_platform = params.get("source", "").toLowerCase();
     } 
 
     const pathSegments = window.location.pathname.split("/").filter(Boolean);
@@ -485,7 +490,7 @@
         if (this.files.length > 0) {
             fileNameDisplay.textContent = this.files[0].name;
             fileNameDisplay.style.fontWeight = "bold";
-            validateFile(this, "entry_resumeError"); // This validates on change but the error was disappearing
+            validateFile(this, "entry_resumeError");
         } else {
             fileNameDisplay.textContent = '選択されていません';
             hideError('entry_resumeError');
@@ -563,6 +568,9 @@
 
             if (occupation) {
                 formData.set("desiredOccupation", occupation);
+            }
+            if (source_platform) {
+                formData.set("sourcePlatform", source_platform);
             }
 
             for (const [key, value] of [...formData.entries()]) {
