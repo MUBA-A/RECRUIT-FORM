@@ -488,6 +488,7 @@
         if (rt) {
             const key = rt.toLowerCase();
             recordType = (key in recordTypes) ? recordTypes[key] : recordType;
+            console.log("record type (from query string): " + recordType);
         }
     } 
 
