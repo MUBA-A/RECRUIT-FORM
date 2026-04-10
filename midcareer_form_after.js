@@ -441,9 +441,9 @@
     };
 
     const recordTypes = {
-        "h": "中途本社レコードタイプ",
-        "c": "中途コンサルレコードタイプ",
-        "j": "JapanWingレコードタイプ",
+        "hq": "中途本社レコードタイプ",
+        "consultant": "中途コンサルレコードタイプ",
+        "con": "中途コンサルレコードタイプ",
         "honsya": "中途本社レコードタイプ",
         "konsaru": "中途コンサルレコードタイプ",
         "japanwing": "JapanWingレコードタイプ",
@@ -454,7 +454,16 @@
     };
     let occupation = "";
     let recordType = "中途コンサルレコードタイプ";    // default
-    let source_platform = "";
+    let sourcePlatform = "";
+
+    
+    const pathSegments = window.location.pathname.split("/").filter(Boolean);
+    const lastSegment = pathSegments[pathSegments.length - 1];
+    
+    if (Object.keys(recordTypes).includes(lastSegment)) {
+        recordType = recordTypes[lastSegment];
+        console.log("record type:" + recordType);
+    }
 
     // set the query string values to the hidden fields in the form so that they can be submitted to Marketo and Pipedream
     if (window.location.search != "") {
@@ -472,16 +481,16 @@
         }
 
         // 集客元 (応募媒体)
-        source_platform = params.get("source", "").toLowerCase();
+        sourcePlatform = params.get("source", "").toLowerCase();
+
+        // Query String の レコードタイプで上書き
+        const rt = params.get("rt", "");
+        if (rt) {
+            const key = rt.toLowerCase();
+            recordType = (key in recordTypes) ? recordTypes[key] : recordType;
+        }
     } 
 
-    const pathSegments = window.location.pathname.split("/").filter(Boolean);
-    const lastSegment = pathSegments[pathSegments.length - 1];
-    
-    if (Object.keys(recordTypes).includes(lastSegment)) {
-        recordType = recordTypes[lastSegment];
-        console.log("record type:" + recordType);
-    }
 
 
 
@@ -569,8 +578,8 @@
             if (occupation) {
                 formData.set("desiredOccupation", occupation);
             }
-            if (source_platform) {
-                formData.set("sourcePlatform", source_platform);
+            if (sourcePlatform) {
+                formData.set("sourcePlatform", sourcePlatform);
             }
 
             for (const [key, value] of [...formData.entries()]) {
@@ -701,7 +710,6 @@ ${formData.get('email')}
                 alert(userMessage);
                 
                 // 5. If it was a blocking issue, modify the UI to show a mailto link
-                // This ensures you don't lose the applicant!
                 let fallback = false;
                 if (isBlockingIssue && !fallback) {
                     const formContainer = form.parentNode
