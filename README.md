@@ -5,3 +5,4 @@
 3．中途採用-カジュアル面談前: <a href="https://muba-a.github.io/RECRUIT-FORM/midcareer_form_before.js">midcareer_form_before.js</a>        <br />
 4．中途採用-カジュアル面談後: <a href="https://muba-a.github.io/RECRUIT-FORM/midcareer_form_after.js">midcareer_form_after.js</a>         <br />
 5．ホームページ流入用フォーム: <a href="https://muba-a.github.io/RECRUIT-FORM/HP_form.js">HP_form.js</a>         <br />
+6．インターン応募用フォーム: <a href="https://muba-a.github.io/RECRUIT-FORM/internship_application.js">HP_form.js</a>         <br />
