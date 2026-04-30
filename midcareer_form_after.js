@@ -481,7 +481,7 @@
         }
 
         // 集客元 (応募媒体)
-        sourcePlatform = params.get("source", "").toLowerCase();
+        sourcePlatform = (params.get("source") || "").toLowerCase();
         console.log("source platform: " + sourcePlatform);
 
         // Query String の レコードタイプで上書き
